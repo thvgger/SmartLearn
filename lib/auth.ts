@@ -7,7 +7,8 @@ const SECRET = new TextEncoder().encode(
 
 // License signing secret (separate from auth)
 const LICENSE_SECRET = new TextEncoder().encode(
-  process.env.LICENSE_SECRET || "smartlearn-license-secret-change-me",
+  process.env.LICENSE_SECRET ||
+    "smartlearn-license-secret-change-in-production",
 );
 
 // ─── Auth JWT (for browser sessions) ───────────────────────────────────
