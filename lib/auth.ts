@@ -45,7 +45,7 @@ export async function createLicenseToken(payload: {
 }) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("1m") // Set to 1 min for testing offline functionality
+    .setExpirationTime("1h") // Set to 1 min for testing offline functionality
     .sign(LICENSE_SECRET);
 }
 
