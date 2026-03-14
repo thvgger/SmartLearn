@@ -16,7 +16,7 @@ const LICENSE_SECRET = new TextEncoder().encode(
 export async function createSessionToken(userId: string) {
   return new SignJWT({ userId })
     .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("7d")
+    .setExpirationTime("10m")
     .sign(SECRET);
 }
 
@@ -45,7 +45,7 @@ export async function createLicenseToken(payload: {
 }) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("7d") // CBT app can work offline for 7 days
+    .setExpirationTime("1m") // Set to 1 min for testing offline functionality
     .sign(LICENSE_SECRET);
 }
 
