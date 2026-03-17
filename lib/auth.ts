@@ -16,7 +16,7 @@ const LICENSE_SECRET = new TextEncoder().encode(
 export async function createSessionToken(userId: string) {
   return new SignJWT({ userId })
     .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("10m")
+    .setExpirationTime("1d")
     .sign(SECRET);
 }
 
