@@ -17,11 +17,33 @@ interface User {
   subscription: Subscription | null;
 }
 
+interface BackupEntry {
+  id: string;
+  license_key: string;
+  label: string | null;
+  entities: string;
+  size_bytes: number;
+  record_count: number;
+  created_at: string;
+}
+
+function formatBytes(bytes: number) {
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+  return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+}
+
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState("");
+
+  // Backups
+  const [backups, setBackups] = useState<BackupEntry[]>([]);
+  const [backupsLoading, setBackupsLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   useEffect(() => {
     async function init() {
@@ -41,6 +63,25 @@ export default function DashboardPage() {
     }
     init();
   }, [router]);
+
+  const fetchBackups = useCallback(async () => {
+    setBackupsLoading(true);
+    try {
+      const res = await fetch("/api/backups");
+      if (res.ok) {
+        const data = await res.json();
+        setBackups(data.backups || []);
+      }
+    } catch {
+      // silent
+    } finally {
+      setBackupsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) fetchBackups();
+  }, [user, fetchBackups]);
 
   async function handleSubscribe(plan: string) {
     setActionLoading("subscribe");
@@ -66,6 +107,44 @@ export default function DashboardPage() {
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
     router.push("/login");
+  }
+
+  async function handleDeleteBackup(id: string) {
+    if (!confirm("Are you sure you want to delete this backup?")) return;
+    setDeletingId(id);
+    try {
+      const res = await fetch(`/api/backups/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setBackups((prev) => prev.filter((b) => b.id !== id));
+      }
+    } catch {
+      // silent
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
+  async function handleDownloadBackup(id: string, label: string | null) {
+    setDownloadingId(id);
+    try {
+      const res = await fetch(`/api/backups/${id}`);
+      if (res.ok) {
+        const result = await res.json();
+        const blob = new Blob([result.backup.data], {
+          type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${label || "backup"}-${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    } catch {
+      // silent
+    } finally {
+      setDownloadingId(null);
+    }
   }
 
   if (loading) {
@@ -338,6 +417,137 @@ export default function DashboardPage() {
               </div>
             </>
           }
+        </section>
+
+        {/* ─── Cloud Backups Section ─── */}
+        <section
+          className="glass-card animate-slide-up"
+          style={{ padding: "32px", marginBottom: "28px" }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "20px",
+            }}
+          >
+            <div>
+              <h2 style={{ fontSize: "1.2rem", fontWeight: 600, display: "flex", alignItems: "center", gap: "8px" }}>
+                ☁️ Cloud Backups
+              </h2>
+              <p style={{ color: "var(--muted)", fontSize: "0.85rem", marginTop: "4px" }}>
+                Backups uploaded from your CBT applications.
+              </p>
+            </div>
+            <button
+              className="btn-outline"
+              onClick={fetchBackups}
+              disabled={backupsLoading}
+              style={{ padding: "8px 16px", fontSize: "0.85rem" }}
+            >
+              {backupsLoading ? "Loading..." : "↻ Refresh"}
+            </button>
+          </div>
+
+          {backupsLoading && backups.length === 0 ? (
+            <p style={{ textAlign: "center", color: "var(--muted)", padding: "32px 0" }}>
+              Loading backups...
+            </p>
+          ) : backups.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "40px 0", color: "var(--muted)" }}>
+              <p style={{ fontSize: "2rem", marginBottom: "8px" }}>💾</p>
+              <p style={{ fontWeight: 500 }}>No backups yet</p>
+              <p style={{ fontSize: "0.85rem", marginTop: "4px" }}>
+                Backups created from your CBT application will appear here.
+              </p>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {backups.map((b) => (
+                <div
+                  key={b.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "16px 20px",
+                    borderRadius: "12px",
+                    border: "1px solid var(--card-border)",
+                    background: "rgba(255, 255, 255, 0.5)",
+                  }}
+                >
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <span style={{ fontWeight: 600, fontSize: "0.95rem" }}>
+                        {b.label || "Untitled Backup"}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: "0.75rem",
+                          padding: "2px 8px",
+                          borderRadius: "999px",
+                          background: "rgba(99, 102, 241, 0.1)",
+                          color: "#6366f1",
+                        }}
+                      >
+                        {formatBytes(b.size_bytes)}
+                      </span>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        marginTop: "6px",
+                        fontSize: "0.8rem",
+                        color: "var(--muted)",
+                      }}
+                    >
+                      <span>
+                        {new Date(b.created_at).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                      <span>•</span>
+                      <span>{b.record_count} records</span>
+                      <span>•</span>
+                      <span style={{ textTransform: "capitalize" }}>
+                        {b.entities.replace(/,/g, ", ")}
+                      </span>
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", gap: "8px", marginLeft: "16px" }}>
+                    <button
+                      className="btn-outline"
+                      style={{ padding: "6px 12px", fontSize: "0.8rem" }}
+                      disabled={downloadingId === b.id}
+                      onClick={() => handleDownloadBackup(b.id, b.label)}
+                    >
+                      {downloadingId === b.id ? "⏳" : "⬇️"} Download
+                    </button>
+                    <button
+                      className="btn-outline"
+                      style={{
+                        padding: "6px 12px",
+                        fontSize: "0.8rem",
+                        color: "#ef4444",
+                        borderColor: "rgba(239, 68, 68, 0.3)",
+                      }}
+                      disabled={deletingId === b.id}
+                      onClick={() => handleDeleteBackup(b.id)}
+                    >
+                      {deletingId === b.id ? "⏳" : "🗑️"} Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
       </main>
     </div>

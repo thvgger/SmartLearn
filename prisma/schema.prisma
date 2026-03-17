@@ -22,6 +22,7 @@ model User {
 
     subscription Subscription?
     license_keys LicenseKey[]
+    backups      Backup[]
 }
 
 model Subscription {
@@ -45,6 +46,22 @@ model LicenseKey {
     is_active     Boolean   @default(true)
     last_verified DateTime?
     created_at    DateTime  @default(now())
+
+    user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+    @@index([user_id])
+}
+
+model Backup {
+    id            String   @id @default(cuid())
+    user_id       String
+    license_key   String   // which CBT device created this backup
+    label         String?  // optional user-facing label e.g. "Weekly Backup"
+    entities      String   // comma-separated: "users,classes,tests,results"
+    data          String   // the JSON payload (stored as text)
+    size_bytes    Int      @default(0)
+    record_count  Int      @default(0)
+    created_at    DateTime @default(now())
 
     user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
