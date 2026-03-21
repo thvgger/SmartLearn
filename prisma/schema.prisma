@@ -23,6 +23,9 @@ model User {
     subscription Subscription?
     license_keys LicenseKey[]
     backups      Backup[]
+    students     Student[]
+    exams        Exam[]
+    questions    Question[]
 }
 
 model Subscription {
@@ -66,4 +69,55 @@ model Backup {
     user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
     @@index([user_id])
+}
+
+model Student {
+    id          String   @id @default(cuid())
+    user_id     String
+    name        String
+    email       String?
+    class_name  String   // e.g. "SS 3A", "JSS 2B"
+    avg_score   Float    @default(0)
+    enrolled_at DateTime @default(now())
+    created_at  DateTime @default(now())
+    updated_at  DateTime @updatedAt
+
+    user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+    @@index([user_id])
+}
+
+model Exam {
+    id             String    @id @default(cuid())
+    user_id        String
+    title          String
+    subject        String
+    question_count Int       @default(0)
+    duration       String    @default("1h") // e.g. "2h 30m"
+    status         String    @default("draft") // draft, scheduled, completed
+    scheduled_date DateTime?
+    student_count  Int       @default(0)
+    avg_score      Float?
+    created_at     DateTime  @default(now())
+    updated_at     DateTime  @updatedAt
+
+    user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+    @@index([user_id])
+}
+
+model Question {
+    id         String   @id @default(cuid())
+    user_id    String
+    subject    String
+    topic      String
+    text       String
+    options    String   @default("[]") // JSON array of option strings
+    answer     String   // the correct answer
+    created_at DateTime @default(now())
+
+    user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+    @@index([user_id])
+    @@index([subject])
 }

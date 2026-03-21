@@ -1,42 +1,26 @@
 "use client";
 
-import { useState, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Navbar from "../components/Navbar";
+import { User, Building2, Mail, Phone, MapPin, Lock, ArrowRight } from "lucide-react";
 
-function RegisterFormTemplate() {
+export default function RegisterPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get("redirect") || "/dashboard";
-  const [form, setForm] = useState({
-    school_name: "",
-    contact_name: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirm_password: "",
-  });
+  const [fullName, setFullName] = useState("");
+  const [institution, setInstitution] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [password, setPassword] = useState("");
+  
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function update(field: string, value: string) {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
-    if (form.password !== form.confirm_password) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    if (form.password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return;
-    }
-
     setLoading(true);
 
     try {
@@ -44,202 +28,190 @@ function RegisterFormTemplate() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-          school_name: form.school_name,
-          contact_name: form.contact_name,
-          phone: form.phone || undefined,
+          contact_name: fullName,
+          school_name: institution,
+          email,
+          phone,
+          password
         }),
       });
 
-      const data = await res.json();
-
       if (!res.ok) {
-        setError(data.error || "Registration failed");
-        return;
+        const data = await res.json();
+        throw new Error(data.error || "Failed to create account");
       }
 
-      router.push(redirectUrl);
-    } catch {
-      setError("Something went wrong. Please try again.");
+      router.push("/dashboard");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
-  }
-
-  const fields = [
-    {
-      label: "School / Organization Name",
-      key: "school_name",
-      type: "text",
-      placeholder: "e.g. Greenwood Academy",
-      required: true,
-    },
-    {
-      label: "Contact Person",
-      key: "contact_name",
-      type: "text",
-      placeholder: "Full name",
-      required: true,
-    },
-    {
-      label: "Email Address",
-      key: "email",
-      type: "email",
-      placeholder: "school@example.com",
-      required: true,
-    },
-    {
-      label: "Phone (optional)",
-      key: "phone",
-      type: "tel",
-      placeholder: "+234 ...",
-      required: false,
-    },
-    {
-      label: "Password",
-      key: "password",
-      type: "password",
-      placeholder: "At least 6 characters",
-      required: true,
-    },
-    {
-      label: "Confirm Password",
-      key: "confirm_password",
-      type: "password",
-      placeholder: "Re-enter your password",
-      required: true,
-    },
-  ];
+  };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "20px",
-        background:
-          "radial-gradient(ellipse at top, rgba(99, 102, 241, 0.08), transparent 50%)",
-      }}
-    >
-      <div
-        className="glass-card animate-slide-up"
-        style={{ width: "100%", maxWidth: "480px", padding: "40px" }}
-      >
-        {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: "32px" }}>
-          <div
-            style={{
-              width: "56px",
-              height: "56px",
-              borderRadius: "16px",
-              background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              margin: "0 auto 16px",
-              fontSize: "24px",
-            }}
-          >
-            🏫
-          </div>
-          <h1
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: 700,
-              marginBottom: "4px",
-            }}
-          >
-            Create your account
-          </h1>
-          <p style={{ color: "var(--muted)", fontSize: "0.95rem" }}>
-            Register your school to get started with SmartLearn CBT
-          </p>
-        </div>
+    <div className="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col">
+      <Navbar />
 
-        {/* Error */}
-        {error && (
-          <div
-            style={{
-              background: "rgba(239, 68, 68, 0.1)",
-              border: "1px solid rgba(239, 68, 68, 0.3)",
-              borderRadius: "12px",
-              padding: "12px 16px",
-              marginBottom: "20px",
-              color: "var(--danger)",
-              fontSize: "0.9rem",
-            }}
-          >
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          {fields.map((f) => (
-            <div key={f.key} style={{ marginBottom: "16px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                  marginBottom: "6px",
-                  color: "var(--muted)",
-                }}
-              >
-                {f.label}
-              </label>
-              <input
-                type={f.type}
-                className="input-field"
-                placeholder={f.placeholder}
-                value={form[f.key as keyof typeof form]}
-                onChange={(e) => update(f.key, e.target.value)}
-                required={f.required}
-              />
+      {/* <!-- Main Content Canvas --> */}
+      <main className="relative flex-grow flex items-center justify-center pt-28 pb-12 overflow-hidden bg-[radial-gradient(circle_at_50%_50%,rgba(128,131,255,0.08)_0%,rgba(13,13,25,1)_70%)]">
+        {/* <!-- Background Ambient Glows --> */}
+        <div className="absolute top-1/4 -left-24 w-96 h-96 bg-primary/10 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-1/4 -right-24 w-96 h-96 bg-secondary/10 blur-[120px] rounded-full"></div>
+        
+        {/* <!-- Central Glassmorphic Card --> */}
+        <div className="relative z-10 w-full max-w-xl px-6 animate-fade-up">
+          <div className="glass-card backdrop-blur-xl p-8 md:p-12 rounded-xl shadow-[0_60px_60px_rgba(0,0,0,0.5)] border border-white/10 text-white">
+            
+            {/* <!-- Header --> */}
+            <div className="mb-10">
+              <span className="text-[0.6875rem] uppercase tracking-widest text-primary font-medium mb-2 block font-label">Institutional Excellence</span>
+              <h1 className="font-headline text-3xl md:text-4xl font-extrabold tracking-tight text-white">
+                Create your account
+              </h1>
             </div>
-          ))}
+            
+            {/* <!-- Registration Form --> */}
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              {error && <div className="p-3 bg-error/10 border border-error/20 rounded-md text-error text-sm font-medium">{error}</div>}
+              {/* <!-- Full Name --> */}
+              <div className="group">
+                <label className="block text-[0.6875rem] uppercase tracking-widest text-outline-variant font-medium mb-2 group-focus-within:text-primary transition-colors">Full Name</label>
+                <div className="relative flex items-center border-b border-outline-variant transition-all focus-within:border-primary pb-2">
+                  <User className="text-outline-variant w-5 h-5 mr-3 group-focus-within:text-primary transition-colors" />
+                  <input 
+                    className="bg-transparent border-none focus:ring-0 focus:outline-none w-full text-white placeholder:text-outline-variant/50 font-body p-0" 
+                    placeholder="John Doe" 
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              
+              {/* <!-- Institution Name --> */}
+              <div className="group">
+                <label className="block text-[0.6875rem] uppercase tracking-widest text-outline-variant font-medium mb-2 group-focus-within:text-primary transition-colors">Institution</label>
+                <div className="relative flex items-center border-b border-outline-variant transition-all focus-within:border-primary pb-2">
+                  <Building2 className="text-outline-variant w-5 h-5 mr-3 group-focus-within:text-primary transition-colors" />
+                  <input 
+                    className="bg-transparent border-none focus:ring-0 focus:outline-none w-full text-white placeholder:text-outline-variant/50 font-body p-0" 
+                    placeholder="University of Lagos" 
+                    type="text"
+                    value={institution}
+                    onChange={(e) => setInstitution(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              
+              {/* <!-- Email Address --> */}
+              <div className="group">
+                <label className="block text-[0.6875rem] uppercase tracking-widest text-outline-variant font-medium mb-2 group-focus-within:text-primary transition-colors">Work Email</label>
+                <div className="relative flex items-center border-b border-outline-variant transition-all focus-within:border-primary pb-2">
+                  <Mail className="text-outline-variant w-5 h-5 mr-3 group-focus-within:text-primary transition-colors" />
+                  <input 
+                    className="bg-transparent border-none focus:ring-0 focus:outline-none w-full text-white placeholder:text-outline-variant/50 font-body p-0" 
+                    placeholder="john@institution.edu" 
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              
+              {/* <!-- Phone Number --> */}
+              <div className="group">
+                <label className="block text-[0.6875rem] uppercase tracking-widest text-outline-variant font-medium mb-2 group-focus-within:text-primary transition-colors">Phone Number</label>
+                <div className="relative flex items-center border-b border-outline-variant transition-all focus-within:border-primary pb-2">
+                  <Phone className="text-outline-variant w-5 h-5 mr-3 group-focus-within:text-primary transition-colors" />
+                  <input 
+                    className="bg-transparent border-none focus:ring-0 w-full text-white placeholder:text-outline-variant/50 font-body p-0" 
+                    placeholder="+234 000 000 0000" 
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </div>
+              </div>
+              
+              {/* <!-- School Address --> */}
+              <div className="group">
+                <label className="block text-[0.6875rem] uppercase tracking-widest text-outline-variant font-medium mb-2 group-focus-within:text-primary transition-colors">School Address</label>
+                <div className="relative flex items-center border-b border-outline-variant transition-all focus-within:border-primary pb-2">
+                  <MapPin className="text-outline-variant w-5 h-5 mr-3 group-focus-within:text-primary transition-colors" />
+                  <input 
+                    className="bg-transparent border-none focus:ring-0 w-full text-white placeholder:text-outline-variant/50 font-body p-0" 
+                    placeholder="123 University Road, Lagos" 
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </div>
+              </div>
+              
+              {/* <!-- Password --> */}
+              <div className="group">
+                <label className="block text-[0.6875rem] uppercase tracking-widest text-outline-variant font-medium mb-2 group-focus-within:text-primary transition-colors">Password</label>
+                <div className="relative flex items-center border-b border-outline-variant transition-all focus-within:border-primary pb-2">
+                  <Lock className="text-outline-variant w-5 h-5 mr-3 group-focus-within:text-primary transition-colors" />
+                  <input 
+                    className="bg-transparent border-none focus:ring-0 w-full text-white placeholder:text-outline-variant/50 font-body p-0" 
+                    placeholder="••••••••" 
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              
+              {/* <!-- Submit Button --> */}
+              <div className="pt-4">
+                <button 
+                  className="w-full disabled:opacity-50 disabled:pointer-events-none bg-primary-container text-on-primary-container font-headline font-bold tracking-tight py-4 rounded-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(128,131,255,0.25)] flex justify-center items-center gap-2" 
+                  type="submit"
+                  disabled={loading}
+                >
+                  <span>{loading ? "Creating account..." : "Create Free Account"}</span>
+                  {!loading && <ArrowRight className="w-4 h-4" strokeWidth={3} />}
+                </button>
+              </div>
+            </form>
+            
+            {/* <!-- Footer Link --> */}
+            <div className="mt-8 pt-8 border-t border-outline-variant/10 text-center">
+              <p className="text-sm text-outline-variant font-body">
+                Already have an institutional account? 
+                <Link href="/login" className="text-primary font-semibold hover:underline decoration-primary/30 underline-offset-4 ml-1">
+                  Sign in
+                </Link>
+              </p>
+            </div>
+          </div>
+          
+          {/* <!-- Trust Badge --> */}
+          <div className="mt-8 flex justify-center items-center gap-8 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500">
+            <div className="h-6 w-24 bg-white/20 rounded"></div>
+            <div className="h-6 w-32 bg-white/20 rounded"></div>
+            <div className="h-6 w-20 bg-white/20 rounded"></div>
+          </div>
+        </div>
+      </main>
 
-          <button
-            type="submit"
-            className="btn-primary"
-            disabled={loading}
-            style={{ width: "100%", marginTop: "8px" }}
-          >
-            {loading ? "Creating account..." : "Create account"}
-          </button>
-        </form>
-
-        <p
-          style={{
-            textAlign: "center",
-            marginTop: "24px",
-            fontSize: "0.9rem",
-            color: "var(--muted)",
-          }}
-        >
-          Already have an account?{" "}
-          <Link
-            href={`/login${redirectUrl !== "/dashboard" ? `?redirect=${encodeURIComponent(redirectUrl)}` : ""}`}
-            style={{
-              color: "var(--primary)",
-              textDecoration: "none",
-              fontWeight: 500,
-            }}
-          >
-            Sign in
-          </Link>
-        </p>
-      </div>
+      {/* <!-- Minimal Footer for Auth Pages --> */}
+      <footer className="w-full flex justify-between items-center px-8 py-8 bg-[#0e0e14] border-t border-[#464554]/15 z-10">
+        <div className="font-body text-[0.6875rem] uppercase tracking-widest text-[#e4e1ea]/40">
+          &copy; {new Date().getFullYear()} Swift Learn.
+        </div>
+        <div className="flex gap-4 sm:gap-6">
+          <Link className="font-body text-[0.6875rem] uppercase tracking-widest text-[#e4e1ea]/40 hover:text-[#c0c1ff] transition-opacity" href="/">Home</Link>
+          <Link className="font-body text-[0.6875rem] uppercase tracking-widest text-[#e4e1ea]/40 hover:text-[#c0c1ff] transition-opacity" href="/contact">Support</Link>
+        </div>
+      </footer>
     </div>
-  );
-}
-
-export default function RegisterPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <RegisterFormTemplate />
-    </Suspense>
   );
 }
