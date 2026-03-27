@@ -64,7 +64,7 @@ export default function PricingPage() {
                 Digital Attendance
               </li>
             </ul>
-            <Link href="/register" className="block w-full py-3 rounded-lg border border-outline-variant/30 text-white font-headline font-bold text-sm hover:bg-white/5 transition-all text-center">
+            <Link href="/login" className="block w-full py-3 rounded-lg border border-outline-variant/30 text-white font-headline font-bold text-sm hover:bg-white/5 transition-all text-center">
               Start Free
             </Link>
           </div>
@@ -100,7 +100,7 @@ export default function PricingPage() {
                 Parent Notifications
               </li>
             </ul>
-            <Link href="/register" className="block w-full py-3 rounded-lg border border-outline-variant/30 text-white font-headline font-bold text-sm hover:bg-white/5 transition-all text-center">
+            <Link href="/login" className="block w-full py-3 rounded-lg border border-outline-variant/30 text-white font-headline font-bold text-sm hover:bg-white/5 transition-all text-center">
               Choose Starter
             </Link>
           </div>
@@ -144,7 +144,7 @@ export default function PricingPage() {
                   Staff Payroll Module
                 </li>
               </ul>
-              <Link href="/register" className="block w-full py-4 rounded-lg bg-primary-container text-on-primary-container font-headline font-bold text-sm hover:scale-[1.02] transition-transform shadow-xl text-center">
+              <Link href="/login" className="block w-full py-4 rounded-lg bg-primary-container text-on-primary-container font-headline font-bold text-sm hover:scale-[1.02] transition-transform shadow-xl text-center">
                 Get Started Now
               </Link>
             </div>

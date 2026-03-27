@@ -14,7 +14,7 @@ export async function GET() {
 
     const [studentCount, examCount, deviceCount, questionCount, avgScoreResult] =
       await Promise.all([
-        prisma.student.count({ where: { user_id: userId } }),
+        prisma.syncedUser.count({ where: { user_id: userId } }),
         prisma.exam.count({ where: { user_id: userId } }),
         prisma.licenseKey.count({ where: { user_id: userId, is_active: true } }),
         prisma.question.count({ where: { user_id: userId } }),
@@ -25,7 +25,7 @@ export async function GET() {
       ]);
 
     // Get class distribution
-    const classCounts = await prisma.student.groupBy({
+    const classCounts = await prisma.syncedUser.groupBy({
       by: ["class_name"],
       where: { user_id: userId },
       _count: { id: true },

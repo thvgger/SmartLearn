@@ -118,22 +118,16 @@ export default function DashboardOverview() {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <StatsCard
           icon={Users}
-          label="Total Students"
+          label="Total Users"
           value={stats ? String(stats.students) : "—"}
         />
         <StatsCard
           icon={FileText}
           label="Exams Created"
           value={stats ? String(stats.exams) : "—"}
-        />
-        <StatsCard
-          icon={Monitor}
-          label="Active Devices"
-          value={stats ? String(stats.devices) : "—"}
-          accent="text-emerald-400"
         />
         <StatsCard
           icon={TrendingUp}
@@ -292,7 +286,7 @@ export default function DashboardOverview() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Link
           href="/dashboard/exams"
           className="glass-card rounded-xl border border-outline-variant/10 p-5 hover:border-primary/30 transition-all group flex items-center gap-4"
@@ -310,7 +304,7 @@ export default function DashboardOverview() {
           </div>
         </Link>
         <Link
-          href="/dashboard/students"
+          href="/dashboard/users"
           className="glass-card rounded-xl border border-outline-variant/10 p-5 hover:border-primary/30 transition-all group flex items-center gap-4"
         >
           <div className="p-3 rounded-lg bg-violet-500/10 text-violet-400 group-hover:bg-violet-500/15 transition-colors">
@@ -318,47 +312,14 @@ export default function DashboardOverview() {
           </div>
           <div>
             <p className="font-headline font-bold text-sm text-on-surface">
-              Manage Students
+              Manage Users
             </p>
             <p className="text-[11px] text-outline-variant">
-              Add, edit, or import students
-            </p>
-          </div>
-        </Link>
-        <Link
-          href="/dashboard/devices"
-          className="glass-card rounded-xl border border-outline-variant/10 p-5 hover:border-primary/30 transition-all group flex items-center gap-4"
-        >
-          <div className="p-3 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/15 transition-colors">
-            <Monitor className="w-5 h-5" />
-          </div>
-          <div>
-            <p className="font-headline font-bold text-sm text-on-surface">
-              Add Device
-            </p>
-            <p className="text-[11px] text-outline-variant">
-              Generate a license key
+              Add, edit, or import users
             </p>
           </div>
         </Link>
       </div>
-
-      {/* Stats summary */}
-      {stats && stats.questions > 0 && (
-        <div className="glass-card rounded-xl border border-outline-variant/10 p-5 flex items-center gap-4">
-          <div className="p-2.5 rounded-lg bg-amber-500/10 text-amber-400">
-            <HelpCircle className="w-5 h-5" />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-on-surface">
-              <span className="font-bold">{stats.questions}</span> questions in your Question Bank
-            </p>
-            <p className="text-[11px] text-outline-variant">
-              Across all subjects. <Link href="/dashboard/exams" className="text-primary font-bold hover:underline">Manage →</Link>
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

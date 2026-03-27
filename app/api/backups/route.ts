@@ -72,6 +72,7 @@ export async function GET(req: NextRequest) {
         entities: true,
         size_bytes: true,
         record_count: true,
+        is_synced: true,
         created_at: true,
         // Exclude `data` from listings to keep responses small
       },
@@ -134,8 +135,23 @@ export async function POST(req: NextRequest) {
         data: jsonStr,
         size_bytes: sizeBytes,
         record_count: recordCount,
+        is_synced: true, // Mark this new upload as the newly synced one
       },
     });
+
+    // Mark previous backups as unsynced
+    await prisma.backup.updateMany({
+      where: { 
+        user_id: user.id, 
+        id: { not: backup.id } 
+      },
+      data: { is_synced: false },
+    });
+
+    // Auto-restore this backup so the dashboard is immediately populated
+    const parsedData = typeof data === "string" ? JSON.parse(data) : data;
+    const { rebuildDashboardData } = await import("@/lib/backup-restore");
+    await rebuildDashboardData(user.id, parsedData);
 
     return NextResponse.json({
       success: true,
@@ -146,6 +162,7 @@ export async function POST(req: NextRequest) {
         size_bytes: backup.size_bytes,
         record_count: backup.record_count,
         created_at: backup.created_at,
+        is_synced: backup.is_synced,
       },
     });
   } catch (error) {
@@ -156,3 +173,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

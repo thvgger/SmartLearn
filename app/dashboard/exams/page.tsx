@@ -62,6 +62,9 @@ export default function ExamsPage() {
   const [newDuration, setNewDuration] = useState("1h");
   const [newQuestionCount, setNewQuestionCount] = useState(0);
   const [creating, setCreating] = useState(false);
+  
+  // Dropdown state
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   const fetchExams = useCallback(async () => {
     try {
@@ -233,7 +236,7 @@ export default function ExamsPage() {
       </div>
 
       {/* Exams List */}
-      <div className="glass-card rounded-xl border border-outline-variant/10 overflow-hidden">
+      <div className="glass-card rounded-xl border border-outline-variant/10 pb-6">
         <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-3 border-b border-outline-variant/10 text-[10px] uppercase tracking-widest text-outline-variant font-bold">
           <div className="col-span-4">Exam</div>
           <div className="col-span-2">Questions</div>
@@ -294,16 +297,43 @@ export default function ExamsPage() {
                     <span className="text-sm font-bold text-on-surface">
                       {exam.avg_score !== null ? `${exam.avg_score}%` : "—"}
                     </span>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 relative">
                       <button
                         onClick={() => handleDelete(exam.id)}
                         className="p-1.5 rounded-md text-outline-variant hover:text-error hover:bg-error/10 transition-colors"
+                        title="Delete"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
-                      <button className="p-1.5 rounded-md text-outline-variant hover:text-on-surface hover:bg-surface-container-high transition-colors">
+                      <button
+                        onClick={() => setActiveDropdown(activeDropdown === exam.id ? null : exam.id)}
+                        className="p-1.5 rounded-md text-outline-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"
+                      >
                         <MoreHorizontal className="w-4 h-4" />
                       </button>
+
+                      {activeDropdown === exam.id && (
+                        <div className="absolute right-0 top-full mt-1 w-40 bg-surface-container-high border border-outline-variant/10 rounded-lg shadow-xl py-1 z-50">
+                          <button 
+                            onClick={() => { alert(`Viewing detailed report for ${exam.title}`); setActiveDropdown(null); }}
+                            className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-surface-container-highest transition-colors"
+                          >
+                            View Report
+                          </button>
+                          <button 
+                            onClick={() => { alert(`Exam will be marked as published/ready.`); setActiveDropdown(null); }}
+                            className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-surface-container-highest transition-colors"
+                          >
+                            Publish Exam
+                          </button>
+                          <button 
+                            onClick={() => { alert('Duplicating exams is managed on your CBT app offline.'); setActiveDropdown(null); }}
+                            className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-surface-container-highest transition-colors"
+                          >
+                            Duplicate Exam
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

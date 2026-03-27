@@ -10,6 +10,7 @@ import {
   Download,
   Trash2,
   RefreshCw,
+  CheckCircle2,
   Shield,
   Mail,
   Phone,
@@ -23,6 +24,7 @@ interface BackupEntry {
   entities: string;
   size_bytes: number;
   record_count: number;
+  is_synced: boolean;
   created_at: string;
 }
 
@@ -39,6 +41,8 @@ export default function SettingsPage() {
   const [backupsLoading, setBackupsLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [restoringId, setRestoringId] = useState<string | null>(null);
+  const [isYearly, setIsYearly] = useState(false);
 
   const sub = user?.subscription;
   const isActive = sub?.status === "active";
@@ -76,7 +80,7 @@ export default function SettingsPage() {
       const res = await fetch("/api/subscription", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify({ plan: isYearly ? `${plan}_yearly` : plan }),
       });
       if (res.ok) {
         window.location.reload();
@@ -98,6 +102,25 @@ export default function SettingsPage() {
       // silent
     } finally {
       setDeletingId(null);
+    }
+  }
+
+  async function handleRestoreBackup(id: string) {
+    if (!confirm("This will overwrite your current dashboard data (Students, Exams, Questions) with the data from this backup. Continue?")) return;
+    setRestoringId(id);
+    try {
+      const res = await fetch(`/api/backups/${id}/restore`, { method: "POST" });
+      if (res.ok) {
+        alert("Success! Dashboard has been synced with the backup data.");
+        window.location.reload();
+      } else {
+        const data = await res.json();
+        alert(`Error: ${data.error || "Failed to sync"}`);
+      }
+    } catch {
+      alert("Error: Network failure while syncing.");
+    } finally {
+      setRestoringId(null);
     }
   }
 
@@ -210,7 +233,7 @@ export default function SettingsPage() {
               <Shield className="w-5 h-5 text-emerald-400" />
               <div>
                 <p className="text-sm font-semibold text-on-surface capitalize">
-                  {sub?.plan} Plan
+                  {sub?.plan.replace("_yearly", " Yearly")} Plan
                 </p>
                 {expiresAt && (
                   <p className="text-xs text-outline-variant">
@@ -225,20 +248,35 @@ export default function SettingsPage() {
           </div>
         ) : (
           <div>
-            <p className="text-on-surface-variant text-sm mb-6">
-              Choose a plan to activate your CBT license and unlock all features.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Basic Plan */}
-              <div className="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10 text-center hover:border-primary/20 transition-all">
-                <h3 className="font-headline font-bold text-lg mb-1">Basic</h3>
-                <p className="text-xs text-outline-variant mb-4">1 month access</p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+              <p className="text-on-surface-variant text-sm">
+                Choose a plan to activate your CBT license and unlock all features.
+              </p>
+              {/* <!-- Toggle Switch --> */}
+              <div className="flex items-center gap-3 shrink-0">
+                <span className={`text-xs font-bold uppercase tracking-wider ${!isYearly ? "text-on-surface" : "text-outline-variant"}`}>Monthly</span>
+                <div 
+                  className="relative w-12 h-6 bg-surface-container rounded-full p-1 cursor-pointer transition-colors border border-outline-variant/10"
+                  onClick={() => setIsYearly(!isYearly)}
+                >
+                  <div className={`absolute top-1 w-4 h-4 bg-primary rounded-full transition-transform ${isYearly ? "translate-x-6" : "translate-x-0"}`}></div>
+                </div>
+                <span className={`text-xs font-bold uppercase tracking-wider ${isYearly ? "text-on-surface" : "text-outline-variant"}`}>Yearly</span>
+                <span className="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[9px] font-bold tracking-tight ml-1">SAVE 25%</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+              {/* Free Plan */}
+              <div className="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10 text-center hover:border-primary/20 transition-all flex flex-col">
+                <h3 className="font-headline font-bold text-lg mb-1">Free</h3>
+                <p className="text-xs text-outline-variant mb-4 flex-grow">Up to 10 Students</p>
                 <p className="text-3xl font-headline font-extrabold mb-1">
-                  ₦5,000
+                  ₦0
                   <span className="text-sm font-normal text-outline-variant">/mo</span>
                 </p>
                 <button
-                  onClick={() => handleSubscribe("basic")}
+                  onClick={() => handleSubscribe("free")}
                   disabled={actionLoading === "subscribe"}
                   className="mt-4 w-full bg-surface-container-high text-on-surface py-3 rounded-lg font-headline font-bold text-sm hover:bg-surface-container-highest transition-colors border border-outline-variant/10 disabled:opacity-50"
                 >
@@ -246,21 +284,64 @@ export default function SettingsPage() {
                 </button>
               </div>
 
-              {/* Premium Plan */}
-              <div className="bg-surface-container-low rounded-xl p-6 border border-primary/30 text-center relative overflow-hidden hover:border-primary/50 transition-all">
-                <span className="absolute top-0 right-0 bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-bl-lg">
-                  Best Value
-                </span>
-                <h3 className="font-headline font-bold text-lg mb-1">Premium</h3>
-                <p className="text-xs text-outline-variant mb-4">1 year access</p>
+              {/* Starter Plan */}
+              <div className="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10 text-center hover:border-primary/20 transition-all flex flex-col">
+                <h3 className="font-headline font-bold text-lg mb-1">Starter</h3>
+                <p className="text-xs text-outline-variant mb-4 flex-grow">Up to 75 Students</p>
                 <p className="text-3xl font-headline font-extrabold mb-1">
-                  ₦40,000
-                  <span className="text-sm font-normal text-outline-variant">/yr</span>
+                  {isYearly ? "₦7,500" : "₦10,000"}
+                  <span className="text-sm font-normal text-outline-variant">/mo</span>
                 </p>
+                <div className="text-[10px] text-primary h-3 mt-1 font-bold">
+                  {isYearly && "₦90,000 billed annually"}
+                </div>
                 <button
-                  onClick={() => handleSubscribe("premium")}
+                  onClick={() => handleSubscribe("starter")}
                   disabled={actionLoading === "subscribe"}
-                  className="mt-4 w-full bg-primary-container text-on-primary-container py-3 rounded-lg font-headline font-bold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary-container/20 disabled:opacity-50"
+                  className="mt-auto w-full bg-surface-container-high text-on-surface py-3 rounded-lg font-headline font-bold text-sm hover:bg-surface-container-highest transition-colors border border-outline-variant/10 disabled:opacity-50"
+                >
+                  {actionLoading === "subscribe" ? "Processing..." : "Subscribe"}
+                </button>
+              </div>
+
+              {/* School Plan */}
+              <div className="bg-surface-container-low rounded-xl p-6 border border-primary/30 text-center relative overflow-hidden hover:border-primary/50 transition-all flex flex-col">
+                <span className="absolute top-0 right-0 bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-bl-lg">
+                  Popular
+                </span>
+                <h3 className="font-headline font-bold text-lg mb-1">School</h3>
+                <p className="text-xs text-outline-variant mb-4 flex-grow">Complete digital transformation</p>
+                <p className="text-3xl font-headline font-extrabold mb-1">
+                  {isYearly ? "₦15,000" : "₦20,000"}
+                  <span className="text-sm font-normal text-outline-variant">/mo</span>
+                </p>
+                <div className="text-[10px] text-primary h-3 mt-1 font-bold">
+                  {isYearly && "₦180,000 billed annually"}
+                </div>
+                <button
+                  onClick={() => handleSubscribe("school")}
+                  disabled={actionLoading === "subscribe"}
+                  className="mt-auto w-full bg-primary-container text-on-primary-container py-3 rounded-lg font-headline font-bold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary-container/20 disabled:opacity-50"
+                >
+                  {actionLoading === "subscribe" ? "Processing..." : "Subscribe"}
+                </button>
+              </div>
+
+              {/* Enterprise Plan */}
+              <div className="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10 text-center hover:border-primary/20 transition-all flex flex-col">
+                <h3 className="font-headline font-bold text-lg mb-1">Enterprise</h3>
+                <p className="text-xs text-outline-variant mb-4 flex-grow">Unlimited resources & scale</p>
+                <p className="text-3xl font-headline font-extrabold mb-1">
+                  {isYearly ? "₦25,000" : "₦33,333"}
+                  <span className="text-sm font-normal text-outline-variant">/mo</span>
+                </p>
+                <div className="text-[10px] text-primary h-3 mt-1 font-bold">
+                  {isYearly && "₦300,000 billed annually"}
+                </div>
+                <button
+                  onClick={() => handleSubscribe("enterprise")}
+                  disabled={actionLoading === "subscribe"}
+                  className="mt-auto w-full bg-surface-container-high text-on-surface py-3 rounded-lg font-headline font-bold text-sm hover:bg-surface-container-highest transition-colors border border-outline-variant/10 disabled:opacity-50"
                 >
                   {actionLoading === "subscribe" ? "Processing..." : "Subscribe"}
                 </button>
@@ -340,13 +421,28 @@ export default function SettingsPage() {
                   </div>
                 </div>
                 <div className="flex gap-2 shrink-0">
+                  {b.is_synced ? (
+                    <span className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold text-emerald-500 bg-emerald-400/10 border border-emerald-400/20">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      Synced
+                    </span>
+                  ) : (
+                    <button
+                      onClick={() => handleRestoreBackup(b.id)}
+                      disabled={restoringId === b.id}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold text-indigo-400 bg-indigo-400/10 hover:bg-indigo-400/20 transition-colors border border-indigo-400/20 disabled:opacity-50"
+                      title="Sync this backup data to your Dashboard"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${restoringId === b.id ? "animate-spin" : ""}`} />
+                      {restoringId === b.id ? "Syncing..." : "Sync to Dashboard"}
+                    </button>
+                  )}
                   <button
                     onClick={() => handleDownloadBackup(b.id, b.label)}
                     disabled={downloadingId === b.id}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-on-surface bg-surface-container-high hover:bg-surface-container-highest transition-colors border border-outline-variant/10 disabled:opacity-50"
                   >
                     <Download className="w-3.5 h-3.5" />
-                    {downloadingId === b.id ? "..." : "Download"}
                   </button>
                   <button
                     onClick={() => handleDeleteBackup(b.id)}
@@ -354,7 +450,6 @@ export default function SettingsPage() {
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-error hover:bg-error/10 transition-colors border border-error/20 disabled:opacity-50"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
-                    {deletingId === b.id ? "..." : "Delete"}
                   </button>
                 </div>
               </div>
