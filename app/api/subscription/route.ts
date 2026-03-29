@@ -12,22 +12,31 @@ export async function POST(req: NextRequest) {
     }
 
     const { plan } = await req.json();
-    const validPlans = ["basic", "premium"];
+    const validPlans = [
+      "free",
+      "starter", "starter_yearly",
+      "school",  "school_yearly",
+      "enterprise", "enterprise_yearly",
+      "basic", "basic_yearly",
+      "premium", "premium_yearly",
+    ];
 
     if (!validPlans.includes(plan)) {
       return NextResponse.json(
-        { error: "Invalid plan. Must be 'basic' or 'premium'" },
+        { error: `Invalid plan: '${plan}'` },
         { status: 400 },
       );
     }
 
-    // Determine subscription duration based on plan (dummy)
+    // Yearly plans get 12 months, monthly plans get 1 month, free is indefinite
     const now = new Date();
     const expiresAt = new Date(now);
-    if (plan === "basic") {
-      expiresAt.setMonth(expiresAt.getMonth() + 1); // 1 month
+    if (plan === "free") {
+      expiresAt.setFullYear(expiresAt.getFullYear() + 10); // effectively unlimited
+    } else if (plan.endsWith("_yearly")) {
+      expiresAt.setFullYear(expiresAt.getFullYear() + 1);
     } else {
-      expiresAt.setFullYear(expiresAt.getFullYear() + 1); // 1 year
+      expiresAt.setMonth(expiresAt.getMonth() + 1);
     }
 
     const subscription = await prisma.subscription.upsert({
