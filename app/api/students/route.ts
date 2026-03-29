@@ -25,7 +25,7 @@ export async function GET(req: Request) {
       ];
     }
 
-    const students = await prisma.student.findMany({
+    const students = await prisma.syncedUser.findMany({
       where,
       orderBy: { name: "asc" },
     });
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const student = await prisma.student.create({
+    const student = await prisma.syncedUser.create({
       data: {
         user_id: session.userId,
         name,

@@ -34,7 +34,7 @@ async function main() {
   ];
 
   for (const s of studentData) {
-    await prisma.student.create({
+    await prisma.syncedUser.create({
       data: { ...s, user_id: user.id },
     });
   }

@@ -14,7 +14,7 @@ export async function GET(
     }
 
     const { id } = await params;
-    const student = await prisma.student.findFirst({
+    const student = await prisma.syncedUser.findFirst({
       where: { id, user_id: session.userId },
     });
 
@@ -41,7 +41,7 @@ export async function PUT(
     }
 
     const { id } = await params;
-    const existing = await prisma.student.findFirst({
+    const existing = await prisma.syncedUser.findFirst({
       where: { id, user_id: session.userId },
     });
 
@@ -50,7 +50,7 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const student = await prisma.student.update({
+    const student = await prisma.syncedUser.update({
       where: { id },
       data: {
         name: body.name ?? existing.name,
@@ -79,7 +79,7 @@ export async function DELETE(
     }
 
     const { id } = await params;
-    const existing = await prisma.student.findFirst({
+    const existing = await prisma.syncedUser.findFirst({
       where: { id, user_id: session.userId },
     });
 
@@ -87,7 +87,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Student not found" }, { status: 404 });
     }
 
-    await prisma.student.delete({ where: { id } });
+    await prisma.syncedUser.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Student delete error:", error);
