@@ -32,14 +32,6 @@ export default function UsersPage() {
   const [selectedClass, setSelectedClass] = useState("All");
   const [selectedRole, setSelectedRole] = useState("All");
 
-  // Add user modal
-  const [showModal, setShowModal] = useState(false);
-  const [newName, setNewName] = useState("");
-  const [newEmail, setNewEmail] = useState("");
-  const [newClass, setNewClass] = useState("");
-  const [newRole, setNewRole] = useState("student");
-  const [creating, setCreating] = useState(false);
-  
   // Dropdown state
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
@@ -74,42 +66,6 @@ export default function UsersPage() {
     return matchesSearch && matchesClass && matchesRole;
   });
 
-  async function handleCreate(e: React.FormEvent) {
-    e.preventDefault();
-    setCreating(true);
-    try {
-      const res = await fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: newName, email: newEmail || null, class_name: newClass, role: newRole }),
-      });
-      if (res.ok) {
-        setShowModal(false);
-        setNewName("");
-        setNewEmail("");
-        setNewClass("");
-        setNewRole("student");
-        await fetchUsers();
-      }
-    } catch {
-      // silent
-    } finally {
-      setCreating(false);
-    }
-  }
-
-  async function handleDelete(id: string) {
-    if (!confirm("Remove this user?")) return;
-    try {
-      const res = await fetch(`/api/users/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        setUsers((prev) => prev.filter((u) => u.id !== id));
-      }
-    } catch {
-      // silent
-    }
-  }
-
   function getScoreColor(score: number) {
     if (score >= 85) return "text-emerald-400 bg-emerald-400/10";
     if (score >= 70) return "text-amber-400 bg-amber-400/10";
@@ -133,19 +89,6 @@ export default function UsersPage() {
           <p className="text-on-surface-variant text-sm mt-1">
             {users.length} users across {allClasses.length - 1} classes
           </p>
-        </div>
-        <div className="flex gap-3">
-          <button className="flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2.5 rounded-lg font-medium text-sm hover:bg-surface-container-highest transition-colors border border-outline-variant/10">
-            <Upload className="w-4 h-4" />
-            Import CSV
-          </button>
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 bg-primary-container text-on-primary-container px-5 py-2.5 rounded-lg font-headline font-bold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary-container/20"
-          >
-            <UserPlus className="w-4 h-4" />
-            Add User
-          </button>
         </div>
       </div>
 
@@ -265,13 +208,6 @@ export default function UsersPage() {
                 </div>
                 <div className="col-span-1 flex justify-end gap-1 relative">
                   <button
-                    onClick={() => handleDelete(user.id)}
-                    className="p-1.5 rounded-md text-outline-variant hover:text-error hover:bg-error/10 transition-colors"
-                    title="Delete"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                  <button
                     onClick={() => setActiveDropdown(activeDropdown === user.id ? null : user.id)}
                     className="p-1.5 rounded-md text-outline-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"
                   >
@@ -286,18 +222,6 @@ export default function UsersPage() {
                       >
                         View Analytics
                       </button>
-                      <button 
-                        onClick={() => { alert(`A password reset link would be sent to ${user.email || 'the user'}`); setActiveDropdown(null); }}
-                        className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-surface-container-highest transition-colors"
-                      >
-                        Reset Password
-                      </button>
-                      <button 
-                        onClick={() => { alert('Synced users cannot be edited directly.'); setActiveDropdown(null); }}
-                        className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-surface-container-highest transition-colors"
-                      >
-                        Edit Profile
-                      </button>
                     </div>
                   )}
                 </div>
@@ -307,73 +231,6 @@ export default function UsersPage() {
         )}
       </div>
 
-      {/* Add User Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="glass-card rounded-xl border border-outline-variant/10 p-8 w-full max-w-md shadow-2xl">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="font-headline font-bold text-xl">Add User</h2>
-              <button onClick={() => setShowModal(false)} className="p-1 rounded-md hover:bg-surface-container-high text-outline-variant hover:text-on-surface">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <form onSubmit={handleCreate} className="space-y-5">
-              <div>
-                <label className="block text-[10px] uppercase tracking-widest text-outline-variant font-bold mb-2">Full Name *</label>
-                <input
-                  type="text"
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  required
-                  placeholder="e.g. Adebayo Olamide"
-                  className="w-full bg-surface-container-low border border-outline-variant/10 rounded-lg px-4 py-2.5 text-sm text-on-surface placeholder:text-outline-variant/50 focus:outline-none focus:border-primary transition-colors"
-                />
-              </div>
-              <div>
-                <label className="block text-[10px] uppercase tracking-widest text-outline-variant font-bold mb-2">Email</label>
-                <input
-                  type="email"
-                  value={newEmail}
-                  onChange={(e) => setNewEmail(e.target.value)}
-                  placeholder="e.g. user@school.edu"
-                  className="w-full bg-surface-container-low border border-outline-variant/10 rounded-lg px-4 py-2.5 text-sm text-on-surface placeholder:text-outline-variant/50 focus:outline-none focus:border-primary transition-colors"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-outline-variant font-bold mb-2">Role *</label>
-                  <select
-                    value={newRole}
-                    onChange={(e) => setNewRole(e.target.value)}
-                    className="w-full bg-surface-container-low border border-outline-variant/10 rounded-lg px-4 py-3 text-sm text-on-surface focus:outline-none focus:border-primary transition-colors appearance-none"
-                  >
-                    <option value="student">Student</option>
-                    <option value="teacher">Teacher</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-outline-variant font-bold mb-2">Class</label>
-                  <input
-                    type="text"
-                    value={newClass}
-                    onChange={(e) => setNewClass(e.target.value)}
-                    placeholder="e.g. SS 3A"
-                    className="w-full bg-surface-container-low border border-outline-variant/10 rounded-lg px-4 py-2.5 text-sm text-on-surface placeholder:text-outline-variant/50 focus:outline-none focus:border-primary transition-colors"
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                disabled={creating}
-                className="w-full bg-primary-container text-on-primary-container py-3 rounded-lg font-headline font-bold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary-container/20 disabled:opacity-50 mt-2"
-              >
-                {creating ? "Adding..." : "Add User"}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

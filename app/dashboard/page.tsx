@@ -287,22 +287,7 @@ export default function DashboardOverview() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Link
-          href="/dashboard/exams"
-          className="glass-card rounded-xl border border-outline-variant/10 p-5 hover:border-primary/30 transition-all group flex items-center gap-4"
-        >
-          <div className="p-3 rounded-lg bg-primary-container/10 text-primary group-hover:bg-primary-container/20 transition-colors">
-            <FileText className="w-5 h-5" />
-          </div>
-          <div>
-            <p className="font-headline font-bold text-sm text-on-surface">
-              Create Exam
-            </p>
-            <p className="text-[11px] text-outline-variant">
-              Build a new test from scratch
-            </p>
-          </div>
-        </Link>
+
         <Link
           href="/dashboard/users"
           className="glass-card rounded-xl border border-outline-variant/10 p-5 hover:border-primary/30 transition-all group flex items-center gap-4"
@@ -315,7 +300,7 @@ export default function DashboardOverview() {
               Manage Users
             </p>
             <p className="text-[11px] text-outline-variant">
-              Add, edit, or import users
+              View users and their performance
             </p>
           </div>
         </Link>

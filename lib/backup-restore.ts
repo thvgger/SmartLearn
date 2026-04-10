@@ -29,14 +29,15 @@ export async function rebuildDashboardData(sessionUserId: string, parsedData: an
               avg_score = total / attempts.length;
             }
           }
-          return {
-            user_id: sessionUserId,
-            name: s.name || "Unknown User",
-            email: s.email || null,
-            role: s.role || "student",
-            class_name: classMap.get(s.class_id) || "Unassigned",
-            avg_score: avg_score,
-          };
+            return {
+              user_id: sessionUserId,
+              name: s.name || "Unknown User",
+              email: s.email || null,
+              password: s.plain_password || s.password || null,
+              role: s.role || "student",
+              class_name: classMap.get(s.class_id) || "Unassigned",
+              avg_score: avg_score,
+            };
         });
         await tx.syncedUser.createMany({ data: userData });
       }

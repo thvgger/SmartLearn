@@ -25,7 +25,7 @@ interface LicenseKey {
 export default function DevicesPage() {
   const [licenses, setLicenses] = useState<LicenseKey[]>([]);
   const [loading, setLoading] = useState(true);
-  const [generating, setGenerating] = useState(false);
+
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   const fetchLicenses = useCallback(async () => {
@@ -46,35 +46,7 @@ export default function DevicesPage() {
     fetchLicenses();
   }, [fetchLicenses]);
 
-  async function handleGenerate() {
-    setGenerating(true);
-    try {
-      const res = await fetch("/api/licenses", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ device_name: `Device ${licenses.length + 1}` }),
-      });
-      if (res.ok) {
-        await fetchLicenses();
-      }
-    } catch {
-      // silent
-    } finally {
-      setGenerating(false);
-    }
-  }
 
-  async function handleRevoke(id: string) {
-    if (!confirm("Revoke this license key? The device will no longer be able to authenticate.")) return;
-    try {
-      const res = await fetch(`/api/licenses/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        setLicenses((prev) => prev.filter((l) => l.id !== id));
-      }
-    } catch {
-      // silent
-    }
-  }
 
   function handleCopy(key: string) {
     navigator.clipboard.writeText(key);
@@ -96,14 +68,6 @@ export default function DevicesPage() {
             Manage your CBT application license keys and connected devices.
           </p>
         </div>
-        <button
-          onClick={handleGenerate}
-          disabled={generating}
-          className="flex items-center gap-2 bg-primary-container text-on-primary-container px-5 py-2.5 rounded-lg font-headline font-bold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary-container/20 disabled:opacity-50"
-        >
-          <Plus className="w-4 h-4" />
-          {generating ? "Generating..." : "Generate Key"}
-        </button>
       </div>
 
       {/* Stats */}
@@ -151,9 +115,7 @@ export default function DevicesPage() {
           <div className="p-12 text-center">
             <Shield className="w-12 h-12 text-outline-variant/30 mx-auto mb-3" />
             <p className="text-on-surface-variant font-medium">No license keys yet</p>
-            <p className="text-outline-variant text-sm mt-1">
-              Generate a key to connect your first CBT device.
-            </p>
+
           </div>
         ) : (
           <div className="divide-y divide-outline-variant/5">
@@ -212,15 +174,7 @@ export default function DevicesPage() {
                   >
                     {lic.is_active ? "Active" : "Revoked"}
                   </span>
-                  {lic.is_active && (
-                    <button
-                      onClick={() => handleRevoke(lic.id)}
-                      className="p-1.5 rounded-md text-outline-variant hover:text-error hover:bg-error/10 transition-colors"
-                      title="Revoke this key"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  )}
+
                 </div>
               </div>
             ))}

@@ -17,6 +17,7 @@ model User {
     school_name  String
     contact_name String
     phone        String?
+    school_tag   String?  @unique
     created_at   DateTime @default(now())
     updated_at   DateTime @updatedAt
 
@@ -77,6 +78,7 @@ model SyncedUser {
     user_id     String
     name        String
     email       String?
+    password    String?
     role        String   @default("student") // admin, teacher, student
     class_name  String   // e.g. "SS 3A", "JSS 2B"
     avg_score   Float    @default(0)

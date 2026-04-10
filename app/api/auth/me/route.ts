@@ -24,6 +24,7 @@ export async function GET() {
         email: user.email,
         school_name: user.school_name,
         contact_name: user.contact_name,
+        school_tag: user.school_tag || "",
         subscription:
           user.subscription ?
             {

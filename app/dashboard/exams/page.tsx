@@ -55,13 +55,7 @@ export default function ExamsPage() {
   const [questionCounts, setQuestionCounts] = useState<QuestionCount[]>([]);
   const [totalQuestions, setTotalQuestions] = useState(0);
 
-  // Create exam modal
-  const [showModal, setShowModal] = useState(false);
-  const [newTitle, setNewTitle] = useState("");
-  const [newSubject, setNewSubject] = useState("");
-  const [newDuration, setNewDuration] = useState("1h");
-  const [newQuestionCount, setNewQuestionCount] = useState(0);
-  const [creating, setCreating] = useState(false);
+
   
   // Dropdown state
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -104,46 +98,7 @@ export default function ExamsPage() {
     return matchesSearch && matchesStatus;
   });
 
-  async function handleCreate(e: React.FormEvent) {
-    e.preventDefault();
-    setCreating(true);
-    try {
-      const res = await fetch("/api/exams", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: newTitle,
-          subject: newSubject,
-          duration: newDuration,
-          question_count: newQuestionCount,
-        }),
-      });
-      if (res.ok) {
-        setShowModal(false);
-        setNewTitle("");
-        setNewSubject("");
-        setNewDuration("1h");
-        setNewQuestionCount(0);
-        await fetchExams();
-      }
-    } catch {
-      // silent
-    } finally {
-      setCreating(false);
-    }
-  }
 
-  async function handleDelete(id: string) {
-    if (!confirm("Delete this exam?")) return;
-    try {
-      const res = await fetch(`/api/exams/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        setExams((prev) => prev.filter((e) => e.id !== id));
-      }
-    } catch {
-      // silent
-    }
-  }
 
   const subjectIcons: Record<string, string> = {
     Mathematics: "📐", English: "📝", Physics: "⚡", Chemistry: "🧪",
@@ -162,17 +117,10 @@ export default function ExamsPage() {
             Create, schedule, and manage your assessments.
           </p>
         </div>
-        <button
-          onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-primary-container text-on-primary-container px-5 py-2.5 rounded-lg font-headline font-bold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary-container/20"
-        >
-          <Plus className="w-4 h-4" />
-          Create Exam
-        </button>
       </div>
 
       {/* Question Bank Overview */}
-      <div className="glass-card rounded-xl border border-outline-variant/10 p-6">
+      {/* <div className="glass-card rounded-xl border border-outline-variant/10 p-6">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-primary-container/10 text-primary">
@@ -204,7 +152,7 @@ export default function ExamsPage() {
             ))}
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* Search & Filter */}
       <div className="flex flex-col sm:flex-row gap-4">
@@ -298,13 +246,7 @@ export default function ExamsPage() {
                       {exam.avg_score !== null ? `${exam.avg_score}%` : "—"}
                     </span>
                     <div className="flex gap-1 relative">
-                      <button
-                        onClick={() => handleDelete(exam.id)}
-                        className="p-1.5 rounded-md text-outline-variant hover:text-error hover:bg-error/10 transition-colors"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+
                       <button
                         onClick={() => setActiveDropdown(activeDropdown === exam.id ? null : exam.id)}
                         className="p-1.5 rounded-md text-outline-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"
@@ -320,18 +262,6 @@ export default function ExamsPage() {
                           >
                             View Report
                           </button>
-                          <button 
-                            onClick={() => { alert(`Exam will be marked as published/ready.`); setActiveDropdown(null); }}
-                            className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-surface-container-highest transition-colors"
-                          >
-                            Publish Exam
-                          </button>
-                          <button 
-                            onClick={() => { alert('Duplicating exams is managed on your CBT app offline.'); setActiveDropdown(null); }}
-                            className="w-full text-left px-3 py-2 text-xs text-on-surface hover:bg-surface-container-highest transition-colors"
-                          >
-                            Duplicate Exam
-                          </button>
                         </div>
                       )}
                     </div>
@@ -343,55 +273,6 @@ export default function ExamsPage() {
         )}
       </div>
 
-      {/* Create Exam Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="glass-card rounded-xl border border-outline-variant/10 p-8 w-full max-w-md shadow-2xl">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="font-headline font-bold text-xl">Create Exam</h2>
-              <button onClick={() => setShowModal(false)} className="p-1 rounded-md hover:bg-surface-container-high text-outline-variant hover:text-on-surface">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <form onSubmit={handleCreate} className="space-y-5">
-              <div>
-                <label className="block text-[10px] uppercase tracking-widest text-outline-variant font-bold mb-2">Title *</label>
-                <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} required
-                  placeholder="e.g. Mathematics Final Exam"
-                  className="w-full bg-surface-container-low border border-outline-variant/10 rounded-lg px-4 py-2.5 text-sm text-on-surface placeholder:text-outline-variant/50 focus:outline-none focus:border-primary transition-colors"
-                />
-              </div>
-              <div>
-                <label className="block text-[10px] uppercase tracking-widest text-outline-variant font-bold mb-2">Subject *</label>
-                <input type="text" value={newSubject} onChange={(e) => setNewSubject(e.target.value)} required
-                  placeholder="e.g. Mathematics"
-                  className="w-full bg-surface-container-low border border-outline-variant/10 rounded-lg px-4 py-2.5 text-sm text-on-surface placeholder:text-outline-variant/50 focus:outline-none focus:border-primary transition-colors"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-outline-variant font-bold mb-2">Duration</label>
-                  <input type="text" value={newDuration} onChange={(e) => setNewDuration(e.target.value)}
-                    placeholder="e.g. 2h 30m"
-                    className="w-full bg-surface-container-low border border-outline-variant/10 rounded-lg px-4 py-2.5 text-sm text-on-surface placeholder:text-outline-variant/50 focus:outline-none focus:border-primary transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-outline-variant font-bold mb-2">Questions</label>
-                  <input type="number" value={newQuestionCount} onChange={(e) => setNewQuestionCount(Number(e.target.value))}
-                    className="w-full bg-surface-container-low border border-outline-variant/10 rounded-lg px-4 py-2.5 text-sm text-on-surface focus:outline-none focus:border-primary transition-colors"
-                  />
-                </div>
-              </div>
-              <button type="submit" disabled={creating}
-                className="w-full bg-primary-container text-on-primary-container py-3 rounded-lg font-headline font-bold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary-container/20 disabled:opacity-50"
-              >
-                {creating ? "Creating..." : "Create Exam"}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

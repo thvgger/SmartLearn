@@ -16,6 +16,7 @@ interface DashboardUser {
   email: string;
   school_name: string;
   contact_name: string;
+  school_tag?: string;
   subscription: Subscription | null;
 }
 
