@@ -177,7 +177,7 @@ export default function PricingPage() {
                 White-label Dashboard
               </li>
             </ul>
-            <Link href="/contact" className="block w-full py-3 rounded-lg border border-outline-variant/30 text-white font-headline font-bold text-sm hover:bg-white/5 transition-all text-center">
+            <Link href="/login" className="block w-full py-3 rounded-lg border border-outline-variant/30 text-white font-headline font-bold text-sm hover:bg-white/5 transition-all text-center">
               Choose Enterprise
             </Link>
           </div>
