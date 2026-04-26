@@ -21,10 +21,10 @@ export default function FeaturesPage() {
         <div className={`relative z-10 max-w-7xl mx-auto px-8 mb-20 ${mounted ? "animate-fade-up" : ""}`}>
           <span className="font-label text-primary tracking-[0.2em] font-semibold mb-4 block">PLATFORM OVERVIEW</span>
           <h1 className="font-headline text-5xl md:text-7xl font-extrabold tracking-tight mb-6 max-w-3xl leading-[1.1]">
-            Everything Your <span className="text-primary-container">School Needs</span>
+            Everything Your <span className="text-primary-container">CBT Center Needs</span>
           </h1>
           <p className="text-on-surface-variant text-lg max-w-2xl leading-relaxed">
-            A unified ecosystem designed for premium Nigerian institutions. Swift Learn automates the heavy lifting so you can focus on academic excellence.
+            A unified ecosystem designed for modern educational institutions. SmartLearn automates CBT data synchronization, backups, and result management so you can focus on academic excellence.
           </p>
         </div>
 

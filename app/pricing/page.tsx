@@ -44,7 +44,7 @@ export default function PricingPage() {
           <div className="glass-card p-8 rounded-xl border border-outline-variant/15 flex flex-col h-full hover:bg-white/5 transition-all duration-300">
             <div className="mb-8">
               <h3 className="font-headline text-xl font-bold text-white mb-2">Free</h3>
-              <p className="text-on-surface-variant text-sm h-10">Test the platform and start your digital journey.</p>
+              <p className="text-on-surface-variant text-sm h-10">Perfect for testing the platform with a single classroom.</p>
             </div>
             <div className="mb-8">
               <span className="font-headline text-4xl font-extrabold text-white tracking-tighter">₦0</span>
@@ -53,15 +53,15 @@ export default function PricingPage() {
             <ul className="space-y-4 mb-10 flex-grow">
               <li className="flex items-start gap-3 text-sm text-on-surface-variant">
                 <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                10 Students
+                15 Students
               </li>
               <li className="flex items-start gap-3 text-sm text-on-surface-variant">
                 <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                Basic LMS features
+                Manual Data Backups
               </li>
               <li className="flex items-start gap-3 text-sm text-on-surface-variant">
                 <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                Digital Attendance
+                Basic Exam Stats
               </li>
             </ul>
             <Link href="/login" className="block w-full py-3 rounded-lg border border-outline-variant/30 text-white font-headline font-bold text-sm hover:bg-white/5 transition-all text-center">
@@ -85,19 +85,19 @@ export default function PricingPage() {
             <ul className="space-y-4 mb-10 flex-grow">
               <li className="flex items-start gap-3 text-sm text-on-surface-variant">
                 <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                75 Students
+                100 Students
               </li>
               <li className="flex items-start gap-3 text-sm text-on-surface-variant">
                 <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                Advanced Reporting
+                Automated Cloud Sync
               </li>
               <li className="flex items-start gap-3 text-sm text-on-surface-variant">
                 <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                Assignment Portal
+                Question Bank (500 Qs)
               </li>
               <li className="flex items-start gap-3 text-sm text-on-surface-variant">
                 <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                Parent Notifications
+                Email Support
               </li>
             </ul>
             <Link href="/login" className="block w-full py-3 rounded-lg border border-outline-variant/30 text-white font-headline font-bold text-sm hover:bg-white/5 transition-all text-center">
@@ -113,7 +113,7 @@ export default function PricingPage() {
             <div className="bg-surface-container-high p-8 rounded-xl border border-primary/30 shadow-[0_0_20px_rgba(192,193,255,0.15)] flex flex-col h-full relative z-0 transform lg:scale-105 shadow-2xl">
               <div className="mb-8">
                 <h3 className="font-headline text-xl font-bold text-white mb-2">School</h3>
-                <p className="text-on-surface-variant text-sm h-10">A complete digital transformation for standard schools.</p>
+                <p className="text-on-surface-variant text-sm h-10">Complete data management for standard secondary schools.</p>
               </div>
               <div className="mb-8">
                 <span className="font-headline text-4xl font-extrabold text-white tracking-tighter">{isYearly ? "₦15,000" : "₦20,000"}</span>
@@ -125,23 +125,19 @@ export default function PricingPage() {
               <ul className="space-y-4 mb-10 flex-grow">
                 <li className="flex items-start gap-3 text-sm text-white">
                   <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                  200 Students
+                  500 Students
                 </li>
                 <li className="flex items-start gap-3 text-sm text-white">
                   <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                  Everything in Starter
+                  Unlimited Question Bank
                 </li>
                 <li className="flex items-start gap-3 text-sm text-white">
                   <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                  Online Exams &amp; CBT
+                  Real-time Results Sync
                 </li>
                 <li className="flex items-start gap-3 text-sm text-white">
                   <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                  Result Management System
-                </li>
-                <li className="flex items-start gap-3 text-sm text-white">
-                  <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                  Staff Payroll Module
+                  Priority Phone Support
                 </li>
               </ul>
               <Link href="/login" className="block w-full py-4 rounded-lg bg-primary-container text-on-primary-container font-headline font-bold text-sm hover:scale-[1.02] transition-transform shadow-xl text-center">
@@ -170,15 +166,15 @@ export default function PricingPage() {
               </li>
               <li className="flex items-start gap-3 text-sm text-on-surface-variant">
                 <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                Custom School Domain
+                Dedicated Account Manager
               </li>
               <li className="flex items-start gap-3 text-sm text-on-surface-variant">
                 <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                Dedicated Support Manager
+                Custom Data Retention
               </li>
               <li className="flex items-start gap-3 text-sm text-on-surface-variant">
                 <Check className="text-primary w-5 h-5 shrink-0" strokeWidth={3} />
-                API Access &amp; Integrations
+                White-label Dashboard
               </li>
             </ul>
             <Link href="/contact" className="block w-full py-3 rounded-lg border border-outline-variant/30 text-white font-headline font-bold text-sm hover:bg-white/5 transition-all text-center">
@@ -196,8 +192,8 @@ export default function PricingPage() {
             {/* <!-- Large Feature --> */}
             <div className="md:col-span-8 glass-card p-10 rounded-xl border border-outline-variant/10 flex flex-col justify-between overflow-hidden relative">
               <div className="relative z-10">
-                <h4 className="font-headline text-2xl font-bold mb-4">Centralized School Ecosystem</h4>
-                <p className="text-on-surface-variant max-w-md leading-relaxed">Swift Learn integrates every aspect of school management from admissions to graduation into a single, high-performance dashboard.</p>
+                <h4 className="font-headline text-2xl font-bold mb-4">Centralized CBT Ecosystem</h4>
+                <p className="text-on-surface-variant max-w-md leading-relaxed">SmartLearn integrates your offline CBT infrastructure with the cloud, providing a unified dashboard for backups, question banks, and performance tracking.</p>
               </div>
               <div className="mt-12 flex gap-4 overflow-hidden -mr-10">
                 <div className="w-48 h-32 bg-surface-container-highest rounded border border-outline-variant/20 shrink-0 p-4">
@@ -222,16 +218,16 @@ export default function PricingPage() {
             {/* <!-- Another Feature --> */}
             <div className="md:col-span-4 glass-card p-10 rounded-xl border border-outline-variant/10">
               <Gauge className="text-primary w-10 h-10 mb-6" />
-              <h4 className="font-headline text-xl font-bold mb-2">Real-time Sync</h4>
-              <p className="text-on-surface-variant text-sm">Instant updates across teacher apps and parent portals.</p>
+              <h4 className="font-headline text-xl font-bold mb-2">Cloud-Sync Ecosystem</h4>
+              <p className="text-on-surface-variant text-sm">Instant data synchronization between offline CBT devices and your central cloud dashboard.</p>
             </div>
 
             {/* <!-- Another Large Feature --> */}
             <div className="md:col-span-8 glass-card p-10 rounded-xl border border-outline-variant/10 bg-gradient-to-br from-indigo-500/5 to-transparent">
               <div className="flex flex-col md:flex-row gap-8 items-center h-full">
                 <div className="flex-1">
-                  <h4 className="font-headline text-2xl font-bold mb-4">Offline-First Learning</h4>
-                  <p className="text-on-surface-variant text-sm leading-relaxed">Built for Nigeria's unique landscape. Students can download course materials and assignments to study without a constant internet connection.</p>
+                  <h4 className="font-headline text-2xl font-bold mb-4">Offline-CBT Integration</h4>
+                  <p className="text-on-surface-variant text-sm leading-relaxed">Built for Nigeria's unique connectivity landscape. Securely back up test results, student profiles, and question banks from local school servers to the cloud.</p>
                 </div>
                 <div className="w-full md:w-1/3 aspect-video bg-surface-container-low rounded border border-outline-variant/20 flex items-center justify-center">
                   <CloudOff className="text-primary w-16 h-16 opacity-30" />

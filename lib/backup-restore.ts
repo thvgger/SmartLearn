@@ -1,6 +1,33 @@
 import { prisma } from "@/lib/db";
 
 export async function rebuildDashboardData(sessionUserId: string, parsedData: any) {
+  // Get user's plan to enforce limits
+  const user = await prisma.user.findUnique({
+    where: { id: sessionUserId },
+    include: { subscription: true }
+  });
+
+  const rawPlan = user?.subscription?.plan || "free";
+  const plan = rawPlan.replace("_yearly", "");
+
+  // Define limits
+  const STUDENT_LIMITS: Record<string, number> = {
+    free: 15,
+    starter: 100,
+    school: 500,
+    enterprise: 1000000, // effective unlimited
+  };
+
+  const QUESTION_LIMITS: Record<string, number> = {
+    free: 0,
+    starter: 500,
+    school: 1000000,
+    enterprise: 1000000,
+  };
+
+  const studentLimit = STUDENT_LIMITS[plan] || 15;
+  const questionLimit = QUESTION_LIMITS[plan] || 0;
+
   return await prisma.$transaction(async (tx: any) => {
     // 1. Clear existing cloud data
     await tx.syncedUser.deleteMany({ where: { user_id: sessionUserId } });
@@ -17,7 +44,13 @@ export async function rebuildDashboardData(sessionUserId: string, parsedData: an
 
     // 2. Insert users (from `users`)
     if (Array.isArray(parsedData.users) && parsedData.users.length > 0) {
-      const usersToInsert = parsedData.users.filter((u: any) => u.role !== "admin");
+      let usersToInsert = parsedData.users.filter((u: any) => u.role !== "admin");
+      
+      // ENFORCE STUDENT LIMIT
+      if (usersToInsert.length > studentLimit) {
+        usersToInsert = usersToInsert.slice(0, studentLimit);
+      }
+
       if (usersToInsert.length > 0) {
         const userData = usersToInsert.map((s: any) => {
           // calculate avg score if test_attempts exists
@@ -83,28 +116,37 @@ export async function rebuildDashboardData(sessionUserId: string, parsedData: an
 
     // 4. Insert questions (from `questions`)
     if (Array.isArray(parsedData.questions) && parsedData.questions.length > 0) {
-      const questionData = parsedData.questions.map((q: any) => {
-        // Try to get subject from test
-        let testSubject = "General";
-        if (Array.isArray(parsedData.tests)) {
-          const parentTest = parsedData.tests.find((t: any) => t.id === q.test_id);
-          if (parentTest && parentTest.title) {
-            testSubject = parentTest.title.split(" ")[0]; // rough guess
-          }
-        }
+      let questionsToInsert = parsedData.questions;
 
-        const optionsArray = [q.option_a, q.option_b, q.option_c, q.option_d].filter(Boolean);
-        
-        return {
-          user_id: sessionUserId,
-          subject: testSubject,
-          topic: "General",
-          text: q.question_text || "Unknown Question",
-          options: JSON.stringify(optionsArray.length > 0 ? optionsArray : []),
-          answer: q.correct_answer || "",
-        };
-      });
-      await tx.question.createMany({ data: questionData });
+      // ENFORCE QUESTION LIMIT
+      if (questionsToInsert.length > questionLimit) {
+        questionsToInsert = questionsToInsert.slice(0, questionLimit);
+      }
+
+      if (questionsToInsert.length > 0) {
+        const questionData = questionsToInsert.map((q: any) => {
+          // Try to get subject from test
+          let testSubject = "General";
+          if (Array.isArray(parsedData.tests)) {
+            const parentTest = parsedData.tests.find((t: any) => t.id === q.test_id);
+            if (parentTest && parentTest.title) {
+              testSubject = parentTest.title.split(" ")[0]; // rough guess
+            }
+          }
+
+          const optionsArray = [q.option_a, q.option_b, q.option_c, q.option_d].filter(Boolean);
+          
+          return {
+            user_id: sessionUserId,
+            subject: testSubject,
+            topic: "General",
+            text: q.question_text || "Unknown Question",
+            options: JSON.stringify(optionsArray.length > 0 ? optionsArray : []),
+            answer: q.correct_answer || "",
+          };
+        });
+        await tx.question.createMany({ data: questionData });
+      }
     }
   });
 }

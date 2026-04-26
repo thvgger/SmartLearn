@@ -322,7 +322,7 @@ export default function SettingsPage() {
           <div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
               <p className="text-on-surface-variant text-sm">
-                Choose a plan to activate your CBT license and unlock all features.
+                Choose a plan to unlock all features and cloud storage.
               </p>
               {/* <!-- Toggle Switch --> */}
               <div className="flex items-center gap-3 shrink-0">
@@ -342,7 +342,7 @@ export default function SettingsPage() {
               {/* Free Plan */}
               <div className="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10 text-center hover:border-primary/20 transition-all flex flex-col">
                 <h3 className="font-headline font-bold text-lg mb-1">Free</h3>
-                <p className="text-xs text-outline-variant mb-4 flex-grow">Up to 10 Students</p>
+                <p className="text-xs text-outline-variant mb-4 flex-grow">Up to 15 Students</p>
                 <p className="text-3xl font-headline font-extrabold mb-1">
                   ₦0
                   <span className="text-sm font-normal text-outline-variant">/mo</span>
@@ -359,7 +359,7 @@ export default function SettingsPage() {
               {/* Starter Plan */}
               <div className="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10 text-center hover:border-primary/20 transition-all flex flex-col">
                 <h3 className="font-headline font-bold text-lg mb-1">Starter</h3>
-                <p className="text-xs text-outline-variant mb-4 flex-grow">Up to 75 Students</p>
+                <p className="text-xs text-outline-variant mb-4 flex-grow">Up to 100 Students</p>
                 <p className="text-3xl font-headline font-extrabold mb-1">
                   {isYearly ? "₦7,500" : "₦10,000"}
                   <span className="text-sm font-normal text-outline-variant">/mo</span>
@@ -382,7 +382,7 @@ export default function SettingsPage() {
                   Popular
                 </span>
                 <h3 className="font-headline font-bold text-lg mb-1">School</h3>
-                <p className="text-xs text-outline-variant mb-4 flex-grow">Complete digital transformation</p>
+                <p className="text-xs text-outline-variant mb-4 flex-grow">Up to 500 Students</p>
                 <p className="text-3xl font-headline font-extrabold mb-1">
                   {isYearly ? "₦15,000" : "₦20,000"}
                   <span className="text-sm font-normal text-outline-variant">/mo</span>
@@ -402,7 +402,7 @@ export default function SettingsPage() {
               {/* Enterprise Plan */}
               <div className="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10 text-center hover:border-primary/20 transition-all flex flex-col">
                 <h3 className="font-headline font-bold text-lg mb-1">Enterprise</h3>
-                <p className="text-xs text-outline-variant mb-4 flex-grow">Unlimited resources & scale</p>
+                <p className="text-xs text-outline-variant mb-4 flex-grow">Unlimited Students</p>
                 <p className="text-3xl font-headline font-extrabold mb-1">
                   {isYearly ? "₦25,000" : "₦33,333"}
                   <span className="text-sm font-normal text-outline-variant">/mo</span>
@@ -433,7 +433,7 @@ export default function SettingsPage() {
             <div>
               <h2 className="font-headline font-bold text-lg">Cloud Backups</h2>
               <p className="text-xs text-outline-variant">
-                Backups synced from your CBT devices
+                Secure cloud backups of your exam data
               </p>
             </div>
           </div>
