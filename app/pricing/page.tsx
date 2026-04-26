@@ -178,7 +178,7 @@ export default function PricingPage() {
               </li>
             </ul>
             <Link href="/contact" className="block w-full py-3 rounded-lg border border-outline-variant/30 text-white font-headline font-bold text-sm hover:bg-white/5 transition-all text-center">
-              Contact Sales
+              Choose Enterprise
             </Link>
           </div>
         </div>
