@@ -1,8 +1,8 @@
-﻿import { NextRequest, NextResponse } from \"next/server\";
-import { prisma } from \"@/lib/db\";
-import { getSession } from \"@/lib/auth\";
-import { initiateRemitaPayment } from \"@/lib/remita\";
-import crypto from \"crypto\";
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/db";
+import { getSession } from "@/lib/auth";
+import { initiateRemitaPayment } from "@/lib/remita";
+import crypto from "crypto";
 
 const PRICES: Record<string, number> = {
     starter: 10000,
@@ -17,16 +17,16 @@ export async function POST(req: NextRequest) {
     try {
         const session = await getSession();
         if (!session) {
-            return NextResponse.json({ error: \"Unauthorized\" }, { status: 401 });
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
         const { plan } = await req.json();
         if (!PRICES[plan]) {
-            return NextResponse.json({ error: \"Invalid plan selected\" }, { status: 400 });
+            return NextResponse.json({ error: "Invalid plan selected" }, { status: 400 });
         }
 
         const amount = PRICES[plan];
-        const reference = `SL-${crypto.randomBytes(4).toString(\"hex\").toUpperCase()}-${Date.now()}`;
+        const reference = `SL-${crypto.randomBytes(4).toString("hex").toUpperCase()}-${Date.now()}`;
 
         // Get user details
         const user = await prisma.user.findUnique({
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
         });
 
         if (!user) {
-            return NextResponse.json({ error: \"User not found\" }, { status: 404 });
+            return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
         // Create pending transaction
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
                 amount,
                 plan,
                 reference,
-                status: \"pending\"
+                status: "pending"
             }
         });
 
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
             amount: amount,
             payerName: user.contact_name || user.school_name,
             payerEmail: user.email,
-            payerPhone: user.phone || \"08000000000\",
+            payerPhone: user.phone || "08000000000",
             description: `SmartLearn Subscription - ${plan}`
         });
 
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
         });
 
     } catch (error) {
-        console.error(\"Payment initiation error:\", error);
-        return NextResponse.json({ error: \"Failed to initiate payment\" }, { status: 500 });
+        console.error("Payment initiation error:", error);
+        return NextResponse.json({ error: "Failed to initiate payment" }, { status: 500 });
     }
 }

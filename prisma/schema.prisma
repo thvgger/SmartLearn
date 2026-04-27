@@ -145,7 +145,3 @@ model Question {
     @@index([user_id])
     @@index([subject])
 }
-datasource db {
-    provider = \"postgresql\"
-    url = env(\"DATABASE_URL\")
-}
