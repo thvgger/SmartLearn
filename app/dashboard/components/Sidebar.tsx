@@ -4,14 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  Monitor,
   Users,
   FileText,
-  BarChart3,
   Settings,
   Zap,
   ChevronLeft,
   ChevronRight,
+  ShieldCheck
 } from "lucide-react";
 import { useState } from "react";
 
@@ -33,22 +32,24 @@ export default function Sidebar({ schoolName, plan }: SidebarProps) {
 
   return (
     <aside
-      className={`hidden md:flex flex-col h-screen sticky top-0 bg-surface-container-lowest border-r border-outline-variant/10 transition-all duration-300 ${
-        collapsed ? "w-[72px]" : "w-[240px]"
+      className={`hidden md:flex flex-col h-screen sticky top-0 bg-surface-container-lowest border-r border-white/5 transition-all duration-300 z-50 ${
+        collapsed ? "w-[80px]" : "w-[260px]"
       }`}
     >
-      {/* Logo */}
-      <div className="flex items-center gap-2.5 px-5 py-5 border-b border-outline-variant/10">
-        <Zap className="text-indigo-400 w-6 h-6 shrink-0" strokeWidth={2.5} />
+      {/* Logo Section */}
+      <div className="flex items-center gap-3 px-6 py-8">
+        <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+          <Zap className="text-indigo-400 w-5 h-5" strokeWidth={2.5} />
+        </div>
         {!collapsed && (
-          <span className="font-headline font-bold text-lg tracking-tight text-white">
+          <span className="font-headline font-extrabold text-xl tracking-tighter text-white">
             Swift Learn
           </span>
         )}
       </div>
 
-      {/* Nav Links */}
-      <nav className="flex-1 py-4 px-3 space-y-1">
+      {/* Navigation */}
+      <nav className="flex-1 px-4 space-y-1.5 mt-4">
         {navItems.map((item) => {
           const isActive =
             item.href === "/dashboard"
@@ -60,47 +61,56 @@ export default function Sidebar({ schoolName, plan }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all duration-300 group relative ${
                 isActive
-                  ? "bg-primary-container/15 text-primary shadow-sm shadow-primary/5"
-                  : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
+                  ? "bg-white/[0.03] text-white"
+                  : "text-zinc-500 hover:text-white hover:bg-white/[0.02]"
               }`}
             >
               <Icon
-                className={`w-[18px] h-[18px] shrink-0 ${
-                  isActive
-                    ? "text-primary"
-                    : "text-outline-variant group-hover:text-on-surface"
+                className={`w-[18px] h-[18px] shrink-0 transition-colors duration-300 ${
+                  isActive ? "text-indigo-400" : "text-zinc-500 group-hover:text-zinc-300"
                 }`}
                 strokeWidth={isActive ? 2.5 : 2}
               />
               {!collapsed && <span>{item.label}</span>}
+              
+              {isActive && (
+                <div className="absolute left-0 w-1 h-6 bg-indigo-500 rounded-r-full shadow-[0_0_12px_rgba(99,102,241,0.5)]" />
+              )}
             </Link>
           );
         })}
       </nav>
 
-      {/* Footer */}
-      <div className="border-t border-outline-variant/10 px-4 py-4">
+      {/* Sidebar Footer */}
+      <div className="p-4 border-t border-white/5">
         {!collapsed && (
-          <div className="mb-3">
-            <p className="text-xs font-medium text-on-surface truncate">
+          <div className="mb-6 p-4 rounded-xl bg-white/[0.02] border border-white/5">
+            <div className="flex items-center gap-2 mb-2">
+              <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-400">
+                {plan} Plan
+              </span>
+            </div>
+            <p className="text-xs font-bold text-white truncate">
               {schoolName}
             </p>
-            <span className="inline-block mt-1 text-[10px] uppercase tracking-widest font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-              {plan}
-            </span>
           </div>
         )}
+        
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="flex items-center justify-center w-full py-1.5 rounded-md text-outline-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"
+          className="flex items-center justify-center w-full py-2 rounded-lg text-zinc-500 hover:text-white hover:bg-white/[0.03] transition-all border border-transparent hover:border-white/5"
           title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? (
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-5 h-5" />
           ) : (
-            <ChevronLeft className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-xs font-bold">
+              <ChevronLeft className="w-4 h-4" />
+              <span>Collapse</span>
+            </div>
           )}
         </button>
       </div>

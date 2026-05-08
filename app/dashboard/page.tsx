@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useDashboardUser } from "./layout";
+import { useAuth } from "@/lib/AuthContext";
 import StatsCard from "./components/StatsCard";
 import {
   Users,
@@ -59,7 +59,7 @@ function formatBytes(bytes: number) {
 }
 
 export default function DashboardOverview() {
-  const user = useDashboardUser();
+  const { user } = useAuth();
   const [backups, setBackups] = useState<BackupEntry[]>([]);
   const [backupsLoading, setBackupsLoading] = useState(false);
   const [stats, setStats] = useState<DashboardStats | null>(null);

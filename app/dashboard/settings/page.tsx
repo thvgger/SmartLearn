@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useDashboardUser } from "../layout";
+import { useAuth } from "@/lib/AuthContext";
 import {
   Settings as SettingsIcon,
   CreditCard,
@@ -37,7 +37,7 @@ function formatBytes(bytes: number) {
 }
 
 export default function SettingsPage() {
-  const user = useDashboardUser();
+  const { user } = useAuth();
   const [actionLoading, setActionLoading] = useState("");
   const [backups, setBackups] = useState<BackupEntry[]>([]);
   const [backupsLoading, setBackupsLoading] = useState(false);
@@ -48,10 +48,16 @@ export default function SettingsPage() {
   const [showPlans, setShowPlans] = useState(false);
 
   // School Tag
-  const [schoolTag, setSchoolTag] = useState(user?.school_tag || "");
+  const [schoolTag, setSchoolTag] = useState("");
   const [tagSaving, setTagSaving] = useState(false);
   const [tagMessage, setTagMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [tagCopied, setTagCopied] = useState(false);
+
+  useEffect(() => {
+    if (user?.school_tag) {
+      setSchoolTag(user.school_tag);
+    }
+  }, [user]);
 
   const sub = user?.subscription;
   const isActive = sub?.status === "active";

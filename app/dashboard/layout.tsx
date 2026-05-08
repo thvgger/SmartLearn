@@ -1,27 +1,10 @@
 "use client";
 
-import { useEffect, useState, createContext, useContext } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "./components/Sidebar";
 import DashboardHeader from "./components/DashboardHeader";
-
-interface Subscription {
-  plan: string;
-  status: string;
-  expires_at: string | null;
-}
-
-interface DashboardUser {
-  id: string;
-  email: string;
-  school_name: string;
-  contact_name: string;
-  school_tag?: string;
-  subscription: Subscription | null;
-}
-
-const UserContext = createContext<DashboardUser | null>(null);
-export const useDashboardUser = () => useContext(UserContext);
+import { useAuth } from "@/lib/AuthContext";
 
 export default function DashboardLayout({
   children,
@@ -29,27 +12,13 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const [user, setUser] = useState<DashboardUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user, loading } = useAuth();
 
   useEffect(() => {
-    async function init() {
-      try {
-        const res = await fetch("/api/auth/me");
-        if (!res.ok) {
-          router.push("/login");
-          return;
-        }
-        const data = await res.json();
-        setUser(data.user);
-      } catch {
-        router.push("/login");
-      } finally {
-        setLoading(false);
-      }
+    if (!loading && !user) {
+      router.push("/login");
     }
-    init();
-  }, [router]);
+  }, [user, loading, router]);
 
   if (loading) {
     return (
@@ -67,17 +36,15 @@ export default function DashboardLayout({
   if (!user) return null;
 
   return (
-    <UserContext.Provider value={user}>
-      <div className="min-h-screen bg-surface flex">
-        <Sidebar
-          schoolName={user.school_name}
-          plan={user.subscription?.plan || "free"}
-        />
-        <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
-          <DashboardHeader contactName={user.contact_name} email={user.email} />
-          <main className="flex-1 p-4 lg:p-8 overflow-y-auto">{children}</main>
-        </div>
+    <div className="min-h-screen bg-surface flex">
+      <Sidebar
+        schoolName={user.school_name}
+        plan={user.subscription?.plan || "free"}
+      />
+      <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
+        <DashboardHeader contactName={user.contact_name} email={user.email} />
+        <main className="flex-1 p-4 lg:p-8 overflow-y-auto">{children}</main>
       </div>
-    </UserContext.Provider>
+    </div>
   );
 }
