@@ -13,11 +13,11 @@ export default function Home() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative pt-48 pb-32 px-6 overflow-hidden min-h-screen flex flex-col justify-center items-center">
-          {/* Enhanced Background Soul Glows */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-indigo-500/10 blur-[140px] rounded-full -z-10"></div>
-          <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-violet-500/5 blur-[120px] rounded-full -z-10"></div>
+          {/* Softened Background Glows */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-indigo-500/5 blur-[140px] rounded-full -z-10 pointer-events-none"></div>
+          <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-violet-500/[0.03] blur-[120px] rounded-full -z-10 pointer-events-none"></div>
           
-          <div className="max-w-5xl mx-auto text-center animate-fade-in-up">
+          <div className="max-w-5xl mx-auto text-center animate-fade-in-up relative z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8">
               <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-300">
@@ -54,7 +54,7 @@ export default function Home() {
 
         {/* Stats Section - Refined */}
         <section className="py-20 px-6 border-y border-white/5 bg-surface-container-lowest/30 relative overflow-hidden">
-          <div className="absolute inset-0 accent-glow opacity-30"></div>
+          <div className="absolute inset-0 accent-glow opacity-30 pointer-events-none"></div>
           <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-12 relative z-10">
             {[
               { val: "50,000+", lab: "Assessments Marked" },

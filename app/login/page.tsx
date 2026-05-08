@@ -4,10 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
-import { Mail, Lock, ShieldCheck } from "lucide-react";
+import { Mail, Lock, ShieldCheck, Sparkles } from "lucide-react";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { refreshUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -30,7 +32,8 @@ export default function LoginPage() {
         throw new Error(data.error || "Failed to log in");
       }
 
-      router.push("/dashboard"); // Successful login
+      await refreshUser();
+      router.push("/dashboard");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
@@ -40,33 +43,39 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col">
+    <div className="bg-background text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col">
       <Navbar />
 
-      {/* <!-- Main Content Canvas --> */}
       <main className="flex-grow flex items-center justify-center relative overflow-hidden pt-20">
-        {/* <!-- Ambient Background Glows --> */}
-        <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.15)_0%,rgba(139,92,246,0.05)_50%,transparent_100%)] opacity-60"></div>
-        <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.15)_0%,rgba(139,92,246,0.05)_50%,transparent_100%)] opacity-40"></div>
+        {/* Ambient Background Glows */}
+        <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-violet-500/5 blur-[120px] rounded-full pointer-events-none"></div>
         
-        {/* <!-- Login Card --> */}
-        <div className="relative z-10 w-full max-w-[440px] px-6 animate-fade-up">
-          <div className="glass-card rounded-xl p-10 shadow-2xl border border-white/10 backdrop-blur-[40px]">
+        <div className="relative z-10 w-full max-w-[460px] px-6 animate-fade-in-up">
+          <div className="glass-card rounded-2xl p-8 md:p-12 shadow-2xl border border-white/5 backdrop-blur-2xl">
             <div className="mb-10 text-center">
-              <span className="text-primary tracking-[0.2em] uppercase text-[0.6875rem] font-medium mb-3 block font-label">Institutional Portal</span>
-              <h1 className="text-3xl font-headline font-extrabold tracking-tight text-white">Welcome back</h1>
-              <p className="text-on-surface-variant/70 text-sm mt-2">Enter your credentials to access your dashboard</p>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 mb-4">
+                <Sparkles className="w-3 h-3 text-indigo-400" />
+                <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-indigo-300">Portal Access</span>
+              </div>
+              <h1 className="text-3xl font-headline font-black tracking-tight text-white">Welcome back</h1>
+              <p className="text-zinc-500 text-sm mt-2 font-medium">Securely access your institutional dashboard</p>
             </div>
             
             <form className="space-y-6" onSubmit={handleSubmit}>
-              {error && <div className="p-3 bg-error/10 border border-error/20 rounded-md text-error text-sm font-medium">{error}</div>}
+              {error && (
+                <div className="p-4 bg-error/10 border border-error/20 rounded-xl text-error text-xs font-bold animate-shake">
+                  {error}
+                </div>
+              )}
+              
               <div className="space-y-2">
-                <label className="block text-[0.6875rem] uppercase tracking-widest text-on-surface-variant font-medium ml-1">Corporate Email</label>
+                <label className="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Email Address</label>
                 <div className="relative group">
-                  <Mail className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-outline-variant group-focus-within:text-primary transition-colors" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
                   <input 
-                    className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:outline-none focus:border-primary pl-8 pb-3 text-on-surface placeholder:text-outline-variant/50 transition-all font-body text-sm" 
-                    placeholder="name@institution.edu" 
+                    className="w-full bg-white/[0.03] border border-white/5 rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus:outline-none focus:border-indigo-500/50 transition-all font-medium" 
+                    placeholder="admin@school.edu" 
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -76,16 +85,16 @@ export default function LoginPage() {
               </div>
               
               <div className="space-y-2">
-                <div className="flex justify-between items-end">
-                  <label className="block text-[0.6875rem] uppercase tracking-widest text-on-surface-variant font-medium ml-1">Password</label>
-                  <Link href="#" className="text-[0.6875rem] uppercase tracking-widest text-primary hover:text-secondary transition-colors font-semibold">
-                    Forgot Password?
+                <div className="flex justify-between items-end mb-1">
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Password</label>
+                  <Link href="#" className="text-[10px] uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors font-black">
+                    Forgot?
                   </Link>
                 </div>
                 <div className="relative group">
-                  <Lock className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-outline-variant group-focus-within:text-primary transition-colors" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
                   <input 
-                    className="w-full bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:outline-none focus:border-primary pl-8 pb-3 text-on-surface placeholder:text-outline-variant/50 transition-all font-body text-sm" 
+                    className="w-full bg-white/[0.03] border border-white/5 rounded-xl py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus:outline-none focus:border-indigo-500/50 transition-all font-medium" 
                     placeholder="••••••••" 
                     type="password"
                     value={password}
@@ -97,46 +106,39 @@ export default function LoginPage() {
               
               <div className="pt-4">
                 <button 
-                  className="w-full bg-primary-container text-on-primary-container py-4 rounded-lg font-headline font-bold text-sm tracking-tight hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_10px_30px_rgba(128,131,255,0.25)] hover:shadow-[0_15px_40px_rgba(128,131,255,0.45)] disabled:opacity-50 disabled:pointer-events-none" 
+                  className="w-full bg-white text-black py-4 rounded-xl font-headline font-black text-sm tracking-tight hover:bg-zinc-200 active:scale-[0.98] transition-all shadow-xl disabled:opacity-50 disabled:pointer-events-none flex justify-center items-center gap-2" 
                   type="submit"
                   disabled={loading}
                 >
-                  {loading ? "Signing in..." : "Sign In"}
+                  {loading ? (
+                    <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                  ) : "Sign In"}
                 </button>
               </div>
             </form>
             
-            <div className="mt-10 pt-8 border-t border-outline-variant/15 text-center">
-              <p className="text-on-surface-variant/60 text-sm">
-                Don't have an institutional account? 
-                <Link href="/register" className="text-primary font-bold ml-1 hover:underline">Sign up</Link>
+            <div className="mt-10 pt-8 border-t border-white/5 text-center">
+              <p className="text-zinc-500 text-xs font-medium">
+                New to Swift Learn? 
+                <Link href="/register" className="text-white font-black ml-2 hover:underline">Create an account</Link>
               </p>
             </div>
           </div>
           
-          {/* <!-- Trust Footer --> */}
-          <div className="mt-8 flex justify-between items-center opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300">
-            <div className="flex gap-6 items-center">
-              <div className="h-6 w-24 bg-on-surface-variant/20 rounded"></div>
-              <div className="h-6 w-20 bg-on-surface-variant/20 rounded"></div>
-            </div>
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-primary" />
-              <span className="text-[10px] uppercase tracking-widest text-primary font-bold">Bank-grade Security</span>
-            </div>
+          <div className="mt-8 flex justify-center items-center gap-4 py-4 px-6 rounded-2xl bg-white/[0.02] border border-white/5">
+            <ShieldCheck className="w-4 h-4 text-indigo-400" />
+            <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-black">Secure AES-256 Encryption</span>
           </div>
         </div>
       </main>
 
-      {/* <!-- Minimal Footer for Auth Pages --> */}
-      <footer className="w-full flex flex-col md:flex-row justify-between items-center px-8 py-10 bg-[#0e0e14] border-t border-[#464554]/15 z-10">
-        <div className="text-[#e4e1ea]/40 font-body text-[0.6875rem] uppercase tracking-widest mb-4 md:mb-0">
-          &copy; {new Date().getFullYear()} Swift Learn. Elevating institutional excellence.
+      <footer className="w-full flex flex-col md:flex-row justify-between items-center px-8 py-10 bg-surface-container-lowest border-t border-white/5 z-10">
+        <div className="text-zinc-600 font-bold text-[10px] uppercase tracking-[0.15em] mb-4 md:mb-0">
+          &copy; {new Date().getFullYear()} Swift Learn &bull; Excellence in Education
         </div>
         <div className="flex gap-8">
-          <Link href="/" className="text-[#e4e1ea]/40 font-body text-[0.6875rem] uppercase tracking-widest hover:text-[#c0c1ff] transition-colors">Home</Link>
-          <Link href="/contact" className="text-[#e4e1ea]/40 font-body text-[0.6875rem] uppercase tracking-widest hover:text-[#c0c1ff] transition-colors">Contact</Link>
-          <Link href="#" className="hidden sm:inline-block text-[#e4e1ea]/40 font-body text-[0.6875rem] uppercase tracking-widest hover:text-[#c0c1ff] transition-colors">Privacy</Link>
+          <Link href="/" className="text-zinc-600 font-bold text-[10px] uppercase tracking-[0.15em] hover:text-white transition-colors">Home</Link>
+          <Link href="/contact" className="text-zinc-600 font-bold text-[10px] uppercase tracking-[0.15em] hover:text-white transition-colors">Support</Link>
         </div>
       </footer>
     </div>

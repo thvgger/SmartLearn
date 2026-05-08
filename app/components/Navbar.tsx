@@ -44,7 +44,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className={pathname === "/login" || pathname === "/register" ? "absolute top-0 w-full z-50 p-8 flex justify-center md:justify-start" : "fixed top-0 w-full z-50 bg-[#131319]/50 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] border-b border-white/5"}>
+    <nav className={pathname === "/login" || pathname === "/register" ? "absolute top-0 w-full z-50 p-8 flex justify-center md:justify-start" : "fixed top-0 w-full z-50 bg-background/50 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] border-b border-white/5"}>
       <div className={pathname === "/login" || pathname === "/register" ? "" : "flex justify-between items-center px-8 py-4 max-w-7xl mx-auto"}>
         <Link href="/" className="text-xl font-bold tracking-tighter text-white flex items-center gap-2 font-headline cursor-pointer">
           <Zap className="text-indigo-300 w-6 h-6" strokeWidth={2.5} />
