@@ -4,13 +4,30 @@ import { verifyRemitaPayment } from "@/lib/remita";
 
 export async function POST(req: NextRequest) {
     try {
-        const { rrr, reference } = await req.json();
+        const body = await req.json().catch(() => ({}));
+        const { rrr, reference } = body;
 
         if (!rrr || !reference) {
+            console.error("[Payment Verify] Missing params:", { rrr, reference });
             return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
         }
 
+        // Check if transaction exists
+        const transaction = await prisma.transaction.findUnique({
+            where: { reference }
+        });
+
+        if (!transaction) {
+            console.error("[Payment Verify] Transaction not found:", reference);
+            return NextResponse.json({ error: "Transaction not found" }, { status: 404 });
+        }
+
+        if (transaction.status === "success") {
+            return NextResponse.json({ success: true, message: "Already verified" });
+        }
+
         const verificationData = await verifyRemitaPayment(rrr);
+        console.log("[Payment Verify] Remita response:", verificationData);
         
         // Remita success code is usually "00" or "01"
         const isSuccess = verificationData.status === "00" || verificationData.status === "01";

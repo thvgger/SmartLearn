@@ -5,6 +5,8 @@ import { initiateRemitaPayment } from "@/lib/remita";
 import crypto from "crypto";
 
 const PRICES: Record<string, number> = {
+    free: 0,
+    free_yearly: 0,
     starter: 10000,
     starter_yearly: 90000,
     school: 20000,
@@ -17,11 +19,15 @@ export async function POST(req: NextRequest) {
     try {
         const session = await getSession();
         if (!session) {
+            console.error("[Payment] Unauthorized attempt");
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const { plan } = await req.json();
-        if (!PRICES[plan]) {
+        const body = await req.json().catch(() => ({}));
+        const { plan } = body;
+
+        if (!plan || PRICES[plan] === undefined) {
+            console.error("[Payment] Invalid plan:", plan);
             return NextResponse.json({ error: "Invalid plan selected" }, { status: 400 });
         }
 
