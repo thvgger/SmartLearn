@@ -92,14 +92,67 @@ export default function SettingsPage() {
   async function handleSubscribe(plan: string) {
     setActionLoading("subscribe");
     try {
-      const res = await fetch("/api/subscription", {
+      const selectedPlan = isYearly ? `${plan}_yearly` : plan;
+      const res = await fetch("/api/payment/initiate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: isYearly ? `${plan}_yearly` : plan }),
+        body: JSON.stringify({ plan: selectedPlan }),
       });
-      if (res.ok) {
-        window.location.reload();
+      
+      const data = await res.json();
+      
+      if (!res.ok) {
+        alert(data.error || "Failed to initiate payment");
+        return;
       }
+
+      const { remitaParams, reference } = data;
+
+      // @ts-ignore - RemitaPay is loaded from external script
+      const paymentEngine = window.RmPaymentEngine.init({
+        key: process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY,
+        processId: reference,
+        transactionId: reference,
+        customerId: user?.email,
+        firstName: user?.contact_name.split(' ')[0],
+        lastName: user?.contact_name.split(' ').slice(1).join(' ') || 'User',
+        email: user?.email,
+        amount: remitaParams.amount,
+        onSuccess: async function (response: any) {
+          console.log('Payment Success:', response);
+          // Verify on backend
+          const verifyRes = await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+              rrr: response.paymentReference || response.rrr, 
+              reference 
+            }),
+          });
+          
+          if (verifyRes.ok) {
+            alert("Payment successful! Your subscription is now active.");
+            window.location.reload();
+          } else {
+            alert("Payment was successful but we couldn't verify it. Please contact support.");
+          }
+        },
+        onError: function (response: any) {
+          console.error('Payment Error:', response);
+          alert("Payment failed. Please try again.");
+        },
+        onClose: function () {
+          console.log('Payment Closed');
+        }
+      });
+
+      // Different versions of Remita inline use different trigger methods
+      // For the modern bundle, it's often .showPaymentWidget()
+      paymentEngine.showPaymentWidget();
+
+    } catch (err) {
+      console.error("Subscription error:", err);
+      alert("An unexpected error occurred.");
     } finally {
       setActionLoading("");
     }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/AuthContext";
+import Script from "next/script";
 
 const inter = Inter({
   variable: "--font-geist-sans",
@@ -23,6 +24,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
         <AuthProvider>{children}</AuthProvider>
+        <Script
+          src={process.env.NEXT_PUBLIC_REMITA_ENV === 'production' 
+            ? "https://remita.net/payment/v1/remita-pay-inline.bundle.js"
+            : "https://remitademo.net/payment/v1/remita-pay-inline.bundle.js"
+          }
+          strategy="beforeInteractive"
+        />
       </body>
     </html>
   );

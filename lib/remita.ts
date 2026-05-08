@@ -3,7 +3,7 @@ import crypto from "crypto";
 const REMITA_MERCHANT_ID = process.env.REMITA_MERCHANT_ID || "";
 const REMITA_API_KEY = process.env.REMITA_API_KEY || "";
 const REMITA_SERVICE_TYPE_ID = process.env.REMITA_SERVICE_TYPE_ID || "";
-const REMITA_GATEWAY_URL = process.env.REMITA_GATEWAY_URL || "https://remitademo.net/remita/exapp/api/v1/send/api/echannelsvc/system/developer/api/v1/" ; // Demo URL
+const REMITA_GATEWAY_URL = process.env.REMITA_GATEWAY_URL || "https://remita.net/remita/exapp/api/v1/send/api/echannelsvc/system/developer/api/v1/" ;
 
 export interface RemitaPaymentParams {
     orderId: string;
