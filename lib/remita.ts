@@ -32,6 +32,7 @@ export async function initiateRemitaPayment(params: RemitaPaymentParams) {
         payerEmail: params.payerEmail,
         payerPhone: params.payerPhone,
         description: params.description,
+        narration: params.description,
         hash: hash
     };
 

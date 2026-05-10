@@ -110,14 +110,9 @@ export default function SettingsPage() {
 
       // @ts-ignore - RemitaPay is loaded from external script
       const paymentEngine = window.RmPaymentEngine.init({
-        key: process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY,
-        processId: reference,
+        key: process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY || "REVUVE9GR098NDY3OTE3OTd8YjU3M2IzYmI0OTU0YmNjYThhMGVkMjk0YThhNWRkYjI0OTZlNjA5MGRhZjI5ZTY5ZWY3YzU3YmI2M2Q1YjA5YTZlYzYyNjAyZWRlYjVjZDg2YmU1YjZlZTA2YzA4YmU1ZjkxYTQ0MTFkYjU1ZDBiZGE0Y2E5ZTEwOTBkYWY=",
+        processRrr: true,
         transactionId: reference,
-        customerId: user?.email,
-        firstName: user?.contact_name.split(' ')[0],
-        lastName: user?.contact_name.split(' ').slice(1).join(' ') || 'User',
-        email: user?.email,
-        amount: remitaParams.amount,
         onSuccess: async function (response: any) {
           console.log('Payment Success:', response);
           // Verify on backend
@@ -134,21 +129,24 @@ export default function SettingsPage() {
             alert("Payment successful! Your subscription is now active.");
             window.location.reload();
           } else {
-            alert("Payment was successful but we couldn't verify it. Please contact support.");
+            const errorData = await verifyRes.json();
+            alert("Payment verification failed: " + (errorData.message || "Unknown error"));
           }
         },
         onError: function (response: any) {
           console.error('Payment Error:', response);
-          alert("Payment failed. Please try again.");
+          alert("Payment failed or closed.");
+          setActionLoading("");
         },
         onClose: function () {
           console.log('Payment Closed');
+          setActionLoading("");
         }
       });
 
-      // Different versions of Remita inline use different trigger methods
-      // For the modern bundle, it's often .showPaymentWidget()
-      paymentEngine.showPaymentWidget();
+      paymentEngine.showPaymentWidget({
+        ...remitaParams
+      });
 
     } catch (err) {
       console.error("Subscription error:", err);
