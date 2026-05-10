@@ -92,10 +92,6 @@ export default function PricingPage() {
 
   return (
     <div className="bg-surface text-on-background font-body selection:bg-primary/30 min-h-screen flex flex-col">
-      <Script 
-        src="https://remitademo.net/remita/exapp/api/v1/send/api/echannelsvc/system/developer/api/v1/remita-pay-inline.bundle.js"
-        strategy="lazyOnload"
-      />
       <Navbar />
       <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto relative overflow-hidden flex-grow">
         {/* <!-- Background Soul Gradient --> */}
