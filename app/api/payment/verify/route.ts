@@ -26,19 +26,20 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: true, message: "Already verified" });
         }
 
-        const verificationData = await verifyRemitaPayment(rrr);
+        // Modern API uses transactionId (reference) for verification
+        const verificationData = await verifyRemitaPayment(reference);
         console.log("[Payment Verify] Remita response:", verificationData);
         
-        // Remita success code is usually "00" or "01"
-        const isSuccess = verificationData.status === "00" || verificationData.status === "01";
+        // Remita success code is "00" for success in modern API
+        const isSuccess = verificationData.status === "00";
 
         if (isSuccess) {
             // Update transaction
-            const transaction = await prisma.transaction.update({
+            await prisma.transaction.update({
                 where: { reference },
                 data: {
                     status: "success",
-                    rrr: rrr
+                    rrr: rrr // Store the RRR from the client response
                 }
             });
 
