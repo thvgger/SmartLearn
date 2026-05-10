@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased`}>
         <AuthProvider>{children}</AuthProvider>
         <Script
-          src={process.env.NEXT_PUBLIC_REMITA_ENV === 'production' 
+          src={(process.env.NEXT_PUBLIC_REMITA_ENV?.replace(/^['"]|['"]$/g, "")) === 'production' 
             ? "https://remita.net/payment/v1/remita-pay-inline.bundle.js"
             : "https://remitademo.net/payment/v1/remita-pay-inline.bundle.js"
           }

@@ -1,13 +1,20 @@
 import crypto from "crypto";
 
-const IS_PRODUCTION = process.env.NEXT_PUBLIC_REMITA_ENV === "production";
+const getEnv = (key: string, defaultValue: string = "") => {
+    const value = process.env[key];
+    if (!value) return defaultValue;
+    // Strip leading/trailing quotes that might be in the .env file
+    return value.replace(/^['"]|['"]$/g, "");
+};
+
+const IS_PRODUCTION = getEnv("NEXT_PUBLIC_REMITA_ENV") === "production";
 // Use remitademo.net for sandbox as the user reported demo.remita.net refused to connect
 const REMITA_BASE_URL = IS_PRODUCTION ? "https://api.remita.net" : "https://remitademo.net";
 
-const REMITA_MERCHANT_ID = process.env.REMITA_MERCHANT_ID || "";
-const REMITA_API_KEY = process.env.REMITA_API_KEY || ""; // This is often the Secret Key in modern APIs
-const REMITA_PUBLIC_KEY = process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY || "";
-const REMITA_SERVICE_TYPE_ID = process.env.REMITA_SERVICE_TYPE_ID || "";
+const REMITA_MERCHANT_ID = getEnv("REMITA_MERCHANT_ID");
+const REMITA_API_KEY = getEnv("REMITA_API_KEY"); // This is often the Secret Key in modern APIs
+const REMITA_PUBLIC_KEY = getEnv("NEXT_PUBLIC_REMITA_PUBLIC_KEY");
+const REMITA_SERVICE_TYPE_ID = getEnv("REMITA_SERVICE_TYPE_ID");
 
 export interface RemitaPaymentParams {
     orderId: string;
