@@ -6,13 +6,6 @@ const globalForPrisma = globalThis as unknown as {
 
 function createPrismaClient() {
   return new PrismaClient({
-    datasources: {
-      db: {
-        url: process.env.DATABASE_URL,
-      },
-    },
-    // Keep connections low for serverless/Neon pooler
-    // The pooler URL already handles connection pooling externally
     log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
   });
 }
