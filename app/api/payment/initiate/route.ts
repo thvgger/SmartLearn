@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
-import { initiateRemitaPayment } from "@/lib/remita";
+import { initiateRemitaPayment, generateRRR } from "@/lib/remita";
 import crypto from "crypto";
 
 const PRICES: Record<string, number> = {
@@ -54,20 +54,34 @@ export async function POST(req: NextRequest) {
             }
         });
 
-        // Initialize Remita params
-        const remitaParams = await initiateRemitaPayment({
+        const remitaData = {
             orderId: reference,
             amount: amount,
-            payerName: user.contact_name || user.school_name,
+            payerName: user.contact_name || user.school_name || "User",
             payerEmail: user.email,
             payerPhone: user.phone || "08000000000",
             description: `SmartLearn Subscription - ${plan}`
-        });
+        };
+
+        let rrr = null;
+        let remitaParams = await initiateRemitaPayment(remitaData);
+
+        try {
+            console.log("[Payment] Attempting server-side RRR generation...");
+            const rrrResponse = await generateRRR(remitaData);
+            console.log("[Payment] RRR Response:", rrrResponse);
+            if (rrrResponse && rrrResponse.RRR) {
+                rrr = rrrResponse.RRR;
+            }
+        } catch (rrrError) {
+            console.error("[Payment] Server-side RRR generation failed, falling back to client-side:", rrrError);
+        }
 
         return NextResponse.json({
             success: true,
             remitaParams,
-            reference
+            reference,
+            rrr
         });
 
     } catch (error) {

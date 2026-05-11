@@ -40,15 +40,15 @@ export default function PricingPage() {
         return;
       }
 
-      const { remitaParams, reference } = data;
+      const { remitaParams, reference, rrr } = data;
 
       const paymentEngine = window.RmPaymentEngine.init({
         key: process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY || "REVUVE9GR098NDY3OTE3OTd8YjU3M2IzYmI0OTU0YmNjYThhMGVkMjk0YThhNWRkYjI0OTZlNjA5MGRhZjI5ZTY5ZWY3YzU3YmI2M2Q1YjA5YTZlYzYyNjAyZWRlYjVjZDg2YmU1YjZlZTA2YzA4YmU1ZjkxYTQ0MTFkYjU1ZDBiZGE0Y2E5ZTEwOTBkYWY=", // Demo key
-        processRrr: true,
+        processRrr: rrr ? false : true,
         transactionId: reference,
         extendedData: {
           customFields: [
-            { name: "RRR", value: "" }
+            { name: "RRR", value: rrr || "" }
           ]
         },
         onSuccess: async function (response: any) {

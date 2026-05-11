@@ -8,8 +8,9 @@ const getEnv = (key: string, defaultValue: string = "") => {
 };
 
 const IS_PRODUCTION = getEnv("NEXT_PUBLIC_REMITA_ENV") === "production";
-// Use remitademo.net for sandbox as the user reported demo.remita.net refused to connect
-const REMITA_BASE_URL = IS_PRODUCTION ? "https://api.remita.net" : "https://remitademo.net";
+// Use demo.remita.net as requested by the user
+const REMITA_BASE_URL = IS_PRODUCTION ? "https://api.remita.net" : "https://demo.remita.net";
+const REMITA_BASE_URL_V1 = IS_PRODUCTION ? "https://remita.net" : "https://demo.remita.net";
 
 const REMITA_MERCHANT_ID = getEnv("REMITA_MERCHANT_ID");
 const REMITA_API_KEY = getEnv("REMITA_API_KEY"); // This is often the Secret Key in modern APIs
@@ -52,36 +53,103 @@ export async function initiateRemitaPayment(params: RemitaPaymentParams) {
     return payload;
 }
 
-export async function verifyRemitaPayment(transactionId: string) {
-    // Modern Verification Hash = SHA512(transactionId + secretKey)
-    // Using REMITA_API_KEY as the secretKey as it's common practice in these integrations
-    const rawData = `${transactionId}${REMITA_API_KEY}`;
-    const hash = crypto.createHash("sha512").update(rawData).digest("hex");
-
-    // Modern Verification Endpoint: /payment/v1/payment/query/{transactionId}
-    const url = `${REMITA_BASE_URL}/payment/v1/payment/query/${transactionId}`;
+export async function generateRRR(params: RemitaPaymentParams) {
+    const hash = generateRemitaHash(params.orderId, params.amount);
+    
+    const url = `${REMITA_BASE_URL_V1}/remita/exapp/api/v1/send/api/bgatesvc/billing/generate`;
+    
+    const payload = {
+        merchantId: REMITA_MERCHANT_ID,
+        serviceTypeId: REMITA_SERVICE_TYPE_ID,
+        orderId: params.orderId,
+        amount: params.amount.toString(),
+        payerName: params.payerName,
+        payerEmail: params.payerEmail,
+        payerPhone: params.payerPhone,
+        description: params.description,
+        hash: hash
+    };
 
     try {
         const response = await fetch(url, {
-            method: "GET",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "publicKey": REMITA_PUBLIC_KEY,
-                "TXN_HASH": hash
-            }
+                "Authorization": `remitaConsumerKey=${REMITA_MERCHANT_ID},remitaConsumerToken=${hash}`
+            },
+            body: JSON.stringify(payload)
         });
 
-        const data = await response.json();
+        const text = await response.text();
+        // The response might be wrapped in jsonp-like format or just text
+        const cleanText = text.replace(/^jsonp\((.*)\)$/, "$1");
+        const data = JSON.parse(cleanText);
         
-        // Map modern response to expected internal format if needed
-        // Modern response usually has responseCode, responseMsg, etc.
-        return {
-            status: data.responseCode === "00" ? "00" : data.responseCode,
-            message: data.responseMsg,
-            ...data
-        };
+        return data;
     } catch (error) {
-        console.error("Remita verification error:", error);
+        console.error("Remita RRR generation error:", error);
         throw error;
+    }
+}
+
+export async function verifyRemitaPayment(transactionId: string) {
+    if (IS_PRODUCTION) {
+        // Modern Verification Hash = SHA512(transactionId + secretKey)
+        const rawData = `${transactionId}${REMITA_API_KEY}`;
+        const hash = crypto.createHash("sha512").update(rawData).digest("hex");
+
+        // Modern Verification Endpoint: /payment/v1/payment/query/{transactionId}
+        const url = `${REMITA_BASE_URL}/payment/v1/payment/query/${transactionId}`;
+
+        try {
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "publicKey": REMITA_PUBLIC_KEY,
+                    "TXN_HASH": hash
+                }
+            });
+
+            const data = await response.json();
+            
+            // Map modern response to expected internal format if needed
+            return {
+                status: data.responseCode === "00" ? "00" : data.responseCode,
+                message: data.responseMsg,
+                ...data
+            };
+        } catch (error) {
+            console.error("Remita verification error:", error);
+            throw error;
+        }
+    } else {
+        // Legacy/Standard Verification for Demo: /remita/ecomm/{merchantId}/{transactionId}/{hash}/status.reg
+        // Hash for legacy: SHA512(transactionId + apiKey + merchantId)
+        const rawData = `${transactionId}${REMITA_API_KEY}${REMITA_MERCHANT_ID}`;
+        const hash = crypto.createHash("sha512").update(rawData).digest("hex");
+        const url = `${REMITA_BASE_URL_V1}/remita/ecomm/${REMITA_MERCHANT_ID}/${transactionId}/${hash}/status.reg`;
+
+        try {
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const data = await response.json();
+            // Legacy response usually has "status" and "message" or "responseCode"
+            // If it returns a JSON with status, we map it to "00" for success if it's "Approved" or "00"
+            const status = data.status || data.responseCode;
+            return {
+                status: (status === "00" || data.message === "Approved") ? "00" : status,
+                message: data.message || data.responseMsg,
+                ...data
+            };
+        } catch (error) {
+            console.error("Remita legacy verification error:", error);
+            throw error;
+        }
     }
 }
