@@ -9,8 +9,8 @@ const getEnv = (key: string, defaultValue: string = "") => {
 
 const IS_PRODUCTION = getEnv("NEXT_PUBLIC_REMITA_ENV") === "production";
 // Use demo.remita.net as requested by the user
-const REMITA_BASE_URL = IS_PRODUCTION ? "https://api.remita.net" : "https://demo.remita.net";
-const REMITA_BASE_URL_V1 = IS_PRODUCTION ? "https://remita.net" : "https://demo.remita.net";
+const REMITA_BASE_URL = IS_PRODUCTION ? "https://api.remita.net" : "https://remitademo.net";
+const REMITA_BASE_URL_V1 = IS_PRODUCTION ? "https://remita.net" : "https://remitademo.net";
 
 const REMITA_MERCHANT_ID = getEnv("REMITA_MERCHANT_ID");
 const REMITA_API_KEY = getEnv("REMITA_API_KEY"); // This is often the Secret Key in modern APIs
@@ -56,7 +56,7 @@ export async function initiateRemitaPayment(params: RemitaPaymentParams) {
 export async function generateRRR(params: RemitaPaymentParams) {
     const hash = generateRemitaHash(params.orderId, params.amount);
     
-    const url = `${REMITA_BASE_URL_V1}/remita/exapp/api/v1/send/api/bgatesvc/billing/generate.json`;
+    const url = `${REMITA_BASE_URL_V1}/remita/exapp/api/v1/send/api/bgatesvc/billing/generate`;
     
     const payload = {
         merchantId: REMITA_MERCHANT_ID,
@@ -79,7 +79,7 @@ export async function generateRRR(params: RemitaPaymentParams) {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "Authorization": `remitaConsumerKey=${REMITA_MERCHANT_ID}, remitaConsumerToken=${hash}`,
+                "Authorization": `remitaConsumerKey=${REMITA_MERCHANT_ID},remitaConsumerToken=${hash}`,
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
             },
             body: JSON.stringify(payload)
