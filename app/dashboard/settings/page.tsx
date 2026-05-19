@@ -113,6 +113,12 @@ export default function SettingsPage() {
         key: process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY || "REVUVE9GR098NDY3OTE3OTd8YjU3M2IzYmI0OTU0YmNjYThhMGVkMjk0YThhNWRkYjI0OTZlNjA5MGRhZjI5ZTY5ZWY3YzU3YmI2M2Q1YjA5YTZlYzYyNjAyZWRlYjVjZDg2YmU1YjZlZTA2YzA4YmU1ZjkxYTQ0MTFkYjU1ZDBiZGE0Y2E5ZTEwOTBkYWY=",
         processRrr: rrr ? false : true,
         transactionId: reference,
+        firstName: remitaParams.firstName,
+        lastName: remitaParams.lastName,
+        email: remitaParams.email,
+        amount: remitaParams.amount,
+        customerId: remitaParams.email,
+        narration: remitaParams.narration,
         extendedData: {
           customFields: [
             { name: "RRR", value: rrr || "" }

@@ -36,17 +36,23 @@ export function generateRemitaHash(orderId: string, amount: number) {
 export async function initiateRemitaPayment(params: RemitaPaymentParams) {
     const hash = generateRemitaHash(params.orderId, params.amount);
     
+    const nameParts = params.payerName.split(" ");
+    const firstName = nameParts[0] || "User";
+    const lastName = nameParts.slice(1).join(" ") || "Customer";
+
     const payload = {
         merchantId: REMITA_MERCHANT_ID,
         serviceTypeId: REMITA_SERVICE_TYPE_ID,
         orderId: params.orderId,
         amount: params.amount.toString(),
-        payerName: params.payerName,
-        payerEmail: params.payerEmail,
-        payerPhone: params.payerPhone,
+        hash: hash,
+        firstName: firstName,
+        lastName: lastName,
+        email: params.payerEmail,
+        phone: params.payerPhone,
+        customerId: params.payerEmail,
         description: params.description,
-        narration: params.description,
-        hash: hash
+        narration: params.description
     };
 
     return payload;
