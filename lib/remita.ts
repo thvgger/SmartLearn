@@ -27,10 +27,19 @@ export interface RemitaPaymentParams {
 
 export function generateRemitaHash(orderId: string, amount: number) {
     // Hash = SHA512(merchantId + serviceTypeId + orderId + amount + apiKey)
-    // Note: Modern initiation still often uses this legacy-style hash for the inline payload 
-    // but the verification uses a different one.
     const rawData = `${REMITA_MERCHANT_ID}${REMITA_SERVICE_TYPE_ID}${orderId}${amount}${REMITA_API_KEY}`;
-    return crypto.createHash("sha512").update(rawData).digest("hex");
+    const hash = crypto.createHash("sha512").update(rawData).digest("hex");
+    
+    console.log("[Remita Debug] Hash Calculation:");
+    console.log(" - Merchant ID:", REMITA_MERCHANT_ID);
+    console.log(" - Service Type ID:", REMITA_SERVICE_TYPE_ID);
+    console.log(" - Order ID:", orderId);
+    console.log(" - Amount:", amount);
+    console.log(" - API Key (Secret):", REMITA_API_KEY ? "***" : "MISSING");
+    console.log(" - Raw String:", rawData.replace(REMITA_API_KEY, "***"));
+    console.log(" - Resulting Hash:", hash);
+    
+    return hash;
 }
 
 export async function initiateRemitaPayment(params: RemitaPaymentParams) {

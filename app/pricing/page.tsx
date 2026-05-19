@@ -34,6 +34,7 @@ export default function PricingPage() {
       }
 
       const data = await response.json();
+      console.log("[Payment Debug] Initiate API Response:", data);
       if (!data.success) {
         alert(data.error || "Failed to initiate payment");
         setLoadingPlan(null);
@@ -41,6 +42,17 @@ export default function PricingPage() {
       }
 
       const { remitaParams, reference, rrr } = data;
+
+      console.log("[Payment Debug] Initializing Remita with:", {
+        processRrr: rrr ? false : true,
+        transactionId: reference,
+        firstName: remitaParams.firstName,
+        lastName: remitaParams.lastName,
+        email: remitaParams.email,
+        amount: remitaParams.amount,
+        customerId: remitaParams.email,
+        hash: remitaParams.hash
+      });
 
       const paymentEngine = window.RmPaymentEngine.init({
         key: process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY || "REVUVE9GR098NDY3OTE3OTd8YjU3M2IzYmI0OTU0YmNjYThhMGVkMjk0YThhNWRkYjI0OTZlNjA5MGRhZjI5ZTY5ZWY3YzU3YmI2M2Q1YjA5YTZlYzYyNjAyZWRlYjVjZDg2YmU1YjZlZTA2YzA4YmU1ZjkxYTQ0MTFkYjU1ZDBiZGE0Y2E5ZTEwOTBkYWY=", // Demo key
@@ -58,7 +70,7 @@ export default function PricingPage() {
           ]
         },
         onSuccess: async function (response: any) {
-          console.log("Payment Success", response);
+          console.log("[Payment Debug] Payment Success callback:", response);
           // Verify on server
           const verifyRes = await fetch("/api/payment/verify", {
             method: "POST",
@@ -69,6 +81,7 @@ export default function PricingPage() {
             })
           });
           const verifyData = await verifyRes.json();
+          console.log("[Payment Debug] Verification API Response:", verifyData);
           if (verifyData.success) {
             window.location.href = "/dashboard?payment=success";
           } else {
@@ -76,15 +89,17 @@ export default function PricingPage() {
           }
         },
         onError: function (response: any) {
-          console.error("Payment Error", response);
+          console.error("[Payment Debug] Payment Error callback:", response);
           alert("Payment failed or closed");
           setLoadingPlan(null);
         },
         onClose: function () {
+          console.log("[Payment Debug] Payment Widget Closed");
           setLoadingPlan(null);
         }
       });
 
+      console.log("[Payment Debug] Showing Widget with Params:", remitaParams);
       paymentEngine.showPaymentWidget({
         ...remitaParams
       });
