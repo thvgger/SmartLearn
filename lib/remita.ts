@@ -62,7 +62,7 @@ export async function generateRRR(params: RemitaPaymentParams) {
         merchantId: REMITA_MERCHANT_ID,
         serviceTypeId: REMITA_SERVICE_TYPE_ID,
         orderId: params.orderId,
-        amount: params.amount.toString(),
+        amount: params.amount, // Send as number
         payerName: params.payerName,
         payerEmail: params.payerEmail,
         payerPhone: params.payerPhone,
@@ -80,7 +80,9 @@ export async function generateRRR(params: RemitaPaymentParams) {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
                 "Authorization": `remitaConsumerKey=${REMITA_MERCHANT_ID},remitaConsumerToken=${hash}`,
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Origin": "https://demo.remita.net",
+                "Referer": "https://demo.remita.net/"
             },
             body: JSON.stringify(payload)
         });
