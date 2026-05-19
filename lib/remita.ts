@@ -70,6 +70,9 @@ export async function generateRRR(params: RemitaPaymentParams) {
         hash: hash
     };
 
+    console.log("[Remita] Generating RRR with URL:", url);
+    console.log("[Remita] Payload:", JSON.stringify(payload, null, 2));
+
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -81,10 +84,13 @@ export async function generateRRR(params: RemitaPaymentParams) {
         });
 
         const text = await response.text();
+        console.log("[Remita] Raw Response:", text);
+
         // The response might be wrapped in jsonp-like format or just text
         const cleanText = text.replace(/^jsonp\((.*)\)$/, "$1");
         const data = JSON.parse(cleanText);
         
+        console.log("[Remita] Parsed Response Data:", data);
         return data;
     } catch (error) {
         console.error("Remita RRR generation error:", error);
@@ -101,6 +107,8 @@ export async function verifyRemitaPayment(transactionId: string) {
         // Modern Verification Endpoint: /payment/v1/payment/query/{transactionId}
         const url = `${REMITA_BASE_URL}/payment/v1/payment/query/${transactionId}`;
 
+        console.log("[Remita] Verifying payment (Production):", url);
+
         try {
             const response = await fetch(url, {
                 method: "GET",
@@ -112,6 +120,7 @@ export async function verifyRemitaPayment(transactionId: string) {
             });
 
             const data = await response.json();
+            console.log("[Remita] Verification Response:", data);
             
             // Map modern response to expected internal format if needed
             return {
@@ -130,6 +139,8 @@ export async function verifyRemitaPayment(transactionId: string) {
         const hash = crypto.createHash("sha512").update(rawData).digest("hex");
         const url = `${REMITA_BASE_URL_V1}/remita/ecomm/${REMITA_MERCHANT_ID}/${transactionId}/${hash}/status.reg`;
 
+        console.log("[Remita] Verifying payment (Demo):", url);
+
         try {
             const response = await fetch(url, {
                 method: "GET",
@@ -139,6 +150,8 @@ export async function verifyRemitaPayment(transactionId: string) {
             });
 
             const data = await response.json();
+            console.log("[Remita] Verification Response:", data);
+
             // Legacy response usually has "status" and "message" or "responseCode"
             // If it returns a JSON with status, we map it to "00" for success if it's "Approved" or "00"
             const status = data.status || data.responseCode;

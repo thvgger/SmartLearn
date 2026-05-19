@@ -63,26 +63,33 @@ export async function POST(req: NextRequest) {
             description: `SmartLearn Subscription - ${plan}`
         };
 
+        console.log("[Payment] Initiation Data:", remitaData);
+
         let rrr = null;
         let remitaParams = await initiateRemitaPayment(remitaData);
 
         try {
             console.log("[Payment] Attempting server-side RRR generation...");
             const rrrResponse = await generateRRR(remitaData);
-            console.log("[Payment] RRR Response:", rrrResponse);
+            console.log("[Payment] RRR Response:", JSON.stringify(rrrResponse, null, 2));
             if (rrrResponse && rrrResponse.RRR) {
                 rrr = rrrResponse.RRR;
+                console.log("[Payment] RRR Obtained:", rrr);
+            } else {
+                console.warn("[Payment] No RRR in response, check if credentials are correct or service type is enabled.");
             }
         } catch (rrrError) {
-            console.error("[Payment] Server-side RRR generation failed, falling back to client-side:", rrrError);
+            console.error("[Payment] Server-side RRR generation failed:", rrrError);
         }
 
-        return NextResponse.json({
+        const finalResponse = {
             success: true,
             remitaParams,
             reference,
             rrr
-        });
+        };
+        console.log("[Payment] Returning response to frontend:", JSON.stringify(finalResponse, null, 2));
+        return NextResponse.json(finalResponse);
 
     } catch (error) {
         console.error("Payment initiation error:", error);
