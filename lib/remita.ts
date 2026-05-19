@@ -56,7 +56,7 @@ export async function initiateRemitaPayment(params: RemitaPaymentParams) {
 export async function generateRRR(params: RemitaPaymentParams) {
     const hash = generateRemitaHash(params.orderId, params.amount);
     
-    const url = `${REMITA_BASE_URL_V1}/remita/exapp/api/v1/send/api/bgatesvc/billing/generate`;
+    const url = `${REMITA_BASE_URL_V1}/remita/exapp/api/v1/send/api/bgatesvc/billing/generate.json`;
     
     const payload = {
         merchantId: REMITA_MERCHANT_ID,
@@ -78,7 +78,9 @@ export async function generateRRR(params: RemitaPaymentParams) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `remitaConsumerKey=${REMITA_MERCHANT_ID},remitaConsumerToken=${hash}`
+                "Accept": "application/json",
+                "Authorization": `remitaConsumerKey=${REMITA_MERCHANT_ID}, remitaConsumerToken=${hash}`,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
             },
             body: JSON.stringify(payload)
         });
@@ -86,9 +88,23 @@ export async function generateRRR(params: RemitaPaymentParams) {
         const text = await response.text();
         console.log("[Remita] Raw Response:", text);
 
+        if (!response.ok) {
+            console.error(`[Remita] API Error: ${response.status} ${response.statusText}`);
+            if (text.includes("<!DOCTYPE html>")) {
+                throw new Error("Remita API returned HTML error (Access Denied). Check headers, credentials or IP whitelist.");
+            }
+        }
+
         // The response might be wrapped in jsonp-like format or just text
-        const cleanText = text.replace(/^jsonp\((.*)\)$/, "$1");
-        const data = JSON.parse(cleanText);
+        const cleanText = text.replace(/^jsonp\((.*)\)$/, "$1").trim();
+        
+        let data;
+        try {
+            data = JSON.parse(cleanText);
+        } catch (e) {
+            console.error("[Remita] Failed to parse JSON response:", cleanText);
+            throw new Error(`Invalid JSON response from Remita: ${cleanText.substring(0, 100)}...`);
+        }
         
         console.log("[Remita] Parsed Response Data:", data);
         return data;
@@ -114,8 +130,10 @@ export async function verifyRemitaPayment(transactionId: string) {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "publicKey": REMITA_PUBLIC_KEY,
-                    "TXN_HASH": hash
+                    "Accept": "application/json",
+                    "publicKey": REMITA_PUBLIC_KEY || "",
+                    "TXN_HASH": hash,
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
                 }
             });
 
@@ -145,7 +163,9 @@ export async function verifyRemitaPayment(transactionId: string) {
             const response = await fetch(url, {
                 method: "GET",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
                 }
             });
 
