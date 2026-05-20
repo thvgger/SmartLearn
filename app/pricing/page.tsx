@@ -145,7 +145,7 @@ export default function PricingPage() {
                   "Standard Support"
                 ].map((feature, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-zinc-400">
-                    <Icon icon="streamline:check-1" className="text-indigo-400 w-4 h-4 mt-0.5 shrink-0" />
+                    <Icon icon="lucide:check" className="text-indigo-400 w-4 h-4 mt-0.5 shrink-0" />
                     {feature}
                   </li>
                 ))}
@@ -178,7 +178,7 @@ export default function PricingPage() {
                   "Email Support"
                 ].map((feature, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-zinc-400">
-                    <Icon icon="streamline:check-1" className="text-indigo-400 w-4 h-4 mt-0.5 shrink-0" />
+                    <Icon icon="lucide:check" className="text-indigo-400 w-4 h-4 mt-0.5 shrink-0" />
                     {feature}
                   </li>
                 ))}
@@ -191,7 +191,7 @@ export default function PricingPage() {
                 variant="outline"
                 className="w-full border-white/10 hover:bg-white/5 text-white font-bold h-11"
               >
-                {loadingPlan === "starter" ? <Icon icon="streamline:loading-1" className="w-4 h-4 animate-spin" /> : "Choose Starter"}
+                {loadingPlan === "starter" ? <Icon icon="lucide:loader-2" className="w-4 h-4 animate-spin" /> : "Choose Starter"}
               </Button>
             </CardFooter>
           </Card>
@@ -220,7 +220,7 @@ export default function PricingPage() {
                     "Priority Phone Support"
                   ].map((feature, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-white">
-                      <Icon icon="streamline:check-1" className="text-indigo-400 w-4 h-4 mt-0.5 shrink-0" />
+                      <Icon icon="lucide:check" className="text-indigo-400 w-4 h-4 mt-0.5 shrink-0" />
                       {feature}
                     </li>
                   ))}
@@ -232,7 +232,7 @@ export default function PricingPage() {
                   disabled={loadingPlan === "school"}
                   className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black h-12 shadow-xl shadow-indigo-600/20 transition-all hover:scale-[1.02]"
                 >
-                  {loadingPlan === "school" ? <Icon icon="streamline:loading-1" className="w-4 h-4 animate-spin" /> : "Get Started Now"}
+                  {loadingPlan === "school" ? <Icon icon="lucide:loader-2" className="w-4 h-4 animate-spin" /> : "Get Started Now"}
                 </Button>
               </CardFooter>
             </Card>
@@ -258,7 +258,7 @@ export default function PricingPage() {
                   "White-label Dashboard"
                 ].map((feature, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-zinc-400">
-                    <Icon icon="streamline:check-1" className="text-indigo-400 w-4 h-4 mt-0.5 shrink-0" />
+                    <Icon icon="lucide:check" className="text-indigo-400 w-4 h-4 mt-0.5 shrink-0" />
                     {feature}
                   </li>
                 ))}
@@ -271,7 +271,7 @@ export default function PricingPage() {
                 variant="outline"
                 className="w-full border-white/10 hover:bg-white/5 text-white font-bold h-11"
               >
-                {loadingPlan === "enterprise" ? <Icon icon="streamline:loading-1" className="w-4 h-4 animate-spin" /> : "Choose Enterprise"}
+                {loadingPlan === "enterprise" ? <Icon icon="lucide:loader-2" className="w-4 h-4 animate-spin" /> : "Choose Enterprise"}
               </Button>
             </CardFooter>
           </Card>
@@ -305,14 +305,14 @@ export default function PricingPage() {
 
             {/* Small Feature */}
             <Card className="md:col-span-4 bg-indigo-500/5 p-10 rounded-2xl border border-indigo-500/20 flex flex-col justify-center items-center text-center group">   
-              <Icon icon="streamline:shield-check-1" className="text-indigo-400 w-12 h-12 mb-6 group-hover:scale-110 transition-transform" />
+              <Icon icon="lucide:shield-check" className="text-indigo-400 w-12 h-12 mb-6 group-hover:scale-110 transition-transform" />
               <h4 className="font-headline text-xl font-bold mb-2 text-white">Data Sovereignty</h4>
               <p className="text-zinc-500 text-sm leading-relaxed">Bank-grade encryption for all student records and institutional data.</p>
             </Card>
 
             {/* Another Feature */}
             <Card className="md:col-span-4 bg-white/[0.01] backdrop-blur-xl border-white/5 p-10 rounded-2xl group">
-              <Icon icon="streamline:dashboard-1" className="text-indigo-400 w-12 h-12 mb-6 group-hover:scale-110 transition-transform" />
+              <Icon icon="lucide:layout-dashboard" className="text-indigo-400 w-12 h-12 mb-6 group-hover:scale-110 transition-transform" />
               <h4 className="font-headline text-xl font-bold mb-2 text-white">Cloud-Sync Ecosystem</h4>
               <p className="text-zinc-500 text-sm leading-relaxed">Instant data synchronization between offline CBT devices and your central cloud dashboard.</p>
             </Card>
@@ -326,7 +326,7 @@ export default function PricingPage() {
                   <p className="text-zinc-500 text-sm leading-relaxed">Built for Nigeria&apos;s unique connectivity landscape. Securely back up test results, student profiles, and question banks from local school servers to the cloud dashboard.</p>
                 </div>
                 <div className="w-full md:w-1/3 aspect-video bg-zinc-900 rounded-xl border border-white/5 flex items-center justify-center group-hover:bg-zinc-800 transition-colors shadow-2xl">
-                  <Icon icon="streamline:cloud-off" className="text-indigo-500/30 w-16 h-16" />
+                  <Icon icon="lucide:cloud-off" className="text-indigo-500/30 w-16 h-16" />
                 </div>
               </div>
             </Card>

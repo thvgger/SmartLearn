@@ -79,8 +79,8 @@ export default function UsersPage() {
   }
 
   function getRoleIcon(role: string) {
-    if (role === "teacher" || role === "admin") return "streamline:shield-1";
-    return "streamline:user-1";
+    if (role === "teacher" || role === "admin") return "lucide:shield";
+    return "lucide:user";
   }
 
   return (
@@ -96,7 +96,7 @@ export default function UsersPage() {
           </p>
         </div>
         <Button className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold h-11 px-6 shadow-lg shadow-indigo-600/20">
-          <Icon icon="streamline:user-add-1" className="w-4 h-4 mr-2" />
+          <Icon icon="lucide:user-plus" className="w-4 h-4 mr-2" />
           Add New User
         </Button>
       </div>
@@ -105,7 +105,7 @@ export default function UsersPage() {
       <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-4 gap-0">
         <div className="flex flex-col gap-6">
           <div className="relative flex-1 group">
-            <Icon icon="streamline:search-1" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
+            <Icon icon="lucide:search" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
             <Input
               type="text"
               placeholder="Search by name or email..."
@@ -169,7 +169,7 @@ export default function UsersPage() {
         ) : filtered.length === 0 ? (
           <div className="p-20 text-center flex flex-col items-center justify-center border-2 border-dashed border-white/5 rounded-2xl m-6">
             <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-6">
-              <Icon icon="streamline:user-1" className="w-8 h-8 text-zinc-700" />
+              <Icon icon="lucide:user" className="w-8 h-8 text-zinc-700" />
             </div>
             <p className="text-white font-bold text-lg">
               {users.length === 0 ? "No users yet" : "No users found"}
@@ -209,14 +209,14 @@ export default function UsersPage() {
                         {user.role}
                       </div>
                       <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 font-medium">
-                        <Icon icon="streamline:graduation-cap-1" className="w-3 h-3" />
+                        <Icon icon="lucide:graduation-cap" className="w-3 h-3" />
                         {user.class_name}
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1.5 text-[11px] text-zinc-400 font-medium max-w-[180px]">
-                      <Icon icon="streamline:mail-send-envelope" className="w-3 h-3 shrink-0 text-zinc-600" />
+                      <Icon icon="lucide:send" className="w-3 h-3 shrink-0 text-zinc-600" />
                       <span className="truncate">{user.email || "—"}</span>
                     </div>
                   </TableCell>
@@ -232,7 +232,7 @@ export default function UsersPage() {
                   <TableCell className="text-right px-6">
                     <DropdownMenu>
                       <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-white hover:bg-white/10 rounded-lg" />}>
-                        <Icon icon="streamline:navigation-menu-horizontal" className="w-4 h-4" />
+                        <Icon icon="lucide:more-horizontal" className="w-4 h-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="bg-zinc-900 border-white/10 w-40">
                         <DropdownMenuItem className="text-xs font-bold text-zinc-300 focus:text-white cursor-pointer" onClick={() => alert(`Detailed analytics for ${user.name}`)}>

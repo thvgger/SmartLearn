@@ -19,18 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { 
-  Plus, 
-  Search, 
-  FileText, 
-  BookOpen, 
-  Layers, 
-  Clock, 
-  Users, 
-  MoreHorizontal,
-  CheckCircle2,
-  AlertCircle
-} from "lucide-react";
+import { Icon } from "@iconify/react";
 import { cn } from "@/lib/utils";
 
 interface Exam {
@@ -54,13 +43,13 @@ interface QuestionCount {
 function getStatusConfig(status: string) {
   switch (status) {
     case "completed":
-      return { icon: CheckCircle2, label: "Completed", variant: "default" as const, class: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" };
+      return { icon: "lucide:check", label: "Completed", variant: "default" as const, class: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" };
     case "scheduled":
-      return { icon: Clock, label: "Scheduled", variant: "secondary" as const, class: "bg-amber-500/10 text-amber-400 border-amber-500/20" };
+      return { icon: "lucide:alarm-clock", label: "Scheduled", variant: "secondary" as const, class: "bg-amber-500/10 text-amber-400 border-amber-500/20" };
     case "draft":
-      return { icon: AlertCircle, label: "Draft", variant: "outline" as const, class: "bg-white/5 text-zinc-500 border-white/5" };
+      return { icon: "lucide:file-edit", label: "Draft", variant: "outline" as const, class: "bg-white/5 text-zinc-500 border-white/5" };
     default:
-      return { icon: AlertCircle, label: status, variant: "outline" as const, class: "bg-white/5 text-zinc-500 border-white/5" };
+      return { icon: "lucide:help-circle", label: status, variant: "outline" as const, class: "bg-white/5 text-zinc-500 border-white/5" };
   }
 }
 
@@ -125,7 +114,7 @@ export default function ExamsPage() {
           </p>
         </div>
         <Button className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold h-11 px-6 shadow-lg shadow-indigo-600/20">
-          <Plus className="w-4 h-4 mr-2" strokeWidth={3} />
+          <Icon icon="lucide:plus" className="w-4 h-4 mr-2" />
           Create New Exam
         </Button>
       </div>
@@ -134,7 +123,7 @@ export default function ExamsPage() {
       <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-4 gap-0">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-1 group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
+            <Icon icon="lucide:search" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
             <Input
               type="text"
               placeholder="Search exams by title..."
@@ -171,7 +160,7 @@ export default function ExamsPage() {
         ) : filtered.length === 0 ? (
           <div className="p-20 text-center flex flex-col items-center justify-center border-2 border-dashed border-white/5 rounded-2xl m-6">
             <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-6">
-              <FileText className="w-8 h-8 text-zinc-700" />
+              <Icon icon="lucide:file-edit" className="w-8 h-8 text-zinc-700" />
             </div>
             <p className="text-white font-bold text-lg">
               {exams.length === 0 ? "No exams yet" : "No exams found"}
@@ -194,13 +183,12 @@ export default function ExamsPage() {
             <TableBody>
               {filtered.map((exam) => {
                 const statusConfig = getStatusConfig(exam.status);
-                const StatusIcon = statusConfig.icon;
                 return (
                   <TableRow key={exam.id} className="hover:bg-white/[0.02] border-white/5 group">
                     <TableCell className="py-4">
                       <div className="flex items-center gap-4">
                         <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
-                          <BookOpen className="w-5 h-5" />
+                          <Icon icon="lucide:book-open" className="w-5 h-5" />
                         </div>
                         <div>
                           <p className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">{exam.title}</p>
@@ -211,18 +199,18 @@ export default function ExamsPage() {
                     <TableCell>
                       <div className="flex flex-col gap-1">
                         <div className="flex items-center gap-1.5 text-[11px] text-zinc-400 font-medium">
-                          <Layers className="w-3 h-3" />
+                          <Icon icon="lucide:layers" className="w-3 h-3" />
                           {exam.question_count} questions
                         </div>
                         <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 font-medium">
-                          <Clock className="w-3 h-3" />
+                          <Icon icon="lucide:alarm-clock" className="w-3 h-3" />
                           {exam.duration}
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
                       <Badge className={cn("text-[9px] font-black uppercase tracking-widest border-none px-2.5 py-0.5", statusConfig.class)}>
-                        <StatusIcon className="w-3 h-3 mr-1.5" />
+                        <Icon icon={statusConfig.icon} className="w-3 h-3 mr-1.5" />
                         {statusConfig.label}
                       </Badge>
                     </TableCell>
@@ -232,7 +220,7 @@ export default function ExamsPage() {
                           {exam.avg_score !== null ? `${Math.round(exam.avg_score)}%` : "—"}
                         </div>
                         <div className="flex items-center gap-1.5 text-[11px] text-zinc-600 font-medium">
-                          <Users className="w-3 h-3" />
+                          <Icon icon="lucide:user" className="w-3 h-3" />
                           {exam.student_count || 0} students
                         </div>
                       </div>
@@ -240,7 +228,7 @@ export default function ExamsPage() {
                     <TableCell className="text-right px-6">
                       <DropdownMenu>
                         <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-white hover:bg-white/10 rounded-lg" />}>
-                          <MoreHorizontal className="w-4 h-4" />
+                          <Icon icon="lucide:more-horizontal" className="w-4 h-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="bg-zinc-900 border-white/10 w-40">
                           <DropdownMenuItem className="text-xs font-bold text-zinc-300 focus:text-white cursor-pointer" onClick={() => alert(`Detailed report for ${exam.title}`)}>

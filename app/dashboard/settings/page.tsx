@@ -7,20 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { 
-  Building2, 
-  User, 
-  Mail, 
-  Phone, 
-  Tag, 
-  CheckCircle2, 
-  Copy, 
-  CreditCard, 
-  Shield, 
-  CloudUpload, 
-  RefreshCw, 
-  Download 
-} from "lucide-react";
+import { Icon } from "@iconify/react";
 
 interface BackupEntry {
   id: string;
@@ -230,7 +217,7 @@ export default function SettingsPage() {
       <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-center gap-3">
           <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
-            <Building2 className="w-5 h-5" />
+            <Icon icon="lucide:building-2" className="w-5 h-5" />
           </div>
           <CardTitle className="font-headline font-bold text-lg text-white">School Profile</CardTitle>
         </CardHeader>
@@ -241,7 +228,7 @@ export default function SettingsPage() {
                 Institution Name
               </label>
               <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/5">
-                <Building2 className="w-4 h-4 text-zinc-600 shrink-0" />
+                <Icon icon="lucide:building-2" className="w-4 h-4 text-zinc-600 shrink-0" />
                 <span className="text-sm text-white font-medium">{user?.school_name}</span>
               </div>
             </div>
@@ -250,7 +237,7 @@ export default function SettingsPage() {
                 Contact Person
               </label>
               <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/5">
-                <User className="w-4 h-4 text-zinc-600 shrink-0" />
+                <Icon icon="lucide:user" className="w-4 h-4 text-zinc-600 shrink-0" />
                 <span className="text-sm text-white font-medium">{user?.contact_name}</span>
               </div>
             </div>
@@ -259,7 +246,7 @@ export default function SettingsPage() {
                 Email Address
               </label>
               <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/5">
-                <Mail className="w-4 h-4 text-zinc-600 shrink-0" />
+                <Icon icon="lucide:send" className="w-4 h-4 text-zinc-600 shrink-0" />
                 <span className="text-sm text-white font-medium">{user?.email}</span>
               </div>
             </div>
@@ -268,7 +255,7 @@ export default function SettingsPage() {
                 Phone
               </label>
               <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/5">
-                <Phone className="w-4 h-4 text-zinc-600 shrink-0" />
+                <Icon icon="lucide:phone" className="w-4 h-4 text-zinc-600 shrink-0" />
                 <span className="text-sm text-zinc-500 font-medium">Not provided</span>
               </div>
             </div>
@@ -280,7 +267,7 @@ export default function SettingsPage() {
       <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-start gap-3">
           <div className="p-2 rounded-lg bg-violet-500/10 text-violet-400">
-            <Tag className="w-5 h-5" />
+            <Icon icon="lucide:tag" className="w-5 h-5" />
           </div>
           <div>
             <CardTitle className="font-headline font-bold text-lg text-white">Teacher Portal Access</CardTitle>
@@ -342,7 +329,7 @@ export default function SettingsPage() {
                 className="h-11 w-11 bg-white/5 hover:bg-white/10 text-zinc-400"
                 title="Copy tag"
               >
-                {tagCopied ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                {tagCopied ? <Icon icon="lucide:check-circle" className="w-4 h-4 text-emerald-400" /> : <Icon icon="lucide:copy" className="w-4 h-4" />}
               </Button>
             )}
           </div>
@@ -362,7 +349,7 @@ export default function SettingsPage() {
         <CardHeader className="p-6 pb-4 flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-3">
             <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
-              <CreditCard className="w-5 h-5" />
+              <Icon icon="lucide:credit-card" className="w-5 h-5" />
             </div>
             <CardTitle className="font-headline font-bold text-lg text-white">Subscription & Billing</CardTitle>
           </div>
@@ -382,7 +369,7 @@ export default function SettingsPage() {
             <div className="space-y-6 mt-4">
               <div className="bg-white/[0.03] rounded-xl p-5 border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <Shield className="w-5 h-5 text-emerald-400" />
+                  <Icon icon="lucide:shield" className="w-5 h-5 text-emerald-400" />
                   <div>
                     <p className="text-sm font-bold text-white capitalize">
                       {sub?.plan.replace("_yearly", " Yearly")} Plan
@@ -540,7 +527,7 @@ export default function SettingsPage() {
         <CardHeader className="p-6 pb-4 flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-3">
             <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
-              <CloudUpload className="w-5 h-5" />
+              <Icon icon="lucide:cloud" className="w-5 h-5" />
             </div>
             <div>
               <CardTitle className="font-headline font-bold text-lg text-white">Cloud Backups</CardTitle>
@@ -554,19 +541,19 @@ export default function SettingsPage() {
             disabled={backupsLoading}
             className="text-zinc-400 hover:text-white hover:bg-white/5"
           >
-            <RefreshCw className={`w-4 h-4 ${backupsLoading ? "animate-spin" : ""}`} />
+            <Icon icon="lucide:refresh-cw" className={`w-4 h-4 ${backupsLoading ? "animate-spin" : ""}`} />
           </Button>
         </CardHeader>
 
         <CardContent className="p-6 pt-0 mt-4">
           {backupsLoading && backups.length === 0 ? (
             <div className="text-center py-12">
-              <RefreshCw className="w-8 h-8 text-indigo-500/30 animate-spin mx-auto mb-3" />
+              <Icon icon="lucide:refresh-cw" className="w-8 h-8 text-indigo-500/30 animate-spin mx-auto mb-3" />
               <p className="text-zinc-500 text-sm font-medium">Loading backups...</p>
             </div>
           ) : backups.length === 0 ? (
             <div className="text-center py-12 border-2 border-dashed border-white/5 rounded-2xl">
-              <CloudUpload className="w-12 h-12 text-zinc-800 mx-auto mb-3" />
+              <Icon icon="lucide:cloud" className="w-12 h-12 text-zinc-800 mx-auto mb-3" />
               <p className="text-white font-bold">No backups yet</p>
               <p className="text-zinc-500 text-sm mt-1 max-w-[240px] mx-auto">
                 Backups created from your CBT application will appear here.
@@ -607,7 +594,7 @@ export default function SettingsPage() {
                   <div className="flex gap-2 w-full lg:w-auto">
                     {b.is_synced ? (
                       <div className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-400/5 border border-emerald-500/10">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <Icon icon="lucide:check-circle" className="w-3.5 h-3.5" />
                         Synced
                       </div>
                     ) : (
@@ -617,7 +604,7 @@ export default function SettingsPage() {
                         disabled={restoringId === b.id}
                         className="flex-1 lg:flex-none h-10 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest bg-indigo-600 hover:bg-indigo-500 text-white"
                       >
-                        <RefreshCw className={`w-3.5 h-3.5 mr-2 ${restoringId === b.id ? "animate-spin" : ""}`} />
+                        <Icon icon="lucide:refresh-cw" className={`w-3.5 h-3.5 mr-2 ${restoringId === b.id ? "animate-spin" : ""}`} />
                         {restoringId === b.id ? "Syncing..." : "Sync Dashboard"}
                       </Button>
                     )}
@@ -628,7 +615,7 @@ export default function SettingsPage() {
                       disabled={downloadingId === b.id}
                       className="h-10 w-10 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 border border-white/5"
                     >
-                      <Download className="w-4 h-4" />
+                      <Icon icon="lucide:download" className="w-4 h-4" />
                     </Button>
 
                   </div>

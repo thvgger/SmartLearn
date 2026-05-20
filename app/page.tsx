@@ -39,7 +39,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
               <Button render={<Link href="/register" />} size="lg" className="h-14 px-10 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg shadow-[0_20px_40px_-10px_rgba(99,102,241,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]">
                 Get Started Free
-                <Icon icon="streamline:arrow-right" className="ml-2 w-5 h-5" />
+                <Icon icon="lucide:arrow-right" className="ml-2 w-5 h-5" />
               </Button>
               <Button render={<Link href="/features" />} variant="outline" size="lg" className="h-14 px-10 rounded-xl border-white/10 bg-white/5 text-white font-bold text-lg hover:bg-white/10 transition-all">
                 See how it works
@@ -76,12 +76,12 @@ export default function Home() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
-                { icon: "streamline:flash-2", title: "Automated Marking", desc: "Objective questions are graded immediately. Instant feedback for students, zero work for teachers." },
-                { icon: "streamline:graph-bar-1", title: "Rich Analytics", desc: "Gain deep insights into class performance, subject trends, and individual student progress." },
-                { icon: "streamline:graph-bar-1", title: "Report Generation", desc: "Generate professional broadsheets and individual result slips with a single click." },
-                { icon: "streamline:money-currency-dollar", title: "Massive Savings", desc: "Eliminate the recurring costs of paper, ink, and manual labor for every examination cycle." },
-                { icon: "streamline:shield-check-1", title: "Cheating Prevention", desc: "Advanced shuffling, lockdown features, and remote monitoring keep your exams high-integrity." },
-                { icon: "streamline:graduation-cap", title: "CBT Ready", desc: "Prepare students for the digital future of JAMB, WAEC, and international standardized tests." }
+                { icon: "lucide:zap", title: "Automated Marking", desc: "Objective questions are graded immediately. Instant feedback for students, zero work for teachers." },
+                { icon: "lucide:bar-chart-2", title: "Rich Analytics", desc: "Gain deep insights into class performance, subject trends, and individual student progress." },
+                { icon: "lucide:bar-chart-2", title: "Report Generation", desc: "Generate professional broadsheets and individual result slips with a single click." },
+                { icon: "lucide:dollar-sign", title: "Massive Savings", desc: "Eliminate the recurring costs of paper, ink, and manual labor for every examination cycle." },
+                { icon: "lucide:shield-check", title: "Cheating Prevention", desc: "Advanced shuffling, lockdown features, and remote monitoring keep your exams high-integrity." },
+                { icon: "lucide:graduation-cap", title: "CBT Ready", desc: "Prepare students for the digital future of JAMB, WAEC, and international standardized tests." }
               ].map((f, i) => (
                 <Card key={i} className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl hover:bg-white/[0.03] transition-all group overflow-hidden relative border-none ring-1 ring-white/5">
                   <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 blur-2xl -z-10 group-hover:bg-indigo-500/10 transition-all"></div>
@@ -119,7 +119,7 @@ export default function Home() {
                   ].map((t, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <div className="w-5 h-5 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-                        <Icon icon="streamline:check-circle-1" className="w-3 h-3 text-indigo-400" />
+                        <Icon icon="lucide:check-circle" className="w-3 h-3 text-indigo-400" />
                       </div>
                       <span className="text-zinc-300 font-medium">{t}</span>
                     </div>

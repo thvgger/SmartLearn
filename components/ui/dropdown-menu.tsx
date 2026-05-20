@@ -127,7 +127,7 @@ function DropdownMenuSubTrigger({
       {...props}
     >
       {children}
-      <Icon icon="streamline:arrow-right-1" className="ml-auto" />
+      <Icon icon="lucide:arrow-right-1" className="ml-auto" />
     </MenuPrimitive.SubmenuTrigger>
   )
 }
@@ -178,7 +178,7 @@ function DropdownMenuCheckboxItem({
         data-slot="dropdown-menu-checkbox-item-indicator"
       >
         <MenuPrimitive.CheckboxItemIndicator>
-          <Icon icon="streamline:check-1" />
+          <Icon icon="lucide:check" />
         </MenuPrimitive.CheckboxItemIndicator>
       </span>
       {children}
@@ -218,7 +218,7 @@ function DropdownMenuRadioItem({
         data-slot="dropdown-menu-radio-item-indicator"
       >
         <MenuPrimitive.RadioItemIndicator>
-          <Icon icon="streamline:check-1" />
+          <Icon icon="lucide:check" />
         </MenuPrimitive.RadioItemIndicator>
       </span>
       {children}

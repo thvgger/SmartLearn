@@ -40,7 +40,7 @@ export default function Navbar() {
     <nav className={isAuthPage ? "absolute top-0 w-full z-50 p-8 flex justify-center md:justify-start" : "fixed top-0 w-full z-50 bg-background/50 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] border-b border-white/5"}>
       <div className={isAuthPage ? "" : "flex justify-between items-center px-8 py-4 max-w-7xl mx-auto"}>
         <Link href="/" className="text-xl font-bold tracking-tighter text-white flex items-center gap-2 font-headline cursor-pointer hover:opacity-90 transition-opacity">
-          <Icon icon="streamline:flash-2" className="text-indigo-300 w-6 h-6" />
+          <Icon icon="lucide:zap" className="text-indigo-300 w-6 h-6" />
           Swift Learn
         </Link>
         
@@ -80,7 +80,7 @@ export default function Navbar() {
                         {initials}
                       </AvatarFallback>
                     </Avatar>
-                    <Icon icon="streamline:chevron-down" className="w-4 h-4 text-slate-400 transition-transform duration-300 group-aria-expanded:rotate-180" />
+                    <Icon icon="lucide:chevron-down" className="w-4 h-4 text-slate-400 transition-transform duration-300 group-aria-expanded:rotate-180" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56 mt-2 bg-zinc-900/95 backdrop-blur-xl border-white/10 rounded-xl" align="end">
                     <DropdownMenuLabel className="font-normal p-4">
@@ -92,11 +92,11 @@ export default function Navbar() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator className="bg-white/5" />
                     <DropdownMenuItem render={<Link href="/dashboard" className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-slate-300 hover:text-white transition-colors cursor-pointer" />}>
-                      <Icon icon="streamline:dashboard-1" className="w-4 h-4 text-indigo-400" />
+                      <Icon icon="lucide:layout-dashboard" className="w-4 h-4 text-indigo-400" />
                       Go to Dashboard
                     </DropdownMenuItem>
                     <DropdownMenuItem render={<Link href="/dashboard/settings" className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-slate-300 hover:text-white transition-colors cursor-pointer" />}>
-                      <Icon icon="streamline:user-1" className="w-4 h-4 text-indigo-400" />
+                      <Icon icon="lucide:user" className="w-4 h-4 text-indigo-400" />
                       Account Settings
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="bg-white/5" />
@@ -104,7 +104,7 @@ export default function Navbar() {
                       onClick={handleLogout}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-red-400 hover:text-red-300 focus:text-red-300 focus:bg-red-400/10 transition-colors cursor-pointer"
                     >
-                      <Icon icon="streamline:logout-1" className="w-4 h-4" />
+                      <Icon icon="lucide:log-out" className="w-4 h-4" />
                       Sign Out
                     </DropdownMenuItem>
                   </DropdownMenuContent>

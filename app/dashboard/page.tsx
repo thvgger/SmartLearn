@@ -112,17 +112,17 @@ export default function DashboardOverview() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <StatsCard
-          icon="streamline:user-1"
+          icon="lucide:user"
           label="Total Users"
           value={stats ? String(stats.students) : "—"}
         />
         <StatsCard
-          icon="streamline:notes-1"
+          icon="lucide:file-text"
           label="Exams Created"
           value={stats ? String(stats.exams) : "—"}
         />
         <StatsCard
-          icon="streamline:graph-bar-1"
+          icon="lucide:bar-chart-2"
           label="Avg Score"
           value={stats ? `${stats.avgScore}%` : "—"}
           accent="text-violet-400"
@@ -166,7 +166,7 @@ export default function DashboardOverview() {
             ) : (
               <div className="flex flex-col items-center justify-center h-48 text-center">
                 <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4">
-                  <Icon icon="streamline:activity-1" className="w-6 h-6 text-zinc-600" />
+                  <Icon icon="lucide:activity" className="w-6 h-6 text-zinc-600" />
                 </div>
                 <p className="text-zinc-500 text-sm max-w-[240px]">
                   No exam data yet. Create your first exam to see score trends.
@@ -222,7 +222,7 @@ export default function DashboardOverview() {
                   </p>
                   <Button className="w-full bg-indigo-600 hover:bg-indigo-500" render={<Link href="/dashboard/settings" />}>
                     Upgrade Now
-                    <Icon icon="streamline:arrow-right" className="ml-2 w-4 h-4" />
+                    <Icon icon="lucide:arrow-right" className="ml-2 w-4 h-4" />
                   </Button>
                   </div>
                   )}
@@ -279,7 +279,7 @@ export default function DashboardOverview() {
           <CardContent className="p-0">
             <Link href="/dashboard/users" className="flex items-center gap-4 p-6">
               <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500/20 transition-all group-hover:scale-110">
-                <Icon icon="streamline:user-1" className="w-5 h-5" />
+                <Icon icon="lucide:user" className="w-5 h-5" />
               </div>
               <div>
                 <p className="font-headline font-bold text-sm text-white">
@@ -297,7 +297,7 @@ export default function DashboardOverview() {
           <CardContent className="p-0">
             <Link href="/dashboard/exams" className="flex items-center gap-4 p-6">
               <div className="p-3 rounded-xl bg-violet-500/10 text-violet-400 group-hover:bg-violet-500/20 transition-all group-hover:scale-110">
-                <Icon icon="streamline:notes-1" className="w-5 h-5" />
+                <Icon icon="lucide:file-text" className="w-5 h-5" />
               </div>
               <div>
                 <p className="font-headline font-bold text-sm text-white">
