@@ -2,9 +2,10 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Sidebar from "./components/Sidebar";
+import { AppSidebar } from "./components/AppSidebar";
 import DashboardHeader from "./components/DashboardHeader";
 import { useAuth } from "@/lib/AuthContext";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 
 export default function DashboardLayout({
   children,
@@ -22,10 +23,10 @@ export default function DashboardLayout({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center">
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-          <p className="text-on-surface-variant text-sm font-medium animate-pulse">
+          <div className="w-10 h-10 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+          <p className="text-zinc-500 text-sm font-medium animate-pulse">
             Loading dashboard...
           </p>
         </div>
@@ -36,15 +37,17 @@ export default function DashboardLayout({
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-surface flex">
-      <Sidebar
-        schoolName={user.school_name}
-        plan={user.subscription?.plan || "free"}
-      />
-      <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
-        <DashboardHeader contactName={user.contact_name} email={user.email} />
-        <main className="flex-1 p-4 lg:p-8 overflow-y-auto">{children}</main>
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full bg-zinc-950">
+        <AppSidebar
+          schoolName={user.school_name}
+          plan={user.subscription?.plan || "free"}
+        />
+        <SidebarInset className="flex flex-col bg-zinc-950">
+          <DashboardHeader contactName={user.contact_name} email={user.email} />
+          <main className="flex-1 p-4 lg:p-8 overflow-y-auto">{children}</main>
+        </SidebarInset>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }

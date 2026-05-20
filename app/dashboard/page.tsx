@@ -3,19 +3,11 @@
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import StatsCard from "./components/StatsCard";
-import {
-  Users,
-  FileText,
-  Monitor,
-  TrendingUp,
-  Activity,
-  Clock,
-  CloudUpload,
-  CheckCircle2,
-  ArrowRight,
-  HelpCircle,
-} from "lucide-react";
+import { Icon } from "@iconify/react";
 import Link from "next/link";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface BackupEntry {
   id: string;
@@ -109,10 +101,10 @@ export default function DashboardOverview() {
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Welcome */}
       <div>
-        <h1 className="font-headline text-2xl lg:text-3xl font-extrabold tracking-tight text-on-surface">
+        <h1 className="font-headline text-2xl lg:text-3xl font-extrabold tracking-tight text-white">
           Welcome back, {user?.contact_name?.split(" ")[0]}
         </h1>
-        <p className="text-on-surface-variant text-sm mt-1">
+        <p className="text-zinc-500 text-sm mt-1">
           Here&apos;s what&apos;s happening with {user?.school_name} today.
         </p>
       </div>
@@ -120,17 +112,17 @@ export default function DashboardOverview() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <StatsCard
-          icon={Users}
+          icon="streamline:user-1"
           label="Total Users"
           value={stats ? String(stats.students) : "—"}
         />
         <StatsCard
-          icon={FileText}
+          icon="streamline:notes-1"
           label="Exams Created"
           value={stats ? String(stats.exams) : "—"}
         />
         <StatsCard
-          icon={TrendingUp}
+          icon="streamline:graph-bar-1"
           label="Avg Score"
           value={stats ? `${stats.avgScore}%` : "—"}
           accent="text-violet-400"
@@ -140,170 +132,184 @@ export default function DashboardOverview() {
       {/* Two Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Score Trend or Activity */}
-        <div className="lg:col-span-3 glass-card rounded-xl border border-outline-variant/10 p-6">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="font-headline font-bold text-lg">
+        <Card className="lg:col-span-3 bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-xl overflow-hidden relative border-none ring-1 ring-white/5 p-0 gap-0">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/[0.02] blur-3xl -z-10"></div>
+          <CardHeader className="flex flex-row items-center justify-between p-6">
+            <CardTitle className="font-headline font-bold text-lg text-white">
               {scoreTrend.length > 0 ? "Score Trend" : "Recent Activity"}
-            </h2>
-            <span className="text-[10px] uppercase tracking-widest text-primary font-bold">
+            </CardTitle>
+            <Badge variant="outline" className="text-[10px] uppercase tracking-widest border-indigo-500/30 text-indigo-400 font-bold bg-indigo-500/5">
               {scoreTrend.length > 0 ? `${scoreTrend.length} exams` : "Live"}
-            </span>
-          </div>
+            </Badge>
+          </CardHeader>
 
-          {scoreTrend.length > 0 ? (
-            <div className="flex items-end gap-3 h-48">
-              {scoreTrend.map((s, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center justify-end h-full">
-                  <span className="text-xs font-bold text-on-surface mb-2">
-                    {s.score ? `${Math.round(s.score)}%` : "—"}
-                  </span>
-                  <div
-                    className="w-full bg-gradient-to-t from-indigo-600 to-violet-500 rounded-t-md transition-all duration-500 min-h-[8px]"
-                    style={{ height: `${((s.score || 0) / maxTrend) * 80}%` }}
-                  />
-                  <span className="text-[9px] text-outline-variant mt-2 font-medium truncate w-full text-center">
-                    {s.title.slice(0, 8)}
-                  </span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {[
-                { icon: Activity, text: "No exam data yet. Create your first exam to see score trends.", color: "text-outline-variant" },
-              ].map((item, i) => {
-                const Icon = item.icon;
-                return (
-                  <div key={i} className="flex items-center gap-4 py-2">
-                    <div className={`p-2 rounded-lg bg-surface-container-high ${item.color}`}>
-                      <Icon className="w-4 h-4" />
+          <CardContent className="p-6 pt-0">
+            {scoreTrend.length > 0 ? (
+              <div className="flex items-end gap-3 h-48">
+                {scoreTrend.map((s, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center justify-end h-full group">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity mb-2">
+                      <Badge variant="secondary" className="text-[10px] bg-indigo-500/20 text-indigo-300 border-none">
+                        {s.score ? `${Math.round(s.score)}%` : "—"}
+                      </Badge>
                     </div>
-                    <p className="flex-1 text-sm text-on-surface-variant">{item.text}</p>
+                    <div
+                      className="w-full bg-gradient-to-t from-indigo-600 to-violet-500 rounded-t-md transition-all duration-500 min-h-[8px] hover:scale-x-110 shadow-lg shadow-indigo-500/20"
+                      style={{ height: `${((s.score || 0) / maxTrend) * 70}%` }}
+                    />
+                    <span className="text-[9px] text-zinc-500 mt-3 font-medium truncate w-full text-center">
+                      {s.title.slice(0, 10)}
+                    </span>
                   </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-48 text-center">
+                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                  <Icon icon="streamline:activity-1" className="w-6 h-6 text-zinc-600" />
+                </div>
+                <p className="text-zinc-500 text-sm max-w-[240px]">
+                  No exam data yet. Create your first exam to see score trends.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Right Column */}
         <div className="lg:col-span-2 space-y-6">
           {/* Subscription Status */}
-          <div className="glass-card rounded-xl border border-outline-variant/10 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-headline font-bold text-lg">Subscription</h2>
-              <span
-                className={`text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full ${
+          <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-xl border-none ring-1 ring-white/5 p-0 gap-0">
+            <CardHeader className="flex flex-row items-center justify-between p-6">
+              <CardTitle className="font-headline font-bold text-lg text-white">Subscription</CardTitle>
+              <Badge 
+                className={
                   isActive
-                    ? "text-emerald-400 bg-emerald-400/10"
-                    : "text-amber-400 bg-amber-400/10"
-                }`}
+                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                    : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                }
               >
                 {isActive ? "Active" : "Inactive"}
-              </span>
-            </div>
-            {isActive ? (
-              <div className="space-y-2">
-                <p className="text-on-surface-variant text-sm">
-                  Plan:{" "}
-                  <span className="text-on-surface font-semibold capitalize">
-                    {sub?.plan}
-                  </span>
-                </p>
-                {sub?.expires_at && (
-                  <p className="text-on-surface-variant text-sm">
-                    Expires:{" "}
-                    <span className="text-on-surface">
-                      {new Date(sub.expires_at).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </span>
-                  </p>
-                )}
-              </div>
-            ) : (
-              <div>
-                <p className="text-on-surface-variant text-sm mb-4">
-                  Activate a plan to unlock all CBT features.
-                </p>
-                <Link
-                  href="/dashboard/settings"
-                  className="flex items-center gap-2 text-sm font-bold text-primary hover:underline"
-                >
-                  <span>Manage subscription</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            )}
-          </div>
-
-          {/* Quick Backups */}
-          <div className="glass-card rounded-xl border border-outline-variant/10 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-headline font-bold text-lg">Cloud Backups</h2>
-              <span className="text-xs text-outline-variant">
-                {backupsLoading ? "Loading..." : `${backups.length} total`}
-              </span>
-            </div>
-            {backups.length === 0 ? (
-              <p className="text-on-surface-variant text-sm">
-                No backups yet. Synced backups from your CBT devices will appear here.
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {backups.slice(0, 3).map((b) => (
-                  <div
-                    key={b.id}
-                    className="flex items-center justify-between py-2 border-b border-outline-variant/5 last:border-0"
-                  >
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-on-surface truncate">
-                        {b.label || "Untitled Backup"}
-                      </p>
-                      <p className="text-[11px] text-outline-variant">
-                        {formatBytes(b.size_bytes)} • {b.record_count} records
-                      </p>
-                    </div>
-                    <span className="text-[11px] text-outline-variant shrink-0 ml-3">
-                      {timeAgo(b.created_at)}
-                    </span>
+              </Badge>
+            </CardHeader>
+            <CardContent className="p-6 pt-0">
+              {isActive ? (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-500 text-sm">Plan</span>
+                    <span className="text-white font-bold capitalize">{sub?.plan}</span>
                   </div>
-                ))}
-                {backups.length > 3 && (
-                  <Link
-                    href="/dashboard/settings"
-                    className="text-xs font-bold text-primary hover:underline"
-                  >
-                    View all backups →
-                  </Link>
-                )}
-              </div>
-            )}
-          </div>
+                  {sub?.expires_at && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-zinc-500 text-sm">Expires</span>
+                      <span className="text-white font-medium text-sm">
+                        {new Date(sub.expires_at).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+                  )}
+                  <Button variant="outline" size="sm" className="w-full mt-4 border-white/10 hover:bg-white/5" render={<Link href="/dashboard/settings" />}>
+                    Manage Plan
+                  </Button>
+                  </div>
+                  ) : (
+                  <div>
+                  <p className="text-zinc-500 text-sm mb-6 leading-relaxed">
+                    Activate a plan to unlock all CBT features and start running secure exams.
+                  </p>
+                  <Button className="w-full bg-indigo-600 hover:bg-indigo-500" render={<Link href="/dashboard/settings" />}>
+                    Upgrade Now
+                    <Icon icon="streamline:arrow-right" className="ml-2 w-4 h-4" />
+                  </Button>
+                  </div>
+                  )}
+                  </CardContent>
+                  </Card>
+
+                  {/* Quick Backups */}
+                  <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-xl border-none ring-1 ring-white/5 p-0 gap-0">
+                  <CardHeader className="flex flex-row items-center justify-between p-6">
+                  <CardTitle className="font-headline font-bold text-lg text-white">Cloud Backups</CardTitle>
+                  <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
+                  {backupsLoading ? "..." : `${backups.length} total`}
+                  </span>
+                  </CardHeader>
+                  <CardContent className="p-6 pt-0">
+                  {backups.length === 0 ? (
+                  <p className="text-zinc-500 text-sm leading-relaxed">
+                  No backups yet. Synced backups from your CBT devices will appear here.
+                  </p>
+                  ) : (
+                  <div className="space-y-4">
+                  {backups.slice(0, 3).map((b) => (
+                    <div
+                      key={b.id}
+                      className="flex items-center justify-between py-2 group cursor-default"
+                    >
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold text-zinc-300 truncate group-hover:text-white transition-colors">
+                          {b.label || "Untitled Backup"}
+                        </p>
+                        <p className="text-[11px] text-zinc-600 font-medium">
+                          {formatBytes(b.size_bytes)} • {b.record_count} records
+                        </p>
+                      </div>
+                      <span className="text-[10px] font-bold text-zinc-500 shrink-0 ml-3 uppercase">
+                        {timeAgo(b.created_at)}
+                      </span>
+                    </div>
+                  ))}
+                  {backups.length > 3 && (
+                    <Button variant="link" size="sm" className="h-auto p-0 text-indigo-400 hover:text-indigo-300" render={<Link href="/dashboard/settings" />}>
+                      View all backups →
+                    </Button>
+                  )}
+                  </div>              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-        <Link
-          href="/dashboard/users"
-          className="glass-card rounded-xl border border-outline-variant/10 p-5 hover:border-primary/30 transition-all group flex items-center gap-4"
-        >
-          <div className="p-3 rounded-lg bg-violet-500/10 text-violet-400 group-hover:bg-violet-500/15 transition-colors">
-            <Users className="w-5 h-5" />
-          </div>
-          <div>
-            <p className="font-headline font-bold text-sm text-on-surface">
-              Manage Users
-            </p>
-            <p className="text-[11px] text-outline-variant">
-              View users and their performance
-            </p>
-          </div>
-        </Link>
+        <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 hover:bg-white/[0.02] transition-all group border-none ring-1 ring-white/5 p-0 gap-0">
+          <CardContent className="p-0">
+            <Link href="/dashboard/users" className="flex items-center gap-4 p-6">
+              <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500/20 transition-all group-hover:scale-110">
+                <Icon icon="streamline:user-1" className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-headline font-bold text-sm text-white">
+                  Manage Users
+                </p>
+                <p className="text-[11px] text-zinc-500 font-medium">
+                  View students and their performance
+                </p>
+              </div>
+            </Link>
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 hover:bg-white/[0.02] transition-all group border-none ring-1 ring-white/5 p-0 gap-0">
+          <CardContent className="p-0">
+            <Link href="/dashboard/exams" className="flex items-center gap-4 p-6">
+              <div className="p-3 rounded-xl bg-violet-500/10 text-violet-400 group-hover:bg-violet-500/20 transition-all group-hover:scale-110">
+                <Icon icon="streamline:notes-1" className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-headline font-bold text-sm text-white">
+                  Exams List
+                </p>
+                <p className="text-[11px] text-zinc-500 font-medium">
+                  Create and manage your examination cycles
+                </p>
+              </div>
+            </Link>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

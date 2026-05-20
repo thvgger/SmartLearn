@@ -76,7 +76,7 @@ export async function generateRRR(params: RemitaPaymentParams) {
         merchantId: REMITA_MERCHANT_ID,
         serviceTypeId: REMITA_SERVICE_TYPE_ID,
         orderId: params.orderId,
-        amount: params.amount, // Send as number
+        amount: params.amount,
         payerName: params.payerName,
         payerEmail: params.payerEmail,
         payerPhone: params.payerPhone,
@@ -111,7 +111,6 @@ export async function generateRRR(params: RemitaPaymentParams) {
             }
         }
 
-        // The response might be wrapped in jsonp-like format or just text
         const cleanText = text.replace(/^jsonp\((.*)\)$/, "$1").trim();
         
         let data;
@@ -132,11 +131,9 @@ export async function generateRRR(params: RemitaPaymentParams) {
 
 export async function verifyRemitaPayment(transactionId: string) {
     if (IS_PRODUCTION) {
-        // Modern Verification Hash = SHA512(transactionId + secretKey)
         const rawData = `${transactionId}${REMITA_API_KEY}`;
         const hash = crypto.createHash("sha512").update(rawData).digest("hex");
 
-        // Modern Verification Endpoint: /payment/v1/payment/query/{transactionId}
         const url = `${REMITA_BASE_URL}/payment/v1/payment/query/${transactionId}`;
 
         console.log("[Remita] Verifying payment (Production):", url);
@@ -156,7 +153,6 @@ export async function verifyRemitaPayment(transactionId: string) {
             const data = await response.json();
             console.log("[Remita] Verification Response:", data);
             
-            // Map modern response to expected internal format if needed
             return {
                 status: data.responseCode === "00" ? "00" : data.responseCode,
                 message: data.responseMsg,
@@ -167,8 +163,6 @@ export async function verifyRemitaPayment(transactionId: string) {
             throw error;
         }
     } else {
-        // Legacy/Standard Verification for Demo: /remita/ecomm/{merchantId}/{transactionId}/{hash}/status.reg
-        // Hash for legacy: SHA512(transactionId + apiKey + merchantId)
         const rawData = `${transactionId}${REMITA_API_KEY}${REMITA_MERCHANT_ID}`;
         const hash = crypto.createHash("sha512").update(rawData).digest("hex");
         const url = `${REMITA_BASE_URL_V1}/remita/ecomm/${REMITA_MERCHANT_ID}/${transactionId}/${hash}/status.reg`;
@@ -188,8 +182,6 @@ export async function verifyRemitaPayment(transactionId: string) {
             const data = await response.json();
             console.log("[Remita] Verification Response:", data);
 
-            // Legacy response usually has "status" and "message" or "responseCode"
-            // If it returns a JSON with status, we map it to "00" for success if it's "Approved" or "00"
             const status = data.status || data.responseCode;
             return {
                 status: (status === "00" || data.message === "Approved") ? "00" : status,

@@ -2,21 +2,24 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/AuthContext";
-import {
-  Settings as SettingsIcon,
-  CreditCard,
-  Building2,
-  CloudUpload,
-  Download,
-  Trash2,
-  RefreshCw,
-  CheckCircle2,
-  Shield,
-  Mail,
-  Phone,
-  User,
-  Tag,
-  Copy,
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { 
+  Building2, 
+  User, 
+  Mail, 
+  Phone, 
+  Tag, 
+  CheckCircle2, 
+  Copy, 
+  CreditCard, 
+  Shield, 
+  CloudUpload, 
+  RefreshCw, 
+  Download 
 } from "lucide-react";
 
 interface BackupEntry {
@@ -108,7 +111,7 @@ export default function SettingsPage() {
 
       const { remitaParams, reference, rrr } = data;
 
-      // @ts-ignore - RemitaPay is loaded from external script
+      // @ts-expect-error - RemitaPay is loaded from external script
       const paymentEngine = window.RmPaymentEngine.init({
         key: process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY || "REVUVE9GR098NDY3OTE3OTd8YjU3M2IzYmI0OTU0YmNjYThhMGVkMjk0YThhNWRkYjI0OTZlNjA5MGRhZjI5ZTY5ZWY3YzU3YmI2M2Q1YjA5YTZlYzYyNjAyZWRlYjVjZDg2YmU1YjZlZTA2YzA4YmU1ZjkxYTQ0MTFkYjU1ZDBiZGE0Y2E5ZTEwOTBkYWY=",
         processRrr: rrr ? false : true,
@@ -212,418 +215,429 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-8 pb-20">
       {/* Header */}
       <div>
-        <h1 className="font-headline text-2xl lg:text-3xl font-extrabold tracking-tight text-on-surface">
+        <h1 className="font-headline text-2xl lg:text-3xl font-extrabold tracking-tight text-white">
           Settings
         </h1>
-        <p className="text-on-surface-variant text-sm mt-1">
+        <p className="text-zinc-500 text-sm mt-1">
           Manage your school profile, subscription, and cloud backups.
         </p>
       </div>
 
       {/* School Profile */}
-      <div className="glass-card rounded-xl border border-outline-variant/10 p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-lg bg-primary-container/10 text-primary">
+      <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+        <CardHeader className="p-6 pb-4 flex flex-row items-center gap-3">
+          <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
             <Building2 className="w-5 h-5" />
           </div>
-          <h2 className="font-headline font-bold text-lg">School Profile</h2>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-[10px] uppercase tracking-widest text-outline-variant font-bold mb-2">
-              Institution Name
-            </label>
-            <div className="flex items-center gap-3 bg-surface-container-low rounded-lg px-4 py-3 border border-outline-variant/10">
-              <Building2 className="w-4 h-4 text-outline-variant shrink-0" />
-              <span className="text-sm text-on-surface">{user?.school_name}</span>
+          <CardTitle className="font-headline font-bold text-lg text-white">School Profile</CardTitle>
+        </CardHeader>
+        <CardContent className="p-6 pt-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+            <div className="space-y-2">
+              <label className="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">
+                Institution Name
+              </label>
+              <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/5">
+                <Building2 className="w-4 h-4 text-zinc-600 shrink-0" />
+                <span className="text-sm text-white font-medium">{user?.school_name}</span>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">
+                Contact Person
+              </label>
+              <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/5">
+                <User className="w-4 h-4 text-zinc-600 shrink-0" />
+                <span className="text-sm text-white font-medium">{user?.contact_name}</span>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">
+                Email Address
+              </label>
+              <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/5">
+                <Mail className="w-4 h-4 text-zinc-600 shrink-0" />
+                <span className="text-sm text-white font-medium">{user?.email}</span>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">
+                Phone
+              </label>
+              <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/5">
+                <Phone className="w-4 h-4 text-zinc-600 shrink-0" />
+                <span className="text-sm text-zinc-500 font-medium">Not provided</span>
+              </div>
             </div>
           </div>
-          <div>
-            <label className="block text-[10px] uppercase tracking-widest text-outline-variant font-bold mb-2">
-              Contact Person
-            </label>
-            <div className="flex items-center gap-3 bg-surface-container-low rounded-lg px-4 py-3 border border-outline-variant/10">
-              <User className="w-4 h-4 text-outline-variant shrink-0" />
-              <span className="text-sm text-on-surface">{user?.contact_name}</span>
-            </div>
-          </div>
-          <div>
-            <label className="block text-[10px] uppercase tracking-widest text-outline-variant font-bold mb-2">
-              Email Address
-            </label>
-            <div className="flex items-center gap-3 bg-surface-container-low rounded-lg px-4 py-3 border border-outline-variant/10">
-              <Mail className="w-4 h-4 text-outline-variant shrink-0" />
-              <span className="text-sm text-on-surface">{user?.email}</span>
-            </div>
-          </div>
-          <div>
-            <label className="block text-[10px] uppercase tracking-widest text-outline-variant font-bold mb-2">
-              Phone
-            </label>
-            <div className="flex items-center gap-3 bg-surface-container-low rounded-lg px-4 py-3 border border-outline-variant/10">
-              <Phone className="w-4 h-4 text-outline-variant shrink-0" />
-              <span className="text-sm text-on-surface-variant">Not provided</span>
-            </div>
-          </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* School Tag for Teacher Portal */}
-      <div className="glass-card rounded-xl border border-outline-variant/10 p-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 rounded-lg bg-primary-container/10 text-primary">
+      <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+        <CardHeader className="p-6 pb-4 flex flex-row items-start gap-3">
+          <div className="p-2 rounded-lg bg-violet-500/10 text-violet-400">
             <Tag className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-headline font-bold text-lg">Teacher Portal Access</h2>
-            <p className="text-xs text-outline-variant">Set a unique school tag so your teachers can log in remotely</p>
+            <CardTitle className="font-headline font-bold text-lg text-white">Teacher Portal Access</CardTitle>
+            <CardDescription className="text-zinc-500 text-xs mt-0.5">Set a unique school tag so your teachers can log in remotely</CardDescription>
           </div>
-        </div>
+        </CardHeader>
 
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="flex-1">
-            <input
-              type="text"
-              value={schoolTag}
-              onChange={(e) => {
-                setSchoolTag(e.target.value);
+        <CardContent className="p-6 pt-0 mt-4">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex-1">
+              <Input
+                type="text"
+                value={schoolTag}
+                onChange={(e) => {
+                  setSchoolTag(e.target.value);
+                  setTagMessage(null);
+                }}
+                placeholder="e.g. springfield-high"
+                className="bg-white/[0.03] border-white/5 rounded-xl h-11 text-white font-medium"
+              />
+            </div>
+            <Button
+              onClick={async () => {
+                setTagSaving(true);
                 setTagMessage(null);
-              }}
-              placeholder="e.g. springfield-high"
-              className="w-full bg-surface-container-low border border-outline-variant/10 rounded-lg px-4 py-2.5 text-sm text-on-surface placeholder:text-outline-variant/50 focus:outline-none focus:border-primary transition-colors"
-            />
-          </div>
-          <button
-            onClick={async () => {
-              setTagSaving(true);
-              setTagMessage(null);
-              try {
-                const res = await fetch("/api/school-tag", {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ school_tag: schoolTag }),
-                });
-                const data = await res.json();
-                if (res.ok) {
-                  setSchoolTag(data.school_tag);
-                  setTagMessage({ type: "success", text: `Saved! Teachers use "${data.school_tag}" to log in.` });
-                } else {
-                  setTagMessage({ type: "error", text: data.error });
+                try {
+                  const res = await fetch("/api/school-tag", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ school_tag: schoolTag }),
+                  });
+                  const data = await res.json();
+                  if (res.ok) {
+                    setSchoolTag(data.school_tag);
+                    setTagMessage({ type: "success", text: `Saved! Teachers use "${data.school_tag}" to log in.` });
+                  } else {
+                    setTagMessage({ type: "error", text: data.error });
+                  }
+                } catch {
+                  setTagMessage({ type: "error", text: "Network error" });
+                } finally {
+                  setTagSaving(false);
                 }
-              } catch {
-                setTagMessage({ type: "error", text: "Network error" });
-              } finally {
-                setTagSaving(false);
-              }
-            }}
-            disabled={tagSaving}
-            className="px-5 py-2.5 bg-primary-container text-on-primary-container rounded-lg font-headline font-bold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary-container/20 disabled:opacity-50"
-          >
-            {tagSaving ? "Saving..." : "Save Tag"}
-          </button>
-          {schoolTag && (
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(schoolTag);
-                setTagCopied(true);
-                setTimeout(() => setTagCopied(false), 2000);
               }}
-              className="p-2.5 rounded-lg hover:bg-surface-container-high text-outline-variant hover:text-on-surface transition-colors"
-              title="Copy tag"
+              disabled={tagSaving}
+              className="h-11 bg-indigo-600 hover:bg-indigo-500 text-white font-bold"
             >
-              {tagCopied ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-            </button>
-          )}
-        </div>
-
-        {tagMessage && (
-          <p className={`mt-3 text-xs font-medium ${
-            tagMessage.type === "success" ? "text-emerald-400" : "text-error"
-          }`}>
-            {tagMessage.text}
-          </p>
-        )}
-      </div>
-
-      {/* Subscription & Billing */}
-      <div className="glass-card rounded-xl border border-outline-variant/10 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary-container/10 text-primary">
-              <CreditCard className="w-5 h-5" />
-            </div>
-            <h2 className="font-headline font-bold text-lg">Subscription & Billing</h2>
-          </div>
-          <span
-            className={`text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full ${
-              isActive
-                ? "text-emerald-400 bg-emerald-400/10"
-                : "text-amber-400 bg-amber-400/10"
-            }`}
-          >
-            {isActive ? "Active" : "Inactive"}
-          </span>
-        </div>
-
-        {isActive ? (
-          <div className="space-y-6">
-            <div className="bg-surface-container-low rounded-lg p-5 border border-outline-variant/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <Shield className="w-5 h-5 text-emerald-400" />
-                <div>
-                  <p className="text-sm font-semibold text-on-surface capitalize">
-                    {sub?.plan.replace("_yearly", " Yearly")} Plan
-                  </p>
-                  {expiresAt && (
-                    <p className="text-xs text-outline-variant">
-                      Expires {expiresAt}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <button
-                onClick={() => setShowPlans(!showPlans)}
-                className="text-xs font-bold text-primary hover:underline"
+              {tagSaving ? "Saving..." : "Save Tag"}
+            </Button>
+            {schoolTag && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  navigator.clipboard.writeText(schoolTag);
+                  setTagCopied(true);
+                  setTimeout(() => setTagCopied(false), 2000);
+                }}
+                className="h-11 w-11 bg-white/5 hover:bg-white/10 text-zinc-400"
+                title="Copy tag"
               >
-                {showPlans ? "Hide plans" : "Change plan"}
-              </button>
-            </div>
-            
-            {(showPlans || !isActive) && (
-              <div className="pt-4 border-t border-outline-variant/5 animate-fade-up">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-                  <p className="text-on-surface-variant text-sm font-medium">
-                    {isActive ? "Switch to a different plan:" : "Choose a plan to unlock all features and cloud storage."}
-                  </p>
-                  {/* <!-- Toggle Switch --> */}
-                  <div className="flex items-center gap-3 shrink-0">
-                    <span className={`text-xs font-bold uppercase tracking-wider ${!isYearly ? "text-on-surface" : "text-outline-variant"}`}>Monthly</span>
-                    <div 
-                      className="relative w-12 h-6 bg-surface-container rounded-full p-1 cursor-pointer transition-colors border border-outline-variant/10"
-                      onClick={() => setIsYearly(!isYearly)}
-                    >
-                      <div className={`absolute top-1 w-4 h-4 bg-primary rounded-full transition-transform ${isYearly ? "translate-x-6" : "translate-x-0"}`}></div>
-                    </div>
-                    <span className={`text-xs font-bold uppercase tracking-wider ${isYearly ? "text-on-surface" : "text-outline-variant"}`}>Yearly</span>
-                    <span className="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[9px] font-bold tracking-tight ml-1">SAVE 25%</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                  {[
-                    { id: "free", name: "Free", price: 0, students: "15" },
-                    { id: "starter", name: "Starter", price: 10000, students: "100" },
-                    { id: "school", name: "School", price: 20000, students: "500", popular: true },
-                    { id: "enterprise", name: "Enterprise", price: 33333, students: "Unlimited" },
-                  ].map((p) => {
-                    const planId = isYearly ? `${p.id}_yearly` : p.id;
-                    const isCurrent = sub?.plan === planId;
-                    const displayPrice = isYearly ? Math.round(p.price * 0.75) : p.price;
-
-                    return (
-                      <div 
-                        key={p.id}
-                        className={`bg-surface-container-low rounded-xl p-6 border transition-all flex flex-col relative overflow-hidden ${
-                          isCurrent ? "border-primary bg-primary/5" : "border-outline-variant/10 hover:border-primary/20"
-                        }`}
-                      >
-                        {p.popular && (
-                          <span className="absolute top-0 right-0 bg-primary text-on-primary text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-bl-lg">
-                            Popular
-                          </span>
-                        )}
-                        <h3 className="font-headline font-bold text-lg mb-1">{p.name}</h3>
-                        <p className="text-xs text-outline-variant mb-4 flex-grow">{p.students} Students</p>
-                        <p className="text-3xl font-headline font-extrabold mb-1">
-                          ₦{displayPrice.toLocaleString()}
-                          <span className="text-sm font-normal text-outline-variant">/mo</span>
-                        </p>
-                        <div className="text-[10px] text-primary h-3 mt-1 font-bold">
-                          {isYearly && p.price > 0 && `₦${(displayPrice * 12).toLocaleString()} billed annually`}
-                        </div>
-                        <button
-                          onClick={() => handleSubscribe(p.id)}
-                          disabled={actionLoading === "subscribe" || isCurrent}
-                          className={`mt-4 w-full py-3 rounded-lg font-headline font-bold text-sm transition-all border disabled:opacity-50 ${
-                            isCurrent 
-                              ? "bg-emerald-400/10 text-emerald-400 border-emerald-400/20 cursor-default"
-                              : "bg-surface-container-high text-on-surface hover:bg-surface-container-highest border-outline-variant/10"
-                          }`}
-                        >
-                          {isCurrent ? "Current Plan" : actionLoading === "subscribe" ? "Processing..." : "Switch Plan"}
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+                {tagCopied ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+              </Button>
             )}
           </div>
-        ) : (
-          <div>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-              <p className="text-on-surface-variant text-sm">
-                Choose a plan to unlock all features and cloud storage.
-              </p>
-              {/* <!-- Toggle Switch --> */}
-              <div className="flex items-center gap-3 shrink-0">
-                <span className={`text-xs font-bold uppercase tracking-wider ${!isYearly ? "text-on-surface" : "text-outline-variant"}`}>Monthly</span>
-                <div 
-                  className="relative w-12 h-6 bg-surface-container rounded-full p-1 cursor-pointer transition-colors border border-outline-variant/10"
-                  onClick={() => setIsYearly(!isYearly)}
-                >
-                  <div className={`absolute top-1 w-4 h-4 bg-primary rounded-full transition-transform ${isYearly ? "translate-x-6" : "translate-x-0"}`}></div>
+
+          {tagMessage && (
+            <p className={`mt-3 text-xs font-bold ${
+              tagMessage.type === "success" ? "text-emerald-400" : "text-rose-400"
+            }`}>
+              {tagMessage.text}
+            </p>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Subscription & Billing */}
+      <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+        <CardHeader className="p-6 pb-4 flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center gap-3">
+            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+              <CreditCard className="w-5 h-5" />
+            </div>
+            <CardTitle className="font-headline font-bold text-lg text-white">Subscription & Billing</CardTitle>
+          </div>
+          <Badge
+            className={
+              isActive
+                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+            }
+          >
+            {isActive ? "Active" : "Inactive"}
+          </Badge>
+        </CardHeader>
+
+        <CardContent className="p-6 pt-0">
+          {isActive ? (
+            <div className="space-y-6 mt-4">
+              <div className="bg-white/[0.03] rounded-xl p-5 border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <Shield className="w-5 h-5 text-emerald-400" />
+                  <div>
+                    <p className="text-sm font-bold text-white capitalize">
+                      {sub?.plan.replace("_yearly", " Yearly")} Plan
+                    </p>
+                    {expiresAt && (
+                      <p className="text-xs text-zinc-500 font-medium">
+                        Expires {expiresAt}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <span className={`text-xs font-bold uppercase tracking-wider ${isYearly ? "text-on-surface" : "text-outline-variant"}`}>Yearly</span>
-                <span className="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-[9px] font-bold tracking-tight ml-1">SAVE 25%</span>
+                <Button
+                  variant="link"
+                  onClick={() => setShowPlans(!showPlans)}
+                  className="text-xs font-bold text-indigo-400 hover:text-indigo-300 p-0 h-auto"
+                >
+                  {showPlans ? "Hide plans" : "Change plan"}
+                </Button>
+              </div>
+              
+              {(showPlans || !isActive) && (
+                <div className="pt-8 border-t border-white/5 animate-fade-in-up">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-8">
+                    <p className="text-zinc-400 text-sm font-medium">
+                      {isActive ? "Switch to a different plan:" : "Choose a plan to unlock all features and cloud storage."}
+                    </p>
+                    {/* Toggle Switch */}
+                    <div className="flex items-center gap-4 shrink-0 bg-white/5 px-4 py-2 rounded-full border border-white/5">
+                      <span className={`text-[10px] font-bold uppercase tracking-widest ${!isYearly ? "text-white" : "text-zinc-600"}`}>Monthly</span>
+                      <Switch 
+                        checked={isYearly} 
+                        onCheckedChange={setIsYearly}
+                        className="data-[state=checked]:bg-indigo-600"
+                      />
+                      <span className={`text-[10px] font-bold uppercase tracking-widest ${isYearly ? "text-white" : "text-zinc-600"}`}>Yearly</span>
+                      <Badge className="bg-emerald-500/10 text-emerald-400 border-none font-black text-[9px]">SAVE 25%</Badge>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                    {[
+                      { id: "free", name: "Free", price: 0, students: "15" },
+                      { id: "starter", name: "Starter", price: 10000, students: "100" },
+                      { id: "school", name: "School", price: 20000, students: "500", popular: true },
+                      { id: "enterprise", name: "Enterprise", price: 33333, students: "Unlimited" },
+                    ].map((p) => {
+                      const planId = isYearly ? `${p.id}_yearly` : p.id;
+                      const isCurrent = sub?.plan === planId;
+                      const displayPrice = isYearly ? Math.round(p.price * 0.75) : p.price;
+
+                      return (
+                        <div 
+                          key={p.id}
+                          className={`bg-white/[0.02] rounded-2xl p-6 border transition-all flex flex-col relative overflow-hidden ring-1 ring-white/5 ${
+                            isCurrent ? "ring-indigo-500/50 bg-indigo-500/5" : "hover:ring-white/10"
+                          }`}
+                        >
+                          {p.popular && (
+                            <span className="absolute top-0 right-0 bg-indigo-600 text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-bl-lg">
+                              Popular
+                            </span>
+                          )}
+                          <h3 className="font-headline font-bold text-lg text-white mb-1">{p.name}</h3>
+                          <p className="text-xs text-zinc-500 font-medium mb-4 flex-grow">{p.students} Students</p>
+                          <p className="text-2xl font-headline font-black text-white tracking-tighter mb-1">
+                            ₦{displayPrice.toLocaleString()}
+                            <span className="text-xs font-medium text-zinc-600 tracking-normal ml-1">/mo</span>
+                          </p>
+                          <div className="text-[10px] text-indigo-400 h-3 mt-1 font-bold">
+                            {isYearly && p.price > 0 && `₦${(displayPrice * 12).toLocaleString()} / yr`}
+                          </div>
+                          <Button
+                            onClick={() => handleSubscribe(p.id)}
+                            disabled={actionLoading === "subscribe" || isCurrent}
+                            variant={isCurrent ? "outline" : "default"}
+                            className={`mt-4 w-full h-10 text-xs font-black uppercase tracking-widest ${
+                              isCurrent 
+                                ? "bg-emerald-400/5 text-emerald-400 border-emerald-500/20 hover:bg-emerald-400/5"
+                                : "bg-white/5 hover:bg-white/10 text-white border-white/5"
+                            }`}
+                          >
+                            {isCurrent ? "Current" : actionLoading === "subscribe" ? "..." : "Switch"}
+                          </Button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="mt-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-8">
+                <p className="text-zinc-400 text-sm font-medium">
+                  Choose a plan to unlock all features and cloud storage.
+                </p>
+                {/* Toggle Switch */}
+                <div className="flex items-center gap-4 shrink-0 bg-white/5 px-4 py-2 rounded-full border border-white/5">
+                  <span className={`text-[10px] font-bold uppercase tracking-widest ${!isYearly ? "text-white" : "text-zinc-600"}`}>Monthly</span>
+                  <Switch 
+                    checked={isYearly} 
+                    onCheckedChange={setIsYearly}
+                    className="data-[state=checked]:bg-indigo-600"
+                  />
+                  <span className={`text-[10px] font-bold uppercase tracking-widest ${isYearly ? "text-white" : "text-zinc-600"}`}>Yearly</span>
+                  <Badge className="bg-emerald-500/10 text-emerald-400 border-none font-black text-[9px]">SAVE 25%</Badge>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                {[
+                  { id: "free", name: "Free", price: 0, students: "15" },
+                  { id: "starter", name: "Starter", price: 10000, students: "100" },
+                  { id: "school", name: "School", price: 20000, students: "500", popular: true },
+                  { id: "enterprise", name: "Enterprise", price: 33333, students: "Unlimited" },
+                ].map((p) => {
+                  const displayPrice = isYearly ? Math.round(p.price * 0.75) : p.price;
+                  return (
+                    <div 
+                      key={p.id}
+                      className="bg-white/[0.02] rounded-2xl p-6 border border-white/5 hover:ring-1 hover:ring-indigo-500/30 transition-all flex flex-col relative overflow-hidden ring-1 ring-white/5"
+                    >
+                      {p.popular && (
+                        <span className="absolute top-0 right-0 bg-indigo-600 text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-bl-lg">
+                          Popular
+                        </span>
+                      )}
+                      <h3 className="font-headline font-bold text-lg text-white mb-1">{p.name}</h3>
+                      <p className="text-xs text-zinc-500 font-medium mb-4 flex-grow">{p.students} Students</p>
+                      <p className="text-2xl font-headline font-black text-white tracking-tighter mb-1">
+                        ₦{displayPrice.toLocaleString()}
+                        <span className="text-xs font-medium text-zinc-600 tracking-normal ml-1">/mo</span>
+                      </p>
+                      <div className="text-[10px] text-indigo-400 h-3 mt-1 font-bold">
+                        {isYearly && p.price > 0 && `₦${(displayPrice * 12).toLocaleString()} billed annually`}
+                      </div>
+                      <Button
+                        onClick={() => handleSubscribe(p.id)}
+                        disabled={actionLoading === "subscribe"}
+                        className="mt-4 w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs uppercase tracking-widest h-11"
+                      >
+                        {actionLoading === "subscribe" ? "..." : "Subscribe"}
+                      </Button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-              {[
-                { id: "free", name: "Free", price: 0, students: "15" },
-                { id: "starter", name: "Starter", price: 10000, students: "100" },
-                { id: "school", name: "School", price: 20000, students: "500", popular: true },
-                { id: "enterprise", name: "Enterprise", price: 33333, students: "Unlimited" },
-              ].map((p) => {
-                const displayPrice = isYearly ? Math.round(p.price * 0.75) : p.price;
-                return (
-                  <div 
-                    key={p.id}
-                    className="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10 text-center hover:border-primary/20 transition-all flex flex-col relative overflow-hidden"
-                  >
-                    {p.popular && (
-                      <span className="absolute top-0 right-0 bg-primary text-on-primary text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-bl-lg">
-                        Popular
-                      </span>
-                    )}
-                    <h3 className="font-headline font-bold text-lg mb-1">{p.name}</h3>
-                    <p className="text-xs text-outline-variant mb-4 flex-grow">{p.students} Students</p>
-                    <p className="text-3xl font-headline font-extrabold mb-1">
-                      ₦{displayPrice.toLocaleString()}
-                      <span className="text-sm font-normal text-outline-variant">/mo</span>
-                    </p>
-                    <div className="text-[10px] text-primary h-3 mt-1 font-bold">
-                      {isYearly && p.price > 0 && `₦${(displayPrice * 12).toLocaleString()} billed annually`}
-                    </div>
-                    <button
-                      onClick={() => handleSubscribe(p.id)}
-                      disabled={actionLoading === "subscribe"}
-                      className="mt-4 w-full bg-surface-container-high text-on-surface py-3 rounded-lg font-headline font-bold text-sm hover:bg-surface-container-highest transition-colors border border-outline-variant/10 disabled:opacity-50"
-                    >
-                      {actionLoading === "subscribe" ? "Processing..." : "Subscribe"}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Cloud Backups */}
-      <div className="glass-card rounded-xl border border-outline-variant/10 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary-container/10 text-primary">
+      <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+        <CardHeader className="p-6 pb-4 flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center gap-3">
+            <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
               <CloudUpload className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="font-headline font-bold text-lg">Cloud Backups</h2>
-              <p className="text-xs text-outline-variant">
-                Secure cloud backups of your exam data
-              </p>
+              <CardTitle className="font-headline font-bold text-lg text-white">Cloud Backups</CardTitle>
+              <CardDescription className="text-zinc-500 text-xs mt-0.5">Secure cloud backups of your exam data</CardDescription>
             </div>
           </div>
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={fetchBackups}
             disabled={backupsLoading}
-            className="p-2 rounded-lg hover:bg-surface-container-high text-outline-variant hover:text-on-surface transition-colors"
+            className="text-zinc-400 hover:text-white hover:bg-white/5"
           >
             <RefreshCw className={`w-4 h-4 ${backupsLoading ? "animate-spin" : ""}`} />
-          </button>
-        </div>
+          </Button>
+        </CardHeader>
 
-        {backupsLoading && backups.length === 0 ? (
-          <p className="text-center text-on-surface-variant text-sm py-8">
-            Loading backups...
-          </p>
-        ) : backups.length === 0 ? (
-          <div className="text-center py-12">
-            <CloudUpload className="w-12 h-12 text-outline-variant/30 mx-auto mb-3" />
-            <p className="text-on-surface-variant font-medium">No backups yet</p>
-            <p className="text-outline-variant text-sm mt-1">
-              Backups created from your CBT application will appear here.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {backups.map((b) => (
-              <div
-                key={b.id}
-                className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-surface-container-low rounded-lg border border-outline-variant/5 gap-3"
-              >
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <p className="text-sm font-medium text-on-surface">
-                      {b.label || "Untitled Backup"}
-                    </p>
-                    <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                      {formatBytes(b.size_bytes)}
-                    </span>
+        <CardContent className="p-6 pt-0 mt-4">
+          {backupsLoading && backups.length === 0 ? (
+            <div className="text-center py-12">
+              <RefreshCw className="w-8 h-8 text-indigo-500/30 animate-spin mx-auto mb-3" />
+              <p className="text-zinc-500 text-sm font-medium">Loading backups...</p>
+            </div>
+          ) : backups.length === 0 ? (
+            <div className="text-center py-12 border-2 border-dashed border-white/5 rounded-2xl">
+              <CloudUpload className="w-12 h-12 text-zinc-800 mx-auto mb-3" />
+              <p className="text-white font-bold">No backups yet</p>
+              <p className="text-zinc-500 text-sm mt-1 max-w-[240px] mx-auto">
+                Backups created from your CBT application will appear here.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {backups.map((b) => (
+                <div
+                  key={b.id}
+                  className="flex flex-col lg:flex-row items-start lg:items-center justify-between p-4 bg-white/[0.02] rounded-xl border border-white/5 gap-4 group hover:bg-white/[0.04] transition-all"
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-3 mb-1.5">
+                      <p className="text-sm font-bold text-white truncate">
+                        {b.label || "Untitled Backup"}
+                      </p>
+                      <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-400 border-none font-bold text-[9px] px-2 py-0.5">
+                        {formatBytes(b.size_bytes)}
+                      </Badge>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                      <span>
+                        {new Date(b.created_at).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </span>
+                      <span className="text-zinc-700">•</span>
+                      <span>{b.record_count} records</span>
+                      <span className="text-zinc-700">•</span>
+                      <span className="text-indigo-500/60">
+                        {b.entities.split(',').length} modules
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3 text-[11px] text-outline-variant">
-                    <span>
-                      {new Date(b.created_at).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </span>
-                    <span>•</span>
-                    <span>{b.record_count} records</span>
-                    <span>•</span>
-                    <span className="capitalize">
-                      {b.entities.replace(/,/g, ", ")}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex gap-2 shrink-0">
-                  {b.is_synced ? (
-                    <span className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold text-emerald-500 bg-emerald-400/10 border border-emerald-400/20">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      Synced
-                    </span>
-                  ) : (
-                    <button
-                      onClick={() => handleRestoreBackup(b.id)}
-                      disabled={restoringId === b.id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold text-indigo-400 bg-indigo-400/10 hover:bg-indigo-400/20 transition-colors border border-indigo-400/20 disabled:opacity-50"
-                      title="Sync this backup data to your Dashboard"
+                  <div className="flex gap-2 w-full lg:w-auto">
+                    {b.is_synced ? (
+                      <div className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-400/5 border border-emerald-500/10">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Synced
+                      </div>
+                    ) : (
+                      <Button
+                        size="sm"
+                        onClick={() => handleRestoreBackup(b.id)}
+                        disabled={restoringId === b.id}
+                        className="flex-1 lg:flex-none h-10 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest bg-indigo-600 hover:bg-indigo-500 text-white"
+                      >
+                        <RefreshCw className={`w-3.5 h-3.5 mr-2 ${restoringId === b.id ? "animate-spin" : ""}`} />
+                        {restoringId === b.id ? "Syncing..." : "Sync Dashboard"}
+                      </Button>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDownloadBackup(b.id, b.label)}
+                      disabled={downloadingId === b.id}
+                      className="h-10 w-10 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 border border-white/5"
                     >
-                      <RefreshCw className={`w-3.5 h-3.5 ${restoringId === b.id ? "animate-spin" : ""}`} />
-                      {restoringId === b.id ? "Syncing..." : "Sync to Dashboard"}
-                    </button>
-                  )}
-                  <button
-                    onClick={() => handleDownloadBackup(b.id, b.label)}
-                    disabled={downloadingId === b.id}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-on-surface bg-surface-container-high hover:bg-surface-container-highest transition-colors border border-outline-variant/10 disabled:opacity-50"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                  </button>
+                      <Download className="w-4 h-4" />
+                    </Button>
 
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

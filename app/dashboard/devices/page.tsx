@@ -10,8 +10,10 @@ import {
   Shield,
   Clock,
   RefreshCw,
-  Trash2,
 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface LicenseKey {
   id: string;
@@ -46,8 +48,6 @@ export default function DevicesPage() {
     fetchLicenses();
   }, [fetchLicenses]);
 
-
-
   function handleCopy(key: string) {
     navigator.clipboard.writeText(key);
     setCopiedKey(key);
@@ -57,130 +57,130 @@ export default function DevicesPage() {
   const activeCount = licenses.filter((l) => l.is_active).length;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8">
+    <div className="max-w-5xl mx-auto space-y-8 pb-20">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div>
-          <h1 className="font-headline text-2xl lg:text-3xl font-extrabold tracking-tight text-on-surface">
+          <h1 className="font-headline text-2xl lg:text-3xl font-extrabold tracking-tight text-white">
             Devices & Licenses
           </h1>
-          <p className="text-on-surface-variant text-sm mt-1">
+          <p className="text-zinc-500 text-sm mt-1 font-medium">
             Manage your CBT application license keys and connected devices.
           </p>
         </div>
+        <Button className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold h-11 px-6 shadow-lg shadow-indigo-600/20">
+          <Plus className="w-4 h-4 mr-2" strokeWidth={3} />
+          Generate License
+        </Button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="glass-card rounded-xl p-5 border border-outline-variant/10">
-          <div className="flex items-center gap-3 mb-2">
-            <Monitor className="w-5 h-5 text-primary" />
-            <span className="text-xs uppercase tracking-widest text-on-surface-variant font-medium">Total Devices</span>
-          </div>
-          <p className="text-2xl font-headline font-extrabold">{licenses.length}</p>
-        </div>
-        <div className="glass-card rounded-xl p-5 border border-outline-variant/10">
-          <div className="flex items-center gap-3 mb-2">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-            <span className="text-xs uppercase tracking-widest text-on-surface-variant font-medium">Active</span>
-          </div>
-          <p className="text-2xl font-headline font-extrabold text-emerald-400">{activeCount}</p>
-        </div>
-        <div className="glass-card rounded-xl p-5 border border-outline-variant/10">
-          <div className="flex items-center gap-3 mb-2">
-            <XCircle className="w-5 h-5 text-rose-400" />
-            <span className="text-xs uppercase tracking-widest text-on-surface-variant font-medium">Revoked</span>
-          </div>
-          <p className="text-2xl font-headline font-extrabold text-rose-400">{licenses.length - activeCount}</p>
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {[
+          { icon: Monitor, label: "Total Devices", value: licenses.length, color: "text-indigo-400" },
+          { icon: CheckCircle2, label: "Active", value: activeCount, color: "text-emerald-400" },
+          { icon: XCircle, label: "Revoked", value: licenses.length - activeCount, color: "text-rose-400" },
+        ].map((s, i) => (
+          <Card key={i} className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-5 gap-0">
+            <div className="flex items-center gap-3 mb-2">
+              <s.icon className={`w-5 h-5 ${s.color}`} />
+              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">{s.label}</span>
+            </div>
+            <p className="text-2xl font-headline font-black text-white">{s.value}</p>
+          </Card>
+        ))}
       </div>
 
       {/* License Table */}
-      <div className="glass-card rounded-xl border border-outline-variant/10 overflow-hidden">
-        <div className="px-6 py-4 border-b border-outline-variant/10 flex items-center justify-between">
-          <h2 className="font-headline font-bold text-lg">License Keys</h2>
-          <button
+      <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+        <CardHeader className="px-6 py-4 border-b border-white/5 flex flex-row items-center justify-between">
+          <CardTitle className="font-headline font-bold text-lg text-white">License Keys</CardTitle>
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={fetchLicenses}
-            className="text-outline-variant hover:text-on-surface transition-colors p-1"
+            className="text-zinc-500 hover:text-white hover:bg-white/5 rounded-lg h-8 w-8"
           >
             <RefreshCw className="w-4 h-4" />
-          </button>
-        </div>
+          </Button>
+        </CardHeader>
 
-        {loading ? (
-          <div className="p-12 text-center text-on-surface-variant text-sm">
-            Loading devices...
-          </div>
-        ) : licenses.length === 0 ? (
-          <div className="p-12 text-center">
-            <Shield className="w-12 h-12 text-outline-variant/30 mx-auto mb-3" />
-            <p className="text-on-surface-variant font-medium">No license keys yet</p>
-
-          </div>
-        ) : (
-          <div className="divide-y divide-outline-variant/5">
-            {licenses.map((lic) => (
-              <div
-                key={lic.id}
-                className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 py-4 gap-3 hover:bg-surface-container-high/30 transition-colors"
-              >
-                <div className="flex items-center gap-4 min-w-0">
-                  <div
-                    className={`p-2 rounded-lg ${
-                      lic.is_active
-                        ? "bg-emerald-500/10 text-emerald-400"
-                        : "bg-rose-500/10 text-rose-400"
-                    }`}
-                  >
-                    <Monitor className="w-4 h-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-on-surface">
-                      {lic.device_name || "Unnamed Device"}
-                    </p>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <code className="text-xs text-outline-variant font-mono truncate max-w-[200px]">
-                        {lic.key}
-                      </code>
-                      <button
-                        onClick={() => handleCopy(lic.key)}
-                        className="text-outline-variant hover:text-primary transition-colors shrink-0"
-                        title="Copy key"
-                      >
-                        {copiedKey === lic.key ? (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                        ) : (
-                          <Copy className="w-3.5 h-3.5" />
-                        )}
-                      </button>
+        <CardContent className="p-0">
+          {loading ? (
+            <div className="p-20 flex flex-col items-center justify-center text-zinc-500">
+              <div className="w-10 h-10 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mb-4" />
+              <p className="text-sm font-bold uppercase tracking-widest">Syncing devices...</p>
+            </div>
+          ) : licenses.length === 0 ? (
+            <div className="p-20 text-center flex flex-col items-center justify-center border-2 border-dashed border-white/5 rounded-2xl m-6">
+              <Shield className="w-12 h-12 text-zinc-800 mx-auto mb-4" />
+              <p className="text-white font-bold">No license keys yet</p>
+              <p className="text-zinc-500 text-sm mt-1">Generate a key to activate a CBT application.</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-white/5">
+              {licenses.map((lic) => (
+                <div
+                  key={lic.id}
+                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 py-5 gap-4 hover:bg-white/[0.02] transition-colors group"
+                >
+                  <div className="flex items-center gap-4 min-w-0">
+                    <div
+                      className={`p-2.5 rounded-xl transition-all group-hover:scale-110 ${
+                        lic.is_active
+                          ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                          : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                      }`}
+                    >
+                      <Monitor className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">
+                        {lic.device_name || "Unnamed Device"}
+                      </p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <code className="text-xs text-zinc-500 font-mono bg-white/5 px-2 py-0.5 rounded truncate max-w-[200px]">
+                          {lic.key}
+                        </code>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleCopy(lic.key)}
+                          className="h-7 w-7 text-zinc-600 hover:text-indigo-400 hover:bg-indigo-500/10"
+                        >
+                          {copiedKey === lic.key ? (
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                          ) : (
+                            <Copy className="w-3.5 h-3.5" />
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-4">
-                  {lic.last_verified && (
-                    <span className="flex items-center gap-1 text-[11px] text-outline-variant">
-                      <Clock className="w-3 h-3" />
-                      Last verified{" "}
-                      {new Date(lic.last_verified).toLocaleDateString()}
-                    </span>
-                  )}
-                  <span
-                    className={`text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full ${
-                      lic.is_active
-                        ? "text-emerald-400 bg-emerald-400/10"
-                        : "text-rose-400 bg-rose-400/10"
-                    }`}
-                  >
-                    {lic.is_active ? "Active" : "Revoked"}
-                  </span>
-
+                  <div className="flex flex-wrap items-center gap-6">
+                    {lic.last_verified && (
+                      <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-zinc-600">
+                        <Clock className="w-3 h-3" />
+                        <span>Last Active: {new Date(lic.last_verified).toLocaleDateString()}</span>
+                      </div>
+                    )}
+                    <Badge
+                      className={`text-[9px] font-black uppercase tracking-widest border-none px-2.5 py-0.5 ${
+                        lic.is_active
+                          ? "bg-emerald-500/10 text-emerald-400"
+                          : "bg-rose-500/10 text-rose-400"
+                      }`}
+                    >
+                      {lic.is_active ? "Active" : "Revoked"}
+                    </Badge>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

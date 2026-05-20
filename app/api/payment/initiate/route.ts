@@ -65,13 +65,13 @@ export async function POST(req: NextRequest) {
 
         console.log("[Payment] Initiation Data:", remitaData);
 
-        let remitaParams = await initiateRemitaPayment(remitaData);
+        const remitaParams = await initiateRemitaPayment(remitaData);
 
         const finalResponse = {
             success: true,
             remitaParams,
             reference,
-            rrr: null // Let the frontend Inline SDK generate the RRR
+            rrr: null
         };
         console.log("[Payment] Returning response to frontend:", JSON.stringify(finalResponse, null, 2));
         return NextResponse.json(finalResponse);
