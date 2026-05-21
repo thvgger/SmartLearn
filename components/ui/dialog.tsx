@@ -70,7 +70,7 @@ function DialogContent({
               />
             }
           >
-            <Icon icon="lucide:trash-2" />
+            <Icon icon="ri:delete-bin-line" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
         )}

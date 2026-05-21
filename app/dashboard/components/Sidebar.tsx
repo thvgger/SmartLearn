@@ -2,23 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  Users,
-  FileText,
-  Settings,
-  Zap,
-  ChevronLeft,
-  ChevronRight,
-  ShieldCheck
-} from "lucide-react";
+import { Icon } from "@iconify/react";
 import { useState } from "react";
 
 const navItems = [
-  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-  { href: "/dashboard/users", label: "Users", icon: Users },
-  { href: "/dashboard/exams", label: "Exams", icon: FileText },
-  { href: "/dashboard/settings", label: "Settings", icon: Settings },
+  { href: "/dashboard", label: "Overview", icon: "ri:dashboard-line" },
+  { href: "/dashboard/users", label: "Users", icon: "ri:group-line" },
+  { href: "/dashboard/exams", label: "Exams", icon: "ri:file-text-line" },
+  { href: "/dashboard/settings", label: "Settings", icon: "ri:settings-3-line" },
 ];
 
 interface SidebarProps {
@@ -39,10 +30,10 @@ export default function Sidebar({ schoolName, plan }: SidebarProps) {
       {/* Logo Section */}
       <div className="flex items-center gap-3 px-6 py-8">
         <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
-          <Zap className="text-indigo-400 w-5 h-5" strokeWidth={2.5} />
+          <Icon icon="ri:flashlight-fill" className="text-indigo-400 w-5 h-5" />
         </div>
         {!collapsed && (
-          <span className="font-headline font-extrabold text-xl tracking-tighter text-white">
+          <span className="font-semibold text-lg tracking-tight text-white">
             Swift Learn
           </span>
         )}
@@ -55,28 +46,27 @@ export default function Sidebar({ schoolName, plan }: SidebarProps) {
             item.href === "/dashboard"
               ? pathname === "/dashboard"
               : pathname.startsWith(item.href);
-          const Icon = item.icon;
+          const iconName = item.icon;
 
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all duration-300 group relative ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors group relative ${
                 isActive
-                  ? "bg-white/[0.03] text-white"
-                  : "text-zinc-500 hover:text-white hover:bg-white/[0.02]"
+                  ? "bg-white/5 text-white"
+                  : "text-zinc-500 hover:text-white hover:bg-white/5"
               }`}
             >
-              <Icon
+              <Icon icon={iconName}
                 className={`w-[18px] h-[18px] shrink-0 transition-colors duration-300 ${
                   isActive ? "text-indigo-400" : "text-zinc-500 group-hover:text-zinc-300"
                 }`}
-                strokeWidth={isActive ? 2.5 : 2}
               />
               {!collapsed && <span>{item.label}</span>}
               
               {isActive && (
-                <div className="absolute left-0 w-1 h-6 bg-indigo-500 rounded-r-full shadow-[0_0_12px_rgba(99,102,241,0.5)]" />
+                <div className="absolute left-0 w-1 h-5 bg-indigo-500 rounded-r-full" />
               )}
             </Link>
           );
@@ -86,14 +76,14 @@ export default function Sidebar({ schoolName, plan }: SidebarProps) {
       {/* Sidebar Footer */}
       <div className="p-4 border-t border-white/5">
         {!collapsed && (
-          <div className="mb-6 p-4 rounded-xl bg-white/[0.02] border border-white/5">
+          <div className="mb-6 p-4 rounded-lg bg-white/[0.02] border border-white/5">
             <div className="flex items-center gap-2 mb-2">
-              <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-400">
+              <Icon icon="ri:shield-check-fill" className="w-4 h-4 text-zinc-400" />
+              <span className="text-xs font-medium text-zinc-400">
                 {plan} Plan
               </span>
             </div>
-            <p className="text-xs font-bold text-white truncate">
+            <p className="text-sm font-medium text-white truncate">
               {schoolName}
             </p>
           </div>
@@ -105,10 +95,10 @@ export default function Sidebar({ schoolName, plan }: SidebarProps) {
           title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? (
-            <ChevronRight className="w-5 h-5" />
+            <Icon icon="ri:arrow-right-s-line" className="w-5 h-5" />
           ) : (
             <div className="flex items-center gap-2 text-xs font-bold">
-              <ChevronLeft className="w-4 h-4" />
+              <Icon icon="ri:arrow-left-s-line" className="w-4 h-4" />
               <span>Collapse</span>
             </div>
           )}

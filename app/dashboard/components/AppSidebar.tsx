@@ -2,15 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  Users,
-  FileText,
-  Settings,
-  Zap,
-  ShieldCheck,
-  MoreHorizontal
-} from "lucide-react";
+import { Icon } from "@iconify/react";
 import {
   Sidebar,
   SidebarContent,
@@ -32,10 +24,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const navItems = [
-  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-  { href: "/dashboard/users", label: "Users", icon: Users },
-  { href: "/dashboard/exams", label: "Exams", icon: FileText },
-  { href: "/dashboard/settings", label: "Settings", icon: Settings },
+  { href: "/dashboard", label: "Overview", icon: "ri:dashboard-line" },
+  { href: "/dashboard/users", label: "Users", icon: "ri:group-line" },
+  { href: "/dashboard/exams", label: "Exams", icon: "ri:file-text-line" },
+  { href: "/dashboard/settings", label: "Settings", icon: "ri:settings-3-line" },
 ];
 
 interface AppSidebarProps {
@@ -51,9 +43,9 @@ export function AppSidebar({ schoolName, plan }: AppSidebarProps) {
       <SidebarHeader className="h-16 flex items-center px-4">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
-            <Zap className="text-indigo-400 w-5 h-5" strokeWidth={2.5} />
+            <Icon icon="ri:flashlight-fill" className="text-indigo-400 w-5 h-5" />
           </div>
-          <span className="font-headline font-extrabold text-xl tracking-tighter text-white group-data-[collapsible=icon]:hidden">
+          <span className="font-semibold text-lg tracking-tight text-white group-data-[collapsible=icon]:hidden">
             Swift Learn
           </span>
         </div>
@@ -69,7 +61,7 @@ export function AppSidebar({ schoolName, plan }: AppSidebarProps) {
                   item.href === "/dashboard"
                     ? pathname === "/dashboard"
                     : pathname.startsWith(item.href);
-                const Icon = item.icon;
+                const iconName = item.icon;
 
                 return (
                   <SidebarMenuItem key={item.href}>
@@ -83,8 +75,8 @@ export function AppSidebar({ schoolName, plan }: AppSidebarProps) {
                           : "text-zinc-400 hover:text-white hover:bg-white/5"
                       }`}
                     >
-                      <Icon className={isActive ? "text-indigo-400" : "text-zinc-500"} />
-                      <span className="font-bold">{item.label}</span>
+                      <Icon icon={iconName} className={isActive ? "text-indigo-400" : "text-zinc-500"} />
+                      <span className="font-medium">{item.label}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
@@ -100,13 +92,13 @@ export function AppSidebar({ schoolName, plan }: AppSidebarProps) {
             <DropdownMenu>
               <DropdownMenuTrigger render={<SidebarMenuButton size="lg" className="data-[state=open]:bg-white/5 text-white" />}>
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-indigo-600 text-white">
-                  <ShieldCheck className="size-4" />
+                  <Icon icon="ri:shield-check-fill" className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
-                  <span className="truncate font-semibold">{schoolName}</span>
-                  <span className="truncate text-xs text-zinc-500 uppercase tracking-widest">{plan} Plan</span>
+                  <span className="truncate font-medium">{schoolName}</span>
+                  <span className="truncate text-xs text-zinc-500">{plan} Plan</span>
                 </div>
-                <MoreHorizontal className="ml-auto size-4 group-data-[collapsible=icon]:hidden" />
+                <Icon icon="ri:more-line" className="ml-auto size-4 group-data-[collapsible=icon]:hidden" />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 className="w-[--radix-dropdown-menu-trigger-width] min-w-56 bg-zinc-900 border-white/10"

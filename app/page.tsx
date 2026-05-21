@@ -37,12 +37,14 @@ export default function Home() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-              <Button render={<Link href="/register" />} size="lg" className="h-14 px-10 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg shadow-[0_20px_40px_-10px_rgba(99,102,241,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]">
-                Get Started Free
-                <Icon icon="lucide:arrow-right" className="ml-2 w-5 h-5" />
+              <Button asChild size="lg" className="h-14 px-10 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg shadow-[0_20px_40px_-10px_rgba(99,102,241,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]">
+                <Link href="/register">
+                  Get Started Free
+                  <Icon icon="ri:arrow-right-line" className="ml-2 w-5 h-5" />
+                </Link>
               </Button>
-              <Button render={<Link href="/features" />} variant="outline" size="lg" className="h-14 px-10 rounded-xl border-white/10 bg-white/5 text-white font-bold text-lg hover:bg-white/10 transition-all">
-                See how it works
+              <Button asChild variant="outline" size="lg" className="h-14 px-10 rounded-xl border-white/10 bg-white/5 text-white font-bold text-lg hover:bg-white/10 transition-all">
+                <Link href="/features">See how it works</Link>
               </Button>
             </div>
           </div>
@@ -76,24 +78,37 @@ export default function Home() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
-                { icon: "lucide:zap", title: "Automated Marking", desc: "Objective questions are graded immediately. Instant feedback for students, zero work for teachers." },
-                { icon: "lucide:bar-chart-2", title: "Rich Analytics", desc: "Gain deep insights into class performance, subject trends, and individual student progress." },
-                { icon: "lucide:bar-chart-2", title: "Report Generation", desc: "Generate professional broadsheets and individual result slips with a single click." },
-                { icon: "lucide:dollar-sign", title: "Massive Savings", desc: "Eliminate the recurring costs of paper, ink, and manual labor for every examination cycle." },
-                { icon: "lucide:shield-check", title: "Cheating Prevention", desc: "Advanced shuffling, lockdown features, and remote monitoring keep your exams high-integrity." },
-                { icon: "lucide:graduation-cap", title: "CBT Ready", desc: "Prepare students for the digital future of JAMB, WAEC, and international standardized tests." }
+                { icon: "ri:flashlight-line", title: "Automated Marking", desc: "Objective questions are graded immediately. Instant feedback for students, zero work for teachers." },
+                { icon: "ri:bar-chart-2-line", title: "Rich Analytics", desc: "Gain deep insights into class performance, subject trends, and individual student progress." },
+                { icon: "ri:file-list-3-line", title: "Report Generation", desc: "Generate professional broadsheets and individual result slips with a single click." },
+                { icon: "ri:money-dollar-circle-line", title: "Massive Savings", desc: "Eliminate the recurring costs of paper, ink, and manual labor for every examination cycle." },
+                { icon: "ri:shield-check-line", title: "Cheating Prevention", desc: "Advanced shuffling, lockdown features, and remote monitoring keep your exams high-integrity." },
+                { icon: "ri:graduation-cap-line", title: "CBT Ready", desc: "Prepare students for the digital future of JAMB, WAEC, and international standardized tests." }
               ].map((f, i) => (
-                <Card key={i} className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl hover:bg-white/[0.03] transition-all group overflow-hidden relative border-none ring-1 ring-white/5">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 blur-2xl -z-10 group-hover:bg-indigo-500/10 transition-all"></div>
-                  <CardHeader className="p-8 pb-4">
-                    <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500/20 transition-all">
-                      <Icon icon={f.icon} className="w-6 h-6" />
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-8 pt-0">
-                    <CardTitle className="text-xl font-headline font-bold text-white mb-4">{f.title}</CardTitle>
-                    <CardDescription className="text-slate-400 text-sm leading-relaxed">{f.desc}</CardDescription>
-                  </CardContent>
+                <Card key={i} className="bg-zinc-900 border-white/10 hover:border-white/20 transition-all group overflow-hidden relative rounded-2xl p-8 flex flex-col h-full">
+                  {/* Top Right Decorative Background */}
+                  <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none overflow-hidden rounded-tr-2xl">
+                    <div className="absolute top-[-20%] right-[-10%] w-full h-full bg-white/[0.02] rotate-12 rounded-3xl transition-transform group-hover:rotate-[15deg]" />
+                    <div className="absolute top-[10%] right-[-20%] w-full h-full border border-white/5 rotate-12 rounded-3xl" />
+                  </div>
+                  
+                  {/* Icon */}
+                  <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-400 mb-6 relative z-10 transition-colors group-hover:bg-indigo-500/10">
+                    <Icon icon={f.icon} className="w-6 h-6" />
+                  </div>
+                  
+                  {/* Content */}
+                  <h3 className="text-xl font-bold text-white mb-3 relative z-10">
+                    {f.title}
+                  </h3>
+                  <p className="text-sm text-zinc-400 leading-relaxed mb-8 flex-grow relative z-10">
+                    {f.desc}
+                  </p>
+                  
+                  {/* Footer Link */}
+                  <div className="flex items-center gap-1.5 text-sm font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors relative z-10 mt-auto">
+                    Learn more <Icon icon="ri:arrow-right-line" className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </div>
                 </Card>
               ))}
             </div>
@@ -119,7 +134,7 @@ export default function Home() {
                   ].map((t, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <div className="w-5 h-5 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-                        <Icon icon="lucide:check-circle" className="w-3 h-3 text-indigo-400" />
+                        <Icon icon="ri:checkbox-circle-line" className="w-3 h-3 text-indigo-400" />
                       </div>
                       <span className="text-zinc-300 font-medium">{t}</span>
                     </div>
@@ -129,9 +144,9 @@ export default function Home() {
               
               <div className="lg:w-1/2 relative">
                 <div className="absolute -inset-4 bg-indigo-500/20 blur-[80px] rounded-full opacity-30"></div>
-                <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 p-2 rounded-3xl overflow-hidden shadow-2xl">
+                <Card className="bg-zinc-900 border-white/10 p-2 rounded-3xl overflow-hidden shadow-2xl">
                   <img 
-                    className="rounded-2xl w-full border border-white/5" 
+                    className="rounded-2xl w-full border border-white/10" 
                     alt="Digital Dashboard" 
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuACXQLAtgtsT1_5kdFAxFFBu258rAsjwU1fccD7jzRGORed1RCyI6Ldc8SgUd7iWCfQ35O8T9XtAywbS1DipmWy7qUYActG64Y_El9exz170e68qgb6o8KbQrpDLXPKDUGG4CAbLyy2dSj5TW9TMDclwI42KjuvMZGo9xtm0D4615lmELfPVJxHx0HRN2LWMywFHtLutQ-R2tRgHLRkUDG1dSXFmydKO3FNVfwAMtxjYCxo7Qos06UmGuXQwLYK8426nQvEraJqT8kH"
                   />
@@ -144,21 +159,21 @@ export default function Home() {
         {/* CTA Section */}
         <section className="py-40 px-6">
           <div className="max-w-5xl mx-auto relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/20 to-violet-500/20 rounded-[2.5rem] blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-            <Card className="relative bg-zinc-950/80 backdrop-blur-2xl rounded-[2.5rem] text-center border-white/5 overflow-hidden p-0 gap-0">
+            <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/20 to-violet-500/20 rounded-[2.5rem] blur opacity-50 group-hover:opacity-75 transition duration-1000"></div>
+            <Card className="relative bg-zinc-900 border-white/10 rounded-[2.5rem] text-center overflow-hidden">
               <CardContent className="py-24 px-10 md:px-20">
-                <CardHeader className="p-0 mb-12">
-                  <CardTitle className="text-4xl md:text-6xl font-headline font-extrabold text-white mb-8 tracking-tight">Ready to transform your school?</CardTitle>
-                  <CardDescription className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+                <div className="mb-12">
+                  <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 tracking-tight">Ready to transform your school?</h2>
+                  <p className="text-zinc-400 text-lg max-w-2xl mx-auto leading-relaxed">
                     Join hundreds of Nigerian schools making the switch to smart, secure, and stress-free digital testing.
-                  </CardDescription>
-                </CardHeader>
+                  </p>
+                </div>
                 <div className="flex flex-col sm:flex-row gap-5 justify-center">
-                  <Button render={<Link href="/register" />} size="lg" className="h-14 px-12 rounded-xl bg-white text-black font-bold text-lg hover:bg-zinc-200 transition-all shadow-xl">
-                    Start Your Journey
+                  <Button asChild size="lg" className="h-14 px-12 rounded-xl bg-white text-zinc-900 font-bold text-lg hover:bg-zinc-200 transition-colors shadow-lg">
+                    <Link href="/register">Start Your Journey</Link>
                   </Button>
-                  <Button render={<Link href="/contact" />} variant="outline" size="lg" className="h-14 px-12 rounded-xl border-white/10 bg-white/5 text-white font-bold text-lg hover:bg-white/10 transition-all">
-                    Book a Demo
+                  <Button asChild variant="outline" size="lg" className="h-14 px-12 rounded-xl border-white/10 bg-white/5 text-white font-bold text-lg hover:bg-white/10 transition-colors">
+                    <Link href="/contact">Book a Demo</Link>
                   </Button>
                 </div>
               </CardContent>

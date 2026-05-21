@@ -271,7 +271,7 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      <Icon icon="lucide:sidebar" />
+      <Icon icon="ri:layout-left-line" />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )

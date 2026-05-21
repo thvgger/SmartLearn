@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 px-8 max-w-7xl mx-auto mb-16">
         <div className="lg:col-span-2">
           <Link href="/" className="text-xl font-extrabold text-white flex items-center gap-2 font-headline mb-6 hover:opacity-80 transition-opacity">
-            <Icon icon="lucide:zap" className="text-indigo-400 w-6 h-6" />
+            <Icon icon="ri:flashlight-line" className="text-indigo-400 w-6 h-6" />
             Swift Learn
           </Link>
           <p className="text-zinc-500 text-sm max-w-sm leading-relaxed mb-8">
@@ -16,13 +16,13 @@ export default function Footer() {
           </p>
           <div className="flex gap-4">
             <button className="w-9 h-9 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/10 transition-all">
-              <Icon icon="lucide:twitter" className="w-4 h-4" />
+              <Icon icon="ri:twitter-x-line" className="w-4 h-4" />
             </button>
             <button className="w-9 h-9 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/10 transition-all">
-              <Icon icon="lucide:linkedin" className="w-4 h-4" />
+              <Icon icon="ri:linkedin-box-line" className="w-4 h-4" />
             </button>
             <button className="w-9 h-9 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/10 transition-all">
-              <Icon icon="lucide:github" className="w-4 h-4" />
+              <Icon icon="ri:github-fill" className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -99,11 +99,11 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <Icon icon="lucide:globe" className="w-3.5 h-3.5 text-zinc-600" />
+              <Icon icon="ri:global-line" className="w-3.5 h-3.5 text-zinc-600" />
               <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">English (NG)</span>
             </div>
             <div className="flex items-center gap-2">
-              <Icon icon="lucide:mail" className="w-3.5 h-3.5 text-zinc-600" />
+              <Icon icon="ri:mail-line" className="w-3.5 h-3.5 text-zinc-600" />
               <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">support@swiftlearn.edu.ng</span>
             </div>
           </div>

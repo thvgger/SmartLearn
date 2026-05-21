@@ -44,7 +44,7 @@ export default function DashboardHeader({
         <SidebarTrigger className="text-zinc-400 hover:text-white" />
         <div className="max-w-md w-full hidden md:block">
           <div className="relative group">
-            <Icon icon="lucide:search" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
+            <Icon icon="ri:search-line" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
             <Input 
               type="text" 
               placeholder="Search for students, exams..." 
@@ -57,7 +57,7 @@ export default function DashboardHeader({
       <div className="flex items-center gap-3 lg:gap-5">
         {/* Notifications */}
         <Button variant="ghost" size="icon-sm" className="relative text-zinc-400 hover:text-white hover:bg-white/5 group">
-          <Icon icon="lucide:bell" className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+          <Icon icon="ri:notification-3-line" className="w-5 h-5 group-hover:rotate-12 transition-transform" />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-500 rounded-full border-2 border-zinc-950" />
         </Button>
 
@@ -83,7 +83,7 @@ export default function DashboardHeader({
               Settings
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleLogout} className="text-red-400 focus:text-red-300 focus:bg-red-400/10 cursor-pointer">
-              <Icon icon="lucide:log-out" className="mr-2 h-4 w-4" />
+              <Icon icon="ri:logout-box-r-line" className="mr-2 h-4 w-4" />
               <span>Sign out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

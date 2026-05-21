@@ -214,10 +214,10 @@ export default function SettingsPage() {
       </div>
 
       {/* School Profile */}
-      <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+      <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-center gap-3">
           <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
-            <Icon icon="lucide:building-2" className="w-5 h-5" />
+            <Icon icon="ri:building-2-line" className="w-5 h-5" />
           </div>
           <CardTitle className="font-headline font-bold text-lg text-white">School Profile</CardTitle>
         </CardHeader>
@@ -227,8 +227,8 @@ export default function SettingsPage() {
               <label className="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">
                 Institution Name
               </label>
-              <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/5">
-                <Icon icon="lucide:building-2" className="w-4 h-4 text-zinc-600 shrink-0" />
+              <div className="flex items-center gap-3 bg-zinc-950 rounded-xl px-4 py-3 border border-white/10">
+                <Icon icon="ri:building-2-line" className="w-4 h-4 text-zinc-600 shrink-0" />
                 <span className="text-sm text-white font-medium">{user?.school_name}</span>
               </div>
             </div>
@@ -236,8 +236,8 @@ export default function SettingsPage() {
               <label className="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">
                 Contact Person
               </label>
-              <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/5">
-                <Icon icon="lucide:user" className="w-4 h-4 text-zinc-600 shrink-0" />
+              <div className="flex items-center gap-3 bg-zinc-950 rounded-xl px-4 py-3 border border-white/10">
+                <Icon icon="ri:user-line" className="w-4 h-4 text-zinc-600 shrink-0" />
                 <span className="text-sm text-white font-medium">{user?.contact_name}</span>
               </div>
             </div>
@@ -245,8 +245,8 @@ export default function SettingsPage() {
               <label className="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">
                 Email Address
               </label>
-              <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/5">
-                <Icon icon="lucide:send" className="w-4 h-4 text-zinc-600 shrink-0" />
+              <div className="flex items-center gap-3 bg-zinc-950 rounded-xl px-4 py-3 border border-white/10">
+                <Icon icon="ri:send-plane-line" className="w-4 h-4 text-zinc-600 shrink-0" />
                 <span className="text-sm text-white font-medium">{user?.email}</span>
               </div>
             </div>
@@ -254,8 +254,8 @@ export default function SettingsPage() {
               <label className="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">
                 Phone
               </label>
-              <div className="flex items-center gap-3 bg-white/[0.03] rounded-xl px-4 py-3 border border-white/5">
-                <Icon icon="lucide:phone" className="w-4 h-4 text-zinc-600 shrink-0" />
+              <div className="flex items-center gap-3 bg-zinc-950 rounded-xl px-4 py-3 border border-white/10">
+                <Icon icon="ri:phone-line" className="w-4 h-4 text-zinc-600 shrink-0" />
                 <span className="text-sm text-zinc-500 font-medium">Not provided</span>
               </div>
             </div>
@@ -264,10 +264,10 @@ export default function SettingsPage() {
       </Card>
 
       {/* School Tag for Teacher Portal */}
-      <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+      <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-start gap-3">
           <div className="p-2 rounded-lg bg-violet-500/10 text-violet-400">
-            <Icon icon="lucide:tag" className="w-5 h-5" />
+            <Icon icon="ri:price-tag-3-line" className="w-5 h-5" />
           </div>
           <div>
             <CardTitle className="font-headline font-bold text-lg text-white">Teacher Portal Access</CardTitle>
@@ -286,7 +286,7 @@ export default function SettingsPage() {
                   setTagMessage(null);
                 }}
                 placeholder="e.g. springfield-high"
-                className="bg-white/[0.03] border-white/5 rounded-xl h-11 text-white font-medium"
+                className="bg-zinc-950 border-white/10 rounded-xl h-11 text-white font-medium"
               />
             </div>
             <Button
@@ -329,7 +329,7 @@ export default function SettingsPage() {
                 className="h-11 w-11 bg-white/5 hover:bg-white/10 text-zinc-400"
                 title="Copy tag"
               >
-                {tagCopied ? <Icon icon="lucide:check-circle" className="w-4 h-4 text-emerald-400" /> : <Icon icon="lucide:copy" className="w-4 h-4" />}
+                {tagCopied ? <Icon icon="ri:checkbox-circle-line" className="w-4 h-4 text-emerald-400" /> : <Icon icon="ri:file-copy-line" className="w-4 h-4" />}
               </Button>
             )}
           </div>
@@ -345,11 +345,11 @@ export default function SettingsPage() {
       </Card>
 
       {/* Subscription & Billing */}
-      <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+      <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-3">
             <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
-              <Icon icon="lucide:credit-card" className="w-5 h-5" />
+              <Icon icon="ri:bank-card-line" className="w-5 h-5" />
             </div>
             <CardTitle className="font-headline font-bold text-lg text-white">Subscription & Billing</CardTitle>
           </div>
@@ -367,9 +367,9 @@ export default function SettingsPage() {
         <CardContent className="p-6 pt-0">
           {isActive ? (
             <div className="space-y-6 mt-4">
-              <div className="bg-white/[0.03] rounded-xl p-5 border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="bg-zinc-950 rounded-xl p-5 border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <Icon icon="lucide:shield" className="w-5 h-5 text-emerald-400" />
+                  <Icon icon="ri:shield-line" className="w-5 h-5 text-emerald-400" />
                   <div>
                     <p className="text-sm font-bold text-white capitalize">
                       {sub?.plan.replace("_yearly", " Yearly")} Plan
@@ -397,7 +397,7 @@ export default function SettingsPage() {
                       {isActive ? "Switch to a different plan:" : "Choose a plan to unlock all features and cloud storage."}
                     </p>
                     {/* Toggle Switch */}
-                    <div className="flex items-center gap-4 shrink-0 bg-white/5 px-4 py-2 rounded-full border border-white/5">
+                    <div className="flex items-center gap-4 shrink-0 bg-zinc-950 px-4 py-2 rounded-full border border-white/10">
                       <span className={`text-[10px] font-bold uppercase tracking-widest ${!isYearly ? "text-white" : "text-zinc-600"}`}>Monthly</span>
                       <Switch 
                         checked={isYearly} 
@@ -423,8 +423,8 @@ export default function SettingsPage() {
                       return (
                         <div 
                           key={p.id}
-                          className={`bg-white/[0.02] rounded-2xl p-6 border transition-all flex flex-col relative overflow-hidden ring-1 ring-white/5 ${
-                            isCurrent ? "ring-indigo-500/50 bg-indigo-500/5" : "hover:ring-white/10"
+                          className={`bg-zinc-900 rounded-xl p-6 border transition-all flex flex-col relative overflow-hidden ${
+                            isCurrent ? "border-indigo-500/30 bg-indigo-600/5" : "border-white/10 hover:border-white/20"
                           }`}
                         >
                           {p.popular && (
@@ -490,7 +490,7 @@ export default function SettingsPage() {
                   return (
                     <div 
                       key={p.id}
-                      className="bg-white/[0.02] rounded-2xl p-6 border border-white/5 hover:ring-1 hover:ring-indigo-500/30 transition-all flex flex-col relative overflow-hidden ring-1 ring-white/5"
+                      className="bg-zinc-900 rounded-xl p-6 border border-white/10 hover:border-white/20 transition-all flex flex-col relative overflow-hidden"
                     >
                       {p.popular && (
                         <span className="absolute top-0 right-0 bg-indigo-600 text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-bl-lg">
@@ -523,11 +523,11 @@ export default function SettingsPage() {
       </Card>
 
       {/* Cloud Backups */}
-      <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+      <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-3">
             <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
-              <Icon icon="lucide:cloud" className="w-5 h-5" />
+              <Icon icon="ri:cloud-line" className="w-5 h-5" />
             </div>
             <div>
               <CardTitle className="font-headline font-bold text-lg text-white">Cloud Backups</CardTitle>
@@ -541,19 +541,19 @@ export default function SettingsPage() {
             disabled={backupsLoading}
             className="text-zinc-400 hover:text-white hover:bg-white/5"
           >
-            <Icon icon="lucide:refresh-cw" className={`w-4 h-4 ${backupsLoading ? "animate-spin" : ""}`} />
+            <Icon icon="ri:refresh-line" className={`w-4 h-4 ${backupsLoading ? "animate-spin" : ""}`} />
           </Button>
         </CardHeader>
 
         <CardContent className="p-6 pt-0 mt-4">
           {backupsLoading && backups.length === 0 ? (
             <div className="text-center py-12">
-              <Icon icon="lucide:refresh-cw" className="w-8 h-8 text-indigo-500/30 animate-spin mx-auto mb-3" />
+              <Icon icon="ri:refresh-line" className="w-8 h-8 text-indigo-500/30 animate-spin mx-auto mb-3" />
               <p className="text-zinc-500 text-sm font-medium">Loading backups...</p>
             </div>
           ) : backups.length === 0 ? (
             <div className="text-center py-12 border-2 border-dashed border-white/5 rounded-2xl">
-              <Icon icon="lucide:cloud" className="w-12 h-12 text-zinc-800 mx-auto mb-3" />
+              <Icon icon="ri:cloud-line" className="w-12 h-12 text-zinc-800 mx-auto mb-3" />
               <p className="text-white font-bold">No backups yet</p>
               <p className="text-zinc-500 text-sm mt-1 max-w-[240px] mx-auto">
                 Backups created from your CBT application will appear here.
@@ -564,7 +564,7 @@ export default function SettingsPage() {
               {backups.map((b) => (
                 <div
                   key={b.id}
-                  className="flex flex-col lg:flex-row items-start lg:items-center justify-between p-4 bg-white/[0.02] rounded-xl border border-white/5 gap-4 group hover:bg-white/[0.04] transition-all"
+                  className="flex flex-col lg:flex-row items-start lg:items-center justify-between p-4 bg-zinc-950 rounded-xl border border-white/10 gap-4 group hover:bg-zinc-900 transition-all"
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-3 mb-1.5">
@@ -594,7 +594,7 @@ export default function SettingsPage() {
                   <div className="flex gap-2 w-full lg:w-auto">
                     {b.is_synced ? (
                       <div className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-400/5 border border-emerald-500/10">
-                        <Icon icon="lucide:check-circle" className="w-3.5 h-3.5" />
+                        <Icon icon="ri:checkbox-circle-line" className="w-3.5 h-3.5" />
                         Synced
                       </div>
                     ) : (
@@ -604,7 +604,7 @@ export default function SettingsPage() {
                         disabled={restoringId === b.id}
                         className="flex-1 lg:flex-none h-10 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest bg-indigo-600 hover:bg-indigo-500 text-white"
                       >
-                        <Icon icon="lucide:refresh-cw" className={`w-3.5 h-3.5 mr-2 ${restoringId === b.id ? "animate-spin" : ""}`} />
+                        <Icon icon="ri:refresh-line" className={`w-3.5 h-3.5 mr-2 ${restoringId === b.id ? "animate-spin" : ""}`} />
                         {restoringId === b.id ? "Syncing..." : "Sync Dashboard"}
                       </Button>
                     )}
@@ -615,7 +615,7 @@ export default function SettingsPage() {
                       disabled={downloadingId === b.id}
                       className="h-10 w-10 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 border border-white/5"
                     >
-                      <Icon icon="lucide:download" className="w-4 h-4" />
+                      <Icon icon="ri:download-2-line" className="w-4 h-4" />
                     </Button>
 
                   </div>

@@ -16,38 +16,34 @@ export default function StatsCard({
   value,
   trend,
   trendUp,
-  accent = "text-indigo-400",
+  accent = "text-zinc-100",
 }: StatsCardProps) {
   return (
-    <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl hover:bg-white/[0.03] transition-all group overflow-hidden relative border-none ring-1 ring-white/5 p-0 gap-0">
-      <CardContent className="p-6">
-        <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 blur-[40px] rounded-full -translate-y-12 translate-x-12 group-hover:bg-indigo-500/10 transition-colors" />
-        
-        <div className="flex items-start justify-between mb-6 relative z-10">
-          <div className={`w-12 h-12 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-center transition-all group-hover:scale-110 group-hover:bg-white/[0.05] ${accent}`}>
-            <Icon icon={icon} className="w-6 h-6" />
-          </div>
-          
-          {trend && (
-            <div
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-tighter ${
-                trendUp
-                  ? "text-emerald-400 bg-emerald-400/10 border border-emerald-400/20"
-                  : "text-rose-400 bg-rose-400/10 border border-rose-400/20"
-              }`}
-            >
-              {trendUp ? "↑" : "↓"} {trend}
-            </div>
-          )}
-        </div>
-        
-        <div className="relative z-10">
-          <h3 className="text-3xl font-headline font-black text-white tracking-tight mb-1">
-            {value}
-          </h3>
-          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-500">
+    <Card className="bg-zinc-900 border-white/10 rounded-lg shadow-sm hover:border-white/20 transition-colors p-0">
+      <CardContent className="p-5 flex items-center justify-between">
+        <div>
+          <p className="text-sm font-medium text-zinc-400 mb-1">
             {label}
           </p>
+          <div className="flex items-center gap-3">
+            <h3 className="text-2xl font-semibold text-white tracking-tight">
+              {value}
+            </h3>
+            {trend && (
+              <span
+                className={`text-xs font-medium px-2 py-0.5 rounded-md ${
+                  trendUp
+                    ? "text-emerald-400 bg-emerald-400/10"
+                    : "text-rose-400 bg-rose-400/10"
+                }`}
+              >
+                {trendUp ? "↑" : "↓"} {trend}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className={`p-3 rounded-md bg-white/5 border border-white/5 ${accent}`}>
+          <Icon icon={icon} className="w-5 h-5" />
         </div>
       </CardContent>
     </Card>

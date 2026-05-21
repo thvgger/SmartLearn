@@ -31,13 +31,18 @@ export default function FeaturesPage() {
         {/* Features Bento Grid */}
         <div className="relative z-10 max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-12 gap-6 animate-fade-in-up">
           {/* Automatic Marking */}
-          <Card className="md:col-span-8 bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl overflow-hidden relative border-none ring-1 ring-white/5 p-0 gap-0 min-h-[400px] flex flex-col">
+          <Card className="md:col-span-8 bg-zinc-900 border-white/10 hover:border-white/20 transition-all group rounded-2xl overflow-hidden relative p-0 flex flex-col min-h-[400px]">
+            {/* Top Right Decorative Background */}
+            <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none overflow-hidden rounded-tr-2xl">
+              <div className="absolute top-[-20%] right-[-10%] w-full h-full bg-white/[0.02] rotate-12 rounded-3xl transition-transform group-hover:rotate-[15deg]" />
+              <div className="absolute top-[10%] right-[-20%] w-full h-full border border-white/5 rotate-12 rounded-3xl" />
+            </div>
             <CardHeader className="p-8 pb-4">
               <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-6">
-                <Icon icon="lucide:sparkles" className="text-indigo-400 w-6 h-6" strokeWidth={1.5} />
+                <Icon icon="ri:sparkling-line" className="text-indigo-400 w-6 h-6" strokeWidth={1.5} />
               </div>
-              <CardTitle className="font-headline text-2xl font-bold text-white mb-2">Automatic Marking</CardTitle>
-              <CardDescription className="text-zinc-500 max-w-md text-base leading-relaxed">Eliminate grading fatigue with instant scoring for objective and structured questions. Real-time results available the moment students submit.</CardDescription>
+              <CardTitle className="text-2xl font-bold text-white mb-2 relative z-10">Automatic Marking</CardTitle>
+              <CardDescription className="text-zinc-400 max-w-md text-sm leading-relaxed relative z-10">Eliminate grading fatigue with instant scoring for objective and structured questions. Real-time results available the moment students submit.</CardDescription>
             </CardHeader>
             <CardContent className="p-8 mt-auto border-t border-white/5 flex flex-col sm:flex-row items-center sm:items-end justify-between gap-8">
               <div className="space-y-3 w-full sm:w-auto">
@@ -51,13 +56,18 @@ export default function FeaturesPage() {
           </Card>
 
           {/* Question Bank */}
-          <Card className="md:col-span-4 bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0">
+          <Card className="md:col-span-4 bg-zinc-900 border-white/10 hover:border-white/20 transition-all group rounded-2xl overflow-hidden relative p-0">
+            {/* Top Right Decorative Background */}
+            <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none overflow-hidden rounded-tr-2xl">
+              <div className="absolute top-[-20%] right-[-10%] w-full h-full bg-white/[0.02] rotate-12 rounded-3xl transition-transform group-hover:rotate-[15deg]" />
+              <div className="absolute top-[10%] right-[-20%] w-full h-full border border-white/5 rotate-12 rounded-3xl" />
+            </div>
             <CardHeader className="p-8 pb-4">
               <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-6">
-                <Icon icon="lucide:database" className="text-violet-400 w-6 h-6" strokeWidth={1.5} />
+                <Icon icon="ri:database-2-line" className="text-violet-400 w-6 h-6" strokeWidth={1.5} />
               </div>
-              <CardTitle className="font-headline text-2xl font-bold text-white mb-2">Question Bank</CardTitle>
-              <CardDescription className="text-zinc-500 text-base leading-relaxed">Access thousands of curated questions or build your own institutional repository.</CardDescription>
+              <CardTitle className="text-2xl font-bold text-white mb-2 relative z-10">Question Bank</CardTitle>
+              <CardDescription className="text-zinc-400 text-sm leading-relaxed relative z-10">Access thousands of curated questions or build your own institutional repository.</CardDescription>
             </CardHeader>
             <CardContent className="p-8 pt-0">
               <div className="flex flex-wrap gap-2 mt-4">
@@ -71,25 +81,35 @@ export default function FeaturesPage() {
           </Card>
 
           {/* Exam Scheduling */}
-          <Card className="md:col-span-4 bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0">
+          <Card className="md:col-span-4 bg-zinc-900 border-white/10 hover:border-white/20 transition-all group rounded-2xl overflow-hidden relative p-0">
+            {/* Top Right Decorative Background */}
+            <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none overflow-hidden rounded-tr-2xl">
+              <div className="absolute top-[-20%] right-[-10%] w-full h-full bg-white/[0.02] rotate-12 rounded-3xl transition-transform group-hover:rotate-[15deg]" />
+              <div className="absolute top-[10%] right-[-20%] w-full h-full border border-white/5 rotate-12 rounded-3xl" />
+            </div>
             <CardHeader className="p-8">
               <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-6">
-                <Icon icon="lucide:calendar" className="text-indigo-400 w-6 h-6" strokeWidth={1.5} />
+                <Icon icon="ri:calendar-line" className="text-indigo-400 w-6 h-6" strokeWidth={1.5} />
               </div>
-              <CardTitle className="font-headline text-2xl font-bold text-white mb-4">Exam Scheduling</CardTitle>
-              <CardDescription className="text-zinc-500 text-base leading-relaxed">Set it and forget it. Exams auto-begin and auto-close at your specified times, ensuring strict adherence to school schedules.</CardDescription>
+              <CardTitle className="text-2xl font-bold text-white mb-4 relative z-10">Exam Scheduling</CardTitle>
+              <CardDescription className="text-zinc-400 text-sm leading-relaxed relative z-10">Set it and forget it. Exams auto-begin and auto-close at your specified times, ensuring strict adherence to school schedules.</CardDescription>
             </CardHeader>
           </Card>
 
           {/* Performance Analytics */}
-          <Card className="md:col-span-8 bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 flex flex-col md:flex-row overflow-hidden">
+          <Card className="md:col-span-8 bg-zinc-900 border-white/10 hover:border-white/20 transition-all group rounded-2xl overflow-hidden relative p-0 flex flex-col md:flex-row">
+            {/* Top Right Decorative Background */}
+            <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none overflow-hidden rounded-tr-2xl z-10">
+              <div className="absolute top-[-20%] right-[-10%] w-full h-full bg-white/[0.02] rotate-12 rounded-3xl transition-transform group-hover:rotate-[15deg]" />
+              <div className="absolute top-[10%] right-[-20%] w-full h-full border border-white/5 rotate-12 rounded-3xl" />
+            </div>
             <div className="flex-1">
               <CardHeader className="p-8 pb-4">
                 <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6">
-                  <Icon icon="lucide:bar-chart-2" className="text-emerald-400 w-6 h-6" strokeWidth={1.5} />
+                  <Icon icon="ri:bar-chart-2-line" className="text-emerald-400 w-6 h-6" strokeWidth={1.5} />
                 </div>
-                <CardTitle className="font-headline text-2xl font-bold text-white mb-2">Performance Analytics</CardTitle>
-                <CardDescription className="text-zinc-500 text-base leading-relaxed">Gain deep insights into student and class performance with high-fidelity data visualization.</CardDescription>
+                <CardTitle className="text-2xl font-bold text-white mb-2 relative z-10">Performance Analytics</CardTitle>
+                <CardDescription className="text-zinc-400 text-sm leading-relaxed relative z-10">Gain deep insights into student and class performance with high-fidelity data visualization.</CardDescription>
               </CardHeader>
               <CardContent className="p-8 pt-0">
                 <ul className="space-y-4 mt-4">
@@ -99,7 +119,7 @@ export default function FeaturesPage() {
                     "Identification of weak topics"
                   ].map((item, i) => (
                     <li key={i} className="flex items-center gap-3 text-sm text-zinc-300 font-medium">
-                      <Icon icon="lucide:check-circle" className="text-indigo-400 w-5 h-5" />
+                      <Icon icon="ri:checkbox-circle-line" className="text-indigo-400 w-5 h-5" />
                       {item}
                     </li>
                   ))}
@@ -113,22 +133,27 @@ export default function FeaturesPage() {
           </Card>
 
           {/* Secure Exam Environment */}
-          <Card className="md:col-span-6 bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0">
+          <Card className="md:col-span-6 bg-zinc-900 border-white/10 hover:border-white/20 transition-all group rounded-2xl overflow-hidden relative p-0">
+            {/* Top Right Decorative Background */}
+            <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none overflow-hidden rounded-tr-2xl">
+              <div className="absolute top-[-20%] right-[-10%] w-full h-full bg-white/[0.02] rotate-12 rounded-3xl transition-transform group-hover:rotate-[15deg]" />
+              <div className="absolute top-[10%] right-[-20%] w-full h-full border border-white/5 rotate-12 rounded-3xl" />
+            </div>
             <CardHeader className="p-8 pb-4">
               <div className="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-6">
-                <Icon icon="lucide:shield" className="text-rose-400 w-6 h-6" strokeWidth={1.5} />
+                <Icon icon="ri:shield-line" className="text-rose-400 w-6 h-6" strokeWidth={1.5} />
               </div>
-              <CardTitle className="font-headline text-2xl font-bold text-white mb-2">Secure Exam Environment</CardTitle>
-              <CardDescription className="text-zinc-500 text-base leading-relaxed">Prevent academic malpractice with enterprise-grade security features built directly into the exam engine.</CardDescription>
+              <CardTitle className="text-2xl font-bold text-white mb-2 relative z-10">Secure Exam Environment</CardTitle>
+              <CardDescription className="text-zinc-400 text-sm leading-relaxed relative z-10">Prevent academic malpractice with enterprise-grade security features built directly into the exam engine.</CardDescription>
             </CardHeader>
             <CardContent className="p-8 pt-0 mt-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white/5 p-4 rounded-xl border border-white/5">
-                  <Icon icon="lucide:shuffle" className="text-indigo-400 w-5 h-5 mb-2" />
+                  <Icon icon="ri:shuffle-line" className="text-indigo-400 w-5 h-5 mb-2" />
                   <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Random order</p>
                 </div>
                 <div className="bg-white/5 p-4 rounded-xl border border-white/5">
-                  <Icon icon="lucide:timer" className="text-indigo-400 w-5 h-5 mb-2" />
+                  <Icon icon="ri:timer-line" className="text-indigo-400 w-5 h-5 mb-2" />
                   <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Time limits</p>
                 </div>
               </div>
@@ -136,18 +161,23 @@ export default function FeaturesPage() {
           </Card>
 
           {/* Multi-Device Support */}
-          <Card className="md:col-span-6 bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 flex items-center">
+          <Card className="md:col-span-6 bg-zinc-900 border-white/10 hover:border-white/20 transition-all group rounded-2xl overflow-hidden relative p-0 flex items-center">
+            {/* Top Right Decorative Background */}
+            <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none overflow-hidden rounded-tr-2xl z-10">
+              <div className="absolute top-[-20%] right-[-10%] w-full h-full bg-white/[0.02] rotate-12 rounded-3xl transition-transform group-hover:rotate-[15deg]" />
+              <div className="absolute top-[10%] right-[-20%] w-full h-full border border-white/5 rotate-12 rounded-3xl" />
+            </div>
             <div className="flex-1">
               <CardHeader className="p-8 pb-4">
                 <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-6">
-                  <Icon icon="lucide:monitor-smartphone" className="text-indigo-400 w-6 h-6" strokeWidth={1.5} />
+                  <Icon icon="ri:device-line" className="text-indigo-400 w-6 h-6" strokeWidth={1.5} />
                 </div>
-                <CardTitle className="font-headline text-2xl font-bold text-white mb-2">Multi-Device Support</CardTitle>
-                <CardDescription className="text-zinc-500 text-base leading-relaxed">Whether students are using school tablets, laboratory desktops, or personal laptops, the experience remains premium and consistent.</CardDescription>
+                <CardTitle className="text-2xl font-bold text-white mb-2 relative z-10">Multi-Device Support</CardTitle>
+                <CardDescription className="text-zinc-400 text-sm leading-relaxed relative z-10">Whether students are using school tablets, laboratory desktops, or personal laptops, the experience remains premium and consistent.</CardDescription>
               </CardHeader>
             </div>
             <div className="hidden sm:block p-8 opacity-10">
-              <Icon icon="lucide:layout" className="text-white w-24 h-24" strokeWidth={1} />
+              <Icon icon="ri:layout-line" className="text-white w-24 h-24" strokeWidth={1} />
             </div>
           </Card>
         </div>

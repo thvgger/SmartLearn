@@ -128,12 +128,12 @@ export default function AnalyticsPage() {
       {/* Top Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { icon: "lucide:bar-chart-2", label: "School Average", value: stats ? `${stats.avgScore}%` : "—", color: "text-indigo-400" },
-          { icon: "lucide:trending-up", label: "Score Trend", value: scoreTrend.length > 1 ? `${scoreTrend[scoreTrend.length - 1].score && scoreTrend[0].score ? (Number(scoreTrend[scoreTrend.length - 1].score) - Number(scoreTrend[0].score) > 0 ? "+" : "") + (Number(scoreTrend[scoreTrend.length - 1].score) - Number(scoreTrend[0].score)).toFixed(1) + "%" : "—"}` : "—", color: "text-emerald-400" },
-          { icon: "lucide:book-open", label: "Tests administered", value: stats?.exams || 0, color: "text-violet-400" },
-          { icon: "lucide:user", label: "Students assessed", value: stats?.students || 0, color: "text-amber-400" },
+          { icon: "ri:bar-chart-2-line", label: "School Average", value: stats ? `${stats.avgScore}%` : "—", color: "text-indigo-400" },
+          { icon: "ri:line-chart-line", label: "Score Trend", value: scoreTrend.length > 1 ? `${scoreTrend[scoreTrend.length - 1].score && scoreTrend[0].score ? (Number(scoreTrend[scoreTrend.length - 1].score) - Number(scoreTrend[0].score) > 0 ? "+" : "") + (Number(scoreTrend[scoreTrend.length - 1].score) - Number(scoreTrend[0].score)).toFixed(1) + "%" : "—"}` : "—", color: "text-emerald-400" },
+          { icon: "ri:book-open-line", label: "Tests administered", value: stats?.exams || 0, color: "text-violet-400" },
+          { icon: "ri:user-line", label: "Students assessed", value: stats?.students || 0, color: "text-amber-400" },
         ].map((s, i) => (
-          <Card key={i} className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-5 gap-0">
+          <Card key={i} className="bg-zinc-900 border-white/10 rounded-xl p-5">
             <Icon icon={s.icon} className={`w-5 h-5 ${s.color} mb-3`} />
             <p className="text-2xl font-headline font-black text-white">{s.value}</p>
             <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mt-1">{s.label}</p>
@@ -142,8 +142,8 @@ export default function AnalyticsPage() {
       </div>
 
       {isEmpty ? (
-        <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-12 text-center flex flex-col items-center justify-center border-2 border-dashed border-white/5">
-          <Icon icon="lucide:bar-chart-2" className="w-16 h-16 text-zinc-800 mx-auto mb-4" />
+        <Card className="bg-zinc-900/50 border-white/10 rounded-xl p-12 text-center flex flex-col items-center justify-center border-2 border-dashed border-white/10">
+          <Icon icon="ri:bar-chart-2-line" className="w-16 h-16 text-zinc-800 mx-auto mb-4" />
           <p className="text-white font-bold text-lg">No data yet</p>
           <p className="text-zinc-500 text-sm mt-2 max-w-md mx-auto">
             Add students and create exams with scores to start seeing performance analytics here.
@@ -154,7 +154,7 @@ export default function AnalyticsPage() {
           {/* Two Column */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Subject Performance */}
-            <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+            <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
               <CardHeader className="p-6 pb-4">
                 <CardTitle className="font-headline font-bold text-lg text-white">Subject Performance</CardTitle>
               </CardHeader>
@@ -183,7 +183,7 @@ export default function AnalyticsPage() {
             </Card>
 
             {/* Score Trend */}
-            <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+            <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
               <CardHeader className="p-6 pb-4">
                 <CardTitle className="font-headline font-bold text-lg text-white">Exam Score Trend</CardTitle>
               </CardHeader>
@@ -217,9 +217,9 @@ export default function AnalyticsPage() {
           {/* Bottom Row */}
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
             {/* Leaderboard */}
-            <Card className="lg:col-span-3 bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+            <Card className="lg:col-span-3 bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
               <CardHeader className="p-6 pb-4 flex flex-row items-center gap-3">
-                <Icon icon="lucide:award" className="w-5 h-5 text-amber-400" />
+                <Icon icon="ri:medal-line" className="w-5 h-5 text-amber-400" />
                 <CardTitle className="font-headline font-bold text-lg text-white">Top Students</CardTitle>
               </CardHeader>
               <CardContent className="p-6 pt-0 mt-2">
@@ -257,9 +257,9 @@ export default function AnalyticsPage() {
             </Card>
 
             {/* Class Distribution */}
-            <Card className="lg:col-span-2 bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+            <Card className="lg:col-span-2 bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
               <CardHeader className="p-6 pb-4 flex flex-row items-center gap-3">
-                <Icon icon="lucide:target" className="w-5 h-5 text-indigo-400" />
+                <Icon icon="ri:focus-3-line" className="w-5 h-5 text-indigo-400" />
                 <CardTitle className="font-headline font-bold text-lg text-white">Class Distribution</CardTitle>
               </CardHeader>
               <CardContent className="p-6 pt-0 mt-2">

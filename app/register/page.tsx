@@ -66,11 +66,11 @@ export default function RegisterPage() {
         <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-violet-500/5 blur-[120px] rounded-full pointer-events-none"></div>
         
         <div className="relative z-10 w-full max-w-[560px] px-6 animate-fade-in-up">
-          <Card className="bg-zinc-950/80 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/5 p-0 gap-0">
+          <Card className="bg-zinc-900 border-white/10 rounded-2xl p-0">
             <CardContent className="p-8 md:p-12">
               <div className="mb-10 text-center sm:text-left">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 mb-4">
-                  <Icon icon="lucide:sparkles" className="w-3 h-3 text-indigo-400" />
+                  <Icon icon="ri:sparkling-line" className="w-3 h-3 text-indigo-400" />
                   <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-indigo-300">Join the Future</span>
                 </div>
                 <h1 className="font-headline text-3xl md:text-4xl font-black tracking-tight text-white leading-tight">
@@ -90,7 +90,7 @@ export default function RegisterPage() {
                   <div className="space-y-2">
                     <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Full Name</Label>
                     <div className="relative group">
-                      <Icon icon="lucide:user" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
+                      <Icon icon="ri:user-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
                       <Input 
                         className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus-visible:ring-indigo-500/50 transition-all font-medium" 
                         placeholder="Principal Name" 
@@ -105,7 +105,7 @@ export default function RegisterPage() {
                   <div className="space-y-2">
                     <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Institution</Label>
                     <div className="relative group">
-                      <Icon icon="lucide:landmark" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
+                      <Icon icon="ri:government-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
                       <Input 
                         className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus-visible:ring-indigo-500/50 transition-all font-medium" 
                         placeholder="School Name" 
@@ -121,7 +121,7 @@ export default function RegisterPage() {
                 <div className="space-y-2">
                   <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Work Email</Label>
                   <div className="relative group">
-                    <Icon icon="lucide:send" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
+                    <Icon icon="ri:send-plane-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
                     <Input 
                       className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus-visible:ring-indigo-500/50 transition-all font-medium" 
                       placeholder="admin@institution.edu" 
@@ -137,7 +137,7 @@ export default function RegisterPage() {
                   <div className="space-y-2">
                     <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Phone Number</Label>
                     <div className="relative group">
-                      <Icon icon="lucide:phone" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
+                      <Icon icon="ri:phone-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
                       <Input 
                         className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus-visible:ring-indigo-500/50 transition-all font-medium" 
                         placeholder="+234..." 
@@ -151,7 +151,7 @@ export default function RegisterPage() {
                   <div className="space-y-2">
                     <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Password</Label>
                     <div className="relative group">
-                      <Icon icon="lucide:lock" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
+                      <Icon icon="ri:lock-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
                       <Input 
                         className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus-visible:ring-indigo-500/50 transition-all font-medium" 
                         placeholder="••••••••" 
@@ -171,7 +171,7 @@ export default function RegisterPage() {
                     disabled={loading}
                   >
                     {loading ? "Creating account..." : "Start Your Free Trial"}
-                    {!loading && <Icon icon="lucide:arrow-right" className="ml-2 w-4 h-4" />}
+                    {!loading && <Icon icon="ri:arrow-right-line" className="ml-2 w-4 h-4" />}
                   </Button>
                 </div>
               </form>
@@ -187,7 +187,7 @@ export default function RegisterPage() {
           
           <div className="mt-8 flex justify-center items-center gap-6 opacity-40 grayscale hover:opacity-100 transition-all">
             <div className="flex items-center gap-2">
-              <Icon icon="lucide:shield-check" className="w-3.5 h-3.5 text-indigo-400" />
+              <Icon icon="ri:shield-line-check" className="w-3.5 h-3.5 text-indigo-400" />
               <span className="text-[9px] uppercase tracking-widest text-zinc-500 font-bold">Data Protected</span>
             </div>
           </div>

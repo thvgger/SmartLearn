@@ -34,24 +34,24 @@ export default function ContactPage() {
           {/* Support Channels Bento */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-32">
             {/* WhatsApp Card */}
-            <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl overflow-hidden group hover:scale-[1.02] transition-all duration-300 border-none ring-1 ring-white/5 p-0 gap-0">
+            <Card className="bg-zinc-900 border-white/10 rounded-2xl overflow-hidden group hover:border-white/20 transition-all p-0">
               <CardContent className="p-8">
                 <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-8">
-                  <Icon icon="lucide:message-square" className="text-indigo-400 w-6 h-6" />
+                  <Icon icon="ri:message-3-line" className="text-indigo-400 w-6 h-6" />
                 </div>
                 <CardTitle className="text-xl font-headline font-bold text-white mb-2">WhatsApp</CardTitle>
                 <CardDescription className="text-zinc-500 text-sm mb-8 leading-relaxed">Chat with our team for immediate assistance with onboarding.</CardDescription>
                 <Link href="#" className="inline-flex items-center gap-2 text-indigo-400 font-bold hover:gap-3 transition-all text-sm uppercase tracking-widest">
-                  Chat now <Icon icon="lucide:arrow-right" className="w-4 h-4" />
+                  Chat now <Icon icon="ri:arrow-right-line" className="w-4 h-4" />
                 </Link>
               </CardContent>
             </Card>
 
             {/* Email Card */}
-            <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl overflow-hidden group hover:scale-[1.02] transition-all duration-300 border-none ring-1 ring-white/5 p-0 gap-0 opacity-80">
+            <Card className="bg-zinc-900 border-white/10 rounded-2xl overflow-hidden group hover:border-white/20 transition-all p-0 opacity-80">
               <CardContent className="p-8">
                 <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-8">
-                  <Icon icon="lucide:send" className="text-indigo-400 w-6 h-6" />
+                  <Icon icon="ri:send-plane-line" className="text-indigo-400 w-6 h-6" />
                 </div>
                 <CardTitle className="text-xl font-headline font-bold text-white mb-2">Email</CardTitle>
                 <CardDescription className="text-zinc-500 text-sm mb-8 leading-relaxed">Detailed inquiries regarding billing and partnerships.</CardDescription>
@@ -60,10 +60,10 @@ export default function ContactPage() {
             </Card>
 
             {/* Phone Card */}
-            <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl overflow-hidden group hover:scale-[1.02] transition-all duration-300 border-none ring-1 ring-white/5 p-0 gap-0 opacity-80">
+            <Card className="bg-zinc-900 border-white/10 rounded-2xl overflow-hidden group hover:border-white/20 transition-all p-0 opacity-80">
               <CardContent className="p-8">
                 <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-8">
-                  <Icon icon="lucide:phone" className="text-indigo-400 w-6 h-6" />
+                  <Icon icon="ri:phone-line" className="text-indigo-400 w-6 h-6" />
                 </div>
                 <CardTitle className="text-xl font-headline font-bold text-white mb-2">Phone</CardTitle>
                 <CardDescription className="text-zinc-500 text-sm mb-8 leading-relaxed">Direct line for urgent technical support calls.</CardDescription>
@@ -106,7 +106,7 @@ export default function ContactPage() {
                 <details key={i} className="group bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-xl overflow-hidden ring-1 ring-white/5" open={faq.open}>
                   <summary className="flex justify-between items-center p-6 cursor-pointer hover:bg-white/5 transition-colors list-none [&::-webkit-details-marker]:hidden">
                     <span className="font-headline font-bold text-white">{faq.q}</span>
-                    <Icon icon="lucide:chevron-down" className="text-indigo-400 w-5 h-5 transition-transform group-open:rotate-180" />
+                    <Icon icon="ri:arrow-down-s-line" className="text-indigo-400 w-5 h-5 transition-transform group-open:rotate-180" />
                   </summary>
                   <div className="px-6 pb-6 text-zinc-400 text-sm leading-relaxed border-t border-white/5 pt-4">
                     {faq.a}

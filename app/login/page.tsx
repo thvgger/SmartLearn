@@ -56,7 +56,7 @@ export default function LoginPage() {
         <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-violet-500/5 blur-[120px] rounded-full pointer-events-none"></div>
         
         <div className="relative z-10 w-full max-w-[460px] px-6 animate-fade-in-up">
-          <Card className="bg-zinc-950/80 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/5 p-0 gap-0">
+          <Card className="bg-zinc-900 border-white/10 rounded-2xl p-0">
             <CardContent className="p-8 md:p-12">
               <div className="mb-10 text-center">
                 <h1 className="text-3xl font-headline font-black tracking-tight text-white">Welcome back</h1>
@@ -73,7 +73,7 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Email Address</Label>
                   <div className="relative group">
-                    <Icon icon="lucide:send" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
+                    <Icon icon="ri:send-plane-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
                     <Input 
                       className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus-visible:ring-indigo-500/50 transition-all font-medium" 
                       placeholder="admin@school.edu" 
@@ -93,7 +93,7 @@ export default function LoginPage() {
                     </Link>
                   </div>
                   <div className="relative group">
-                    <Icon icon="lucide:lock" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
+                    <Icon icon="ri:lock-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
                     <Input 
                       className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus-visible:ring-indigo-500/50 transition-all font-medium" 
                       placeholder="••••••••" 
@@ -128,7 +128,7 @@ export default function LoginPage() {
           </Card>
           
           <div className="mt-8 flex justify-center items-center gap-4 py-4 px-6 rounded-2xl bg-white/[0.02] border border-white/5">
-            <Icon icon="lucide:shield-check" className="w-4 h-4 text-indigo-400" />
+            <Icon icon="ri:shield-line-check" className="w-4 h-4 text-indigo-400" />
             <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-black">Secure AES-256 Encryption</span>
           </div>
         </div>

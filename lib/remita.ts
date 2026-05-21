@@ -130,67 +130,41 @@ export async function generateRRR(params: RemitaPaymentParams) {
 }
 
 export async function verifyRemitaPayment(transactionId: string) {
-    if (IS_PRODUCTION) {
-        const rawData = `${transactionId}${REMITA_API_KEY}`;
-        const hash = crypto.createHash("sha512").update(rawData).digest("hex");
+    // Modern Remita API v1 Query (Used in both Demo and Production for most modern integrations)
+    // Formula: SHA512(transactionId + secretKey)
+    const rawData = `${transactionId}${REMITA_API_KEY}`;
+    const hash = crypto.createHash("sha512").update(rawData).digest("hex");
 
-        const url = `${REMITA_BASE_URL}/payment/v1/payment/query/${transactionId}`;
+    const url = `${REMITA_BASE_URL}/payment/v1/payment/query/${transactionId}`;
 
-        console.log("[Remita] Verifying payment (Production):", url);
+    console.log("[Remita] Verifying payment (Modern API):", url);
+    console.log("[Remita] Hashing string used:", `${transactionId}***`);
 
-        try {
-            const response = await fetch(url, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "publicKey": REMITA_PUBLIC_KEY || "",
-                    "TXN_HASH": hash,
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-                }
-            });
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "publicKey": REMITA_PUBLIC_KEY || "",
+                "TXN_HASH": hash,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+        });
 
-            const data = await response.json();
-            console.log("[Remita] Verification Response:", data);
-            
-            return {
-                status: data.responseCode === "00" ? "00" : data.responseCode,
-                message: data.responseMsg,
-                ...data
-            };
-        } catch (error) {
-            console.error("Remita verification error:", error);
-            throw error;
-        }
-    } else {
-        const rawData = `${transactionId}${REMITA_API_KEY}${REMITA_MERCHANT_ID}`;
-        const hash = crypto.createHash("sha512").update(rawData).digest("hex");
-        const url = `${REMITA_BASE_URL_V1}/remita/ecomm/${REMITA_MERCHANT_ID}/${transactionId}/${hash}/status.reg`;
-
-        console.log("[Remita] Verifying payment (Demo):", url);
-
-        try {
-            const response = await fetch(url, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-                }
-            });
-
-            const data = await response.json();
-            console.log("[Remita] Verification Response:", data);
-
-            const status = data.status || data.responseCode;
-            return {
-                status: (status === "00" || data.message === "Approved") ? "00" : status,
-                message: data.message || data.responseMsg,
-                ...data
-            };
-        } catch (error) {
-            console.error("Remita legacy verification error:", error);
-            throw error;
-        }
+        const data = await response.json();
+        console.log("[Remita] Verification Response:", data);
+        
+        // responseCode "00" or "01" usually means success in modern Remita
+        const isSuccess = data.responseCode === "00" || data.responseCode === "01";
+        
+        return {
+            status: isSuccess ? "00" : data.responseCode,
+            message: data.responseMsg,
+            ...data
+        };
+    } catch (error) {
+        console.error("Remita verification error:", error);
+        throw error;
     }
 }

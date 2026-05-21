@@ -101,7 +101,7 @@ export default function DashboardOverview() {
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Welcome */}
       <div>
-        <h1 className="font-headline text-2xl lg:text-3xl font-extrabold tracking-tight text-white">
+        <h1 className="text-2xl font-semibold tracking-tight text-white">
           Welcome back, {user?.contact_name?.split(" ")[0]}
         </h1>
         <p className="text-zinc-500 text-sm mt-1">
@@ -112,17 +112,17 @@ export default function DashboardOverview() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <StatsCard
-          icon="lucide:user"
+          icon="ri:user-line"
           label="Total Users"
           value={stats ? String(stats.students) : "—"}
         />
         <StatsCard
-          icon="lucide:file-text"
+          icon="ri:file-text-line"
           label="Exams Created"
           value={stats ? String(stats.exams) : "—"}
         />
         <StatsCard
-          icon="lucide:bar-chart-2"
+          icon="ri:bar-chart-2-line"
           label="Avg Score"
           value={stats ? `${stats.avgScore}%` : "—"}
           accent="text-violet-400"
@@ -132,13 +132,12 @@ export default function DashboardOverview() {
       {/* Two Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Score Trend or Activity */}
-        <Card className="lg:col-span-3 bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-xl overflow-hidden relative border-none ring-1 ring-white/5 p-0 gap-0">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/[0.02] blur-3xl -z-10"></div>
-          <CardHeader className="flex flex-row items-center justify-between p-6">
-            <CardTitle className="font-headline font-bold text-lg text-white">
+        <Card className="lg:col-span-3 bg-zinc-900 border-white/10 rounded-lg p-0">
+          <CardHeader className="flex flex-row items-center justify-between p-6 pb-4">
+            <CardTitle className="font-semibold text-lg text-white">
               {scoreTrend.length > 0 ? "Score Trend" : "Recent Activity"}
             </CardTitle>
-            <Badge variant="outline" className="text-[10px] uppercase tracking-widest border-indigo-500/30 text-indigo-400 font-bold bg-indigo-500/5">
+            <Badge variant="secondary" className="text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-800 border-transparent">
               {scoreTrend.length > 0 ? `${scoreTrend.length} exams` : "Live"}
             </Badge>
           </CardHeader>
@@ -166,7 +165,7 @@ export default function DashboardOverview() {
             ) : (
               <div className="flex flex-col items-center justify-center h-48 text-center">
                 <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4">
-                  <Icon icon="lucide:activity" className="w-6 h-6 text-zinc-600" />
+                  <Icon icon="ri:pulse-line" className="w-6 h-6 text-zinc-600" />
                 </div>
                 <p className="text-zinc-500 text-sm max-w-[240px]">
                   No exam data yet. Create your first exam to see score trends.
@@ -179,14 +178,14 @@ export default function DashboardOverview() {
         {/* Right Column */}
         <div className="lg:col-span-2 space-y-6">
           {/* Subscription Status */}
-          <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-xl border-none ring-1 ring-white/5 p-0 gap-0">
-            <CardHeader className="flex flex-row items-center justify-between p-6">
-              <CardTitle className="font-headline font-bold text-lg text-white">Subscription</CardTitle>
-              <Badge 
+          <Card className="bg-zinc-900 border-white/10 rounded-lg p-0">
+            <CardHeader className="flex flex-row items-center justify-between p-6 pb-4">
+              <CardTitle className="font-semibold text-lg text-white">Subscription</CardTitle>
+              <Badge variant="outline"
                 className={
                   isActive
-                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                    : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                    ? "border-emerald-500/30 text-emerald-400 bg-emerald-500/10 font-medium"
+                    : "border-amber-500/30 text-amber-400 bg-amber-500/10 font-medium"
                 }
               >
                 {isActive ? "Active" : "Inactive"}
@@ -211,8 +210,8 @@ export default function DashboardOverview() {
                       </span>
                     </div>
                   )}
-                  <Button variant="outline" size="sm" className="w-full mt-4 border-white/10 hover:bg-white/5" render={<Link href="/dashboard/settings" />}>
-                    Manage Plan
+                  <Button asChild variant="outline" size="sm" className="w-full mt-4 border-white/10 hover:bg-white/5">
+                    <Link href="/dashboard/settings">Manage Plan</Link>
                   </Button>
                   </div>
                   ) : (
@@ -220,9 +219,11 @@ export default function DashboardOverview() {
                   <p className="text-zinc-500 text-sm mb-6 leading-relaxed">
                     Activate a plan to unlock all CBT features and start running secure exams.
                   </p>
-                  <Button className="w-full bg-indigo-600 hover:bg-indigo-500" render={<Link href="/dashboard/settings" />}>
-                    Upgrade Now
-                    <Icon icon="lucide:arrow-right" className="ml-2 w-4 h-4" />
+                  <Button asChild className="w-full bg-indigo-600 hover:bg-indigo-500">
+                    <Link href="/dashboard/settings">
+                      Upgrade Now
+                      <Icon icon="ri:arrow-right-line" className="ml-2 w-4 h-4" />
+                    </Link>
                   </Button>
                   </div>
                   )}
@@ -230,14 +231,14 @@ export default function DashboardOverview() {
                   </Card>
 
                   {/* Quick Backups */}
-                  <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-xl border-none ring-1 ring-white/5 p-0 gap-0">
-                  <CardHeader className="flex flex-row items-center justify-between p-6">
-                  <CardTitle className="font-headline font-bold text-lg text-white">Cloud Backups</CardTitle>
-                  <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
-                  {backupsLoading ? "..." : `${backups.length} total`}
-                  </span>
-                  </CardHeader>
-                  <CardContent className="p-6 pt-0">
+                  <Card className="bg-zinc-900 border-white/10 rounded-lg p-0">
+            <CardHeader className="flex flex-row items-center justify-between p-6 pb-4">
+              <CardTitle className="font-semibold text-lg text-white">Cloud Backups</CardTitle>
+              <span className="text-xs font-medium text-zinc-500">
+                {backupsLoading ? "..." : `${backups.length} total`}
+              </span>
+            </CardHeader>
+            <CardContent className="p-6 pt-0">
                   {backups.length === 0 ? (
                   <p className="text-zinc-500 text-sm leading-relaxed">
                   No backups yet. Synced backups from your CBT devices will appear here.
@@ -250,21 +251,21 @@ export default function DashboardOverview() {
                       className="flex items-center justify-between py-2 group cursor-default"
                     >
                       <div className="min-w-0">
-                        <p className="text-sm font-bold text-zinc-300 truncate group-hover:text-white transition-colors">
+                        <p className="text-sm font-medium text-zinc-200 truncate group-hover:text-white transition-colors">
                           {b.label || "Untitled Backup"}
                         </p>
-                        <p className="text-[11px] text-zinc-600 font-medium">
+                        <p className="text-xs text-zinc-500 font-medium mt-0.5">
                           {formatBytes(b.size_bytes)} • {b.record_count} records
                         </p>
                       </div>
-                      <span className="text-[10px] font-bold text-zinc-500 shrink-0 ml-3 uppercase">
+                      <span className="text-xs font-medium text-zinc-500 shrink-0 ml-3">
                         {timeAgo(b.created_at)}
                       </span>
                     </div>
                   ))}
                   {backups.length > 3 && (
-                    <Button variant="link" size="sm" className="h-auto p-0 text-indigo-400 hover:text-indigo-300" render={<Link href="/dashboard/settings" />}>
-                      View all backups →
+                    <Button asChild variant="link" size="sm" className="h-auto p-0 text-indigo-400 hover:text-indigo-300">
+                      <Link href="/dashboard/settings">View all backups →</Link>
                     </Button>
                   )}
                   </div>              )}
@@ -273,44 +274,99 @@ export default function DashboardOverview() {
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 hover:bg-white/[0.02] transition-all group border-none ring-1 ring-white/5 p-0 gap-0">
-          <CardContent className="p-0">
-            <Link href="/dashboard/users" className="flex items-center gap-4 p-6">
-              <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500/20 transition-all group-hover:scale-110">
-                <Icon icon="lucide:user" className="w-5 h-5" />
+        <Link href="/dashboard/users" className="block h-full">
+          <Card className="relative overflow-hidden bg-zinc-900 border-white/10 hover:border-white/20 transition-all group rounded-2xl p-6 flex flex-col items-start h-full">
+            {/* Top Right Decorative Background */}
+            <div className="absolute top-0 right-0 w-48 h-48 pointer-events-none overflow-hidden rounded-tr-2xl">
+              <div className="absolute top-[-20%] right-[-10%] w-full h-full bg-indigo-500/[0.03] rotate-12 rounded-3xl" />
+              <div className="absolute top-[10%] right-[-20%] w-full h-full border border-white/5 rotate-12 rounded-3xl" />
+              
+              {/* Mini UI Graphic - Users */}
+              <div className="absolute right-[10px] top-[20px] w-32 bg-zinc-800 border border-white/10 rounded-lg p-2.5 shadow-2xl transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-2">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-5 h-5 rounded-full bg-indigo-500/20 flex-shrink-0" />
+                  <div className="space-y-1 w-full">
+                    <div className="h-1.5 w-full bg-white/20 rounded-full" />
+                    <div className="h-1.5 w-2/3 bg-white/10 rounded-full" />
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex-shrink-0" />
+                  <div className="space-y-1 w-full">
+                    <div className="h-1.5 w-5/6 bg-white/20 rounded-full" />
+                    <div className="h-1.5 w-1/2 bg-white/10 rounded-full" />
+                  </div>
+                </div>
               </div>
-              <div>
-                <p className="font-headline font-bold text-sm text-white">
-                  Manage Users
-                </p>
-                <p className="text-[11px] text-zinc-500 font-medium">
-                  View students and their performance
-                </p>
-              </div>
-            </Link>
-          </CardContent>
-        </Card>
+            </div>
+
+            {/* Icon */}
+            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-400 mb-6 relative z-10 group-hover:bg-indigo-500/10 transition-colors">
+              <Icon icon="ri:user-line" className="w-6 h-6" />
+            </div>
+
+            {/* Content */}
+            <h3 className="text-lg font-bold text-white mb-2 relative z-10">
+              Manage Users
+            </h3>
+            <p className="text-sm text-zinc-400 leading-relaxed mb-8 flex-grow relative z-10 max-w-[75%]">
+              View students, monitor their performance, and manage role assignments in your institution.
+            </p>
+
+            {/* Footer Link */}
+            <div className="flex items-center gap-1.5 text-sm font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors relative z-10 mt-auto">
+              Manage now <Icon icon="ri:arrow-right-line" className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </div>
+          </Card>
+        </Link>
         
-        <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 hover:bg-white/[0.02] transition-all group border-none ring-1 ring-white/5 p-0 gap-0">
-          <CardContent className="p-0">
-            <Link href="/dashboard/exams" className="flex items-center gap-4 p-6">
-              <div className="p-3 rounded-xl bg-violet-500/10 text-violet-400 group-hover:bg-violet-500/20 transition-all group-hover:scale-110">
-                <Icon icon="lucide:file-text" className="w-5 h-5" />
+        <Link href="/dashboard/exams" className="block h-full">
+          <Card className="relative overflow-hidden bg-zinc-900 border-white/10 hover:border-white/20 transition-all group rounded-2xl p-6 flex flex-col items-start h-full">
+            {/* Top Right Decorative Background */}
+            <div className="absolute top-0 right-0 w-48 h-48 pointer-events-none overflow-hidden rounded-tr-2xl">
+              <div className="absolute top-[-20%] right-[-10%] w-full h-full bg-emerald-500/[0.03] -rotate-12 rounded-3xl" />
+              <div className="absolute top-[10%] right-[-20%] w-full h-full border border-white/5 -rotate-12 rounded-3xl" />
+              
+              {/* Mini UI Graphic - Exams */}
+              <div className="absolute right-[15px] top-[25px] w-28 bg-zinc-800 border border-white/10 rounded-lg p-3 shadow-2xl transition-transform duration-500 group-hover:-translate-y-2 group-hover:-rotate-2">
+                <div className="space-y-2.5">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+                      <Icon icon="ri:check-line" className="w-2 h-2 text-emerald-400" />
+                    </div>
+                    <div className="h-1.5 w-full bg-white/20 rounded-full" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded bg-white/5 border border-white/10" />
+                    <div className="h-1.5 w-4/5 bg-white/10 rounded-full" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded bg-white/5 border border-white/10" />
+                    <div className="h-1.5 w-5/6 bg-white/10 rounded-full" />
+                  </div>
+                </div>
               </div>
-              <div>
-                <p className="font-headline font-bold text-sm text-white">
-                  Exams List
-                </p>
-                <p className="text-[11px] text-zinc-500 font-medium">
-                  Create and manage your examination cycles
-                </p>
-              </div>
-            </Link>
-          </CardContent>
-        </Card>
-      </div>
+            </div>
+
+            {/* Icon */}
+            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400 mb-6 relative z-10 group-hover:bg-emerald-500/10 transition-colors">
+              <Icon icon="ri:file-list-3-line" className="w-6 h-6" />
+            </div>
+
+            {/* Content */}
+            <h3 className="text-lg font-bold text-white mb-2 relative z-10">
+              Exams List
+            </h3>
+            <p className="text-sm text-zinc-400 leading-relaxed mb-8 flex-grow relative z-10 max-w-[75%]">
+              Create new examination cycles, manage questions, and review automated results.
+            </p>
+
+            {/* Footer Link */}
+            <div className="flex items-center gap-1.5 text-sm font-semibold text-emerald-400 group-hover:text-emerald-300 transition-colors relative z-10 mt-auto">
+              View exams <Icon icon="ri:arrow-right-line" className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </div>
+          </Card>
+        </Link>
     </div>
   );
 }

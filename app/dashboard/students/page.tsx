@@ -87,16 +87,16 @@ export default function StudentsPage() {
           </p>
         </div>
         <Button className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold h-11 px-6 shadow-lg shadow-indigo-600/20">
-          <Icon icon="lucide:user-plus" className="w-4 h-4 mr-2" />
+          <Icon icon="ri:user-line-plus" className="w-4 h-4 mr-2" />
           Add New Student
         </Button>
       </div>
 
       {/* Search & Filter */}
-      <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-4 gap-0">
+      <Card className="bg-zinc-900 border-white/10 rounded-xl p-4">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-1 group">
-            <Icon icon="lucide:search" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
+            <Icon icon="ri:search-line" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
             <Input
               type="text"
               placeholder="Search by name or email..."
@@ -124,7 +124,7 @@ export default function StudentsPage() {
       </Card>
 
       {/* Student Table */}
-      <Card className="bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-2xl border-none ring-1 ring-white/5 p-0 gap-0 overflow-hidden">
+      <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         {loading ? (
           <div className="p-20 flex flex-col items-center justify-center text-zinc-500">
             <div className="w-10 h-10 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mb-4" />
@@ -133,7 +133,7 @@ export default function StudentsPage() {
         ) : filtered.length === 0 ? (
           <div className="p-20 text-center flex flex-col items-center justify-center border-2 border-dashed border-white/5 rounded-2xl m-6">
             <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-6">
-              <Icon icon="lucide:user" className="w-8 h-8 text-zinc-700" />
+              <Icon icon="ri:user-line" className="w-8 h-8 text-zinc-700" />
             </div>
             <p className="text-white font-bold text-lg">
               {students.length === 0 ? "No students yet" : "No students found"}
@@ -168,13 +168,13 @@ export default function StudentsPage() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 font-medium">
-                      <Icon icon="lucide:graduation-cap" className="w-3 h-3" />
+                      <Icon icon="ri:graduation-cap-line" className="w-3 h-3" />
                       {student.class_name}
                     </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1.5 text-[11px] text-zinc-400 font-medium max-w-[180px]">
-                      <Icon icon="lucide:send" className="w-3 h-3 shrink-0 text-zinc-600" />
+                      <Icon icon="ri:send-plane-line" className="w-3 h-3 shrink-0 text-zinc-600" />
                       <span className="truncate">{student.email || "—"}</span>
                     </div>
                   </TableCell>
@@ -186,7 +186,7 @@ export default function StudentsPage() {
                   <TableCell className="text-right px-6">
                     <DropdownMenu>
                       <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-white hover:bg-white/10 rounded-lg" />}>
-                        <Icon icon="lucide:more-horizontal" className="w-4 h-4" />
+                        <Icon icon="ri:more-line" className="w-4 h-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="bg-zinc-900 border-white/10 w-40">
                         <DropdownMenuItem className="text-xs font-bold text-zinc-300 focus:text-white cursor-pointer" onClick={() => alert(`Detailed analytics for ${student.name}`)}>
