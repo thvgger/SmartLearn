@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useAuth } from "@/lib/AuthContext";
 import {
@@ -20,6 +21,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, loading, logout } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const initials = user?.contact_name
     ? user.contact_name
@@ -66,7 +68,7 @@ export default function Navbar() {
               ))}
             </div>
             
-            <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-4">
               {loading ? (
                 <div className="w-20 h-8 bg-white/5 animate-pulse rounded-lg" />
               ) : user ? (
@@ -131,9 +133,110 @@ export default function Navbar() {
                 </>
               )}
             </div>
+
+            <div className="flex items-center gap-3 md:hidden">
+              <button 
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-lg bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors"
+                aria-label="Toggle mobile menu"
+              >
+                <Icon icon={mobileMenuOpen ? "ri:close-line" : "ri:menu-5-line"} className="w-5 h-5" />
+              </button>
+            </div>
           </>
         )}
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {!isAuthPage && mobileMenuOpen && (
+        <div className="md:hidden absolute top-full left-0 w-full h-[calc(100vh-73px)] bg-zinc-950/98 backdrop-blur-3xl border-t border-white/5 overflow-y-auto animate-fade-in-up origin-top">
+          <div className="flex flex-col p-6 gap-8">
+            <div className="flex flex-col gap-4">
+              {[
+                { label: "Home", href: "/" },
+                { label: "Features", href: "/features" },
+                { label: "Pricing", href: "/pricing" },
+                { label: "Contact", href: "/contact" },
+              ].map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`font-headline font-bold tracking-tight text-xl transition-colors py-2 ${
+                    pathname === link.href ? "text-indigo-300" : "text-white hover:text-indigo-200"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            
+            <div className="h-px w-full bg-white/5" />
+
+            {loading ? (
+              <div className="w-full h-24 bg-white/5 animate-pulse rounded-2xl" />
+            ) : user ? (
+              <div className="flex flex-col gap-4">
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4">
+                  <Avatar className="w-12 h-12 border-none shadow-lg shadow-indigo-500/20">
+                    <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-sm font-bold border-none">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="text-sm font-bold text-white">{user.contact_name}</p>
+                    <p className="text-xs text-slate-400">{user.school_name}</p>
+                  </div>
+                </div>
+                
+                <div className="flex flex-col gap-2 mt-2">
+                  <Button 
+                    onClick={() => { setMobileMenuOpen(false); router.push("/dashboard"); }}
+                    className="w-full h-12 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl justify-start px-4 shadow-lg shadow-indigo-500/20"
+                  >
+                    <Icon icon="ri:dashboard-line" className="w-5 h-5 mr-3" />
+                    Go to Dashboard
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => { setMobileMenuOpen(false); router.push("/dashboard/settings"); }}
+                    className="w-full h-12 bg-white/5 border-white/10 text-white font-bold rounded-xl justify-start px-4 hover:bg-white/10"
+                  >
+                    <Icon icon="ri:user-line" className="w-5 h-5 mr-3 text-slate-400" />
+                    Account Settings
+                  </Button>
+                  <Button 
+                    variant="ghost"
+                    onClick={() => { setMobileMenuOpen(false); handleLogout(); }}
+                    className="w-full h-12 text-red-400 font-bold rounded-xl justify-start px-4 hover:bg-red-400/10 hover:text-red-300 mt-2"
+                  >
+                    <Icon icon="ri:logout-box-r-line" className="w-5 h-5 mr-3" />
+                    Sign Out
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-4">
+                <Button 
+                  asChild 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full h-12 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/20 text-lg"
+                >
+                  <Link href="/register">Get Started Free</Link>
+                </Button>
+                <Button 
+                  asChild 
+                  variant="outline"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full h-12 bg-white/5 border-white/10 text-white font-bold rounded-xl hover:bg-white/10 text-lg"
+                >
+                  <Link href="/login">Sign In to Account</Link>
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

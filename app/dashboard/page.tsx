@@ -110,7 +110,7 @@ export default function DashboardOverview() {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <StatsCard
           icon="ri:user-line"
           label="Total Users"
@@ -274,6 +274,7 @@ export default function DashboardOverview() {
         </div>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Link href="/dashboard/users" className="block h-full">
           <Card className="relative overflow-hidden bg-zinc-900 border-white/10 hover:border-white/20 transition-all group rounded-2xl p-6 flex flex-col items-start h-full">
             {/* Top Right Decorative Background */}
@@ -367,6 +368,7 @@ export default function DashboardOverview() {
             </div>
           </Card>
         </Link>
+      </div>
     </div>
   );
 }

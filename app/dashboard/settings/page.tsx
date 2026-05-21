@@ -216,7 +216,7 @@ export default function SettingsPage() {
       {/* School Profile */}
       <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-center gap-3">
-          <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
+          <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-indigo-400">
             <Icon icon="ri:building-2-line" className="w-5 h-5" />
           </div>
           <CardTitle className="font-headline font-bold text-lg text-white">School Profile</CardTitle>
@@ -266,7 +266,7 @@ export default function SettingsPage() {
       {/* School Tag for Teacher Portal */}
       <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-start gap-3">
-          <div className="p-2 rounded-lg bg-violet-500/10 text-violet-400">
+          <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-violet-400 shrink-0">
             <Icon icon="ri:price-tag-3-line" className="w-5 h-5" />
           </div>
           <div>
@@ -285,7 +285,7 @@ export default function SettingsPage() {
                   setSchoolTag(e.target.value);
                   setTagMessage(null);
                 }}
-                placeholder="e.g. springfield-high"
+                placeholder="e.g. SwiftLearn-High-School"
                 className="bg-zinc-950 border-white/10 rounded-xl h-11 text-white font-medium"
               />
             </div>
@@ -348,7 +348,7 @@ export default function SettingsPage() {
       <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-3">
-            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+            <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-emerald-400">
               <Icon icon="ri:bank-card-line" className="w-5 h-5" />
             </div>
             <CardTitle className="font-headline font-bold text-lg text-white">Subscription & Billing</CardTitle>
@@ -526,7 +526,7 @@ export default function SettingsPage() {
       <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-3">
-            <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
+            <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-indigo-400">
               <Icon icon="ri:cloud-line" className="w-5 h-5" />
             </div>
             <div>

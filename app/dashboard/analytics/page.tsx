@@ -126,7 +126,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Top Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { icon: "ri:bar-chart-2-line", label: "School Average", value: stats ? `${stats.avgScore}%` : "—", color: "text-indigo-400" },
           { icon: "ri:line-chart-line", label: "Score Trend", value: scoreTrend.length > 1 ? `${scoreTrend[scoreTrend.length - 1].score && scoreTrend[0].score ? (Number(scoreTrend[scoreTrend.length - 1].score) - Number(scoreTrend[0].score) > 0 ? "+" : "") + (Number(scoreTrend[scoreTrend.length - 1].score) - Number(scoreTrend[0].score)).toFixed(1) + "%" : "—"}` : "—", color: "text-emerald-400" },
