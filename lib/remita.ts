@@ -12,10 +12,10 @@ const REMITA_BASE_URL = IS_PRODUCTION ? "https://api.remita.net" : "https://demo
 const REMITA_BASE_URL_V1 = IS_PRODUCTION ? "https://remita.net" : "https://demo.remita.net";
 
 const REMITA_MERCHANT_ID = getEnv("REMITA_MERCHANT_ID");
-const REMITA_API_KEY = getEnv("REMITA_API_KEY"); // This is often the Secret Key in modern APIs
+const REMITA_API_KEY = getEnv("REMITA_API_KEY");
 const REMITA_PUBLIC_KEY = getEnv("NEXT_PUBLIC_REMITA_PUBLIC_KEY");
 const REMITA_SERVICE_TYPE_ID = getEnv("REMITA_SERVICE_TYPE_ID");
-const REMITA_SECRET_KEY = getEnv("REMITA_SECRET_KEY"); // Modern API secret key
+const REMITA_SECRET_KEY = getEnv("REMITA_SECRET_KEY");
 
 export interface RemitaPaymentParams {
     orderId: string;
@@ -71,7 +71,6 @@ export async function initiateRemitaPayment(params: RemitaPaymentParams) {
 export async function generateRRR(params: RemitaPaymentParams) {
     const hash = generateRemitaHash(params.orderId, params.amount);
     
-    // Modern standard endpoint for merchant invoice (RRR) generation
     const url = `${REMITA_BASE_URL_V1}/remita/exapp/api/v1/send/api/echannelsvc/merchant/api/paymentinit`;
     
     const payload = {
@@ -130,8 +129,6 @@ export async function generateRRR(params: RemitaPaymentParams) {
 }
 
 export async function verifyRemitaPayment(transactionId: string) {
-    // Modern Remita API v1 Query (Used in both Demo and Production for most modern integrations)
-    // Formula: SHA512(transactionId + secretKey)
     const secretKey = REMITA_SECRET_KEY || REMITA_API_KEY;
     const rawData = `${transactionId}${secretKey}`;
     const hash = crypto.createHash("sha512").update(rawData).digest("hex");
@@ -156,7 +153,6 @@ export async function verifyRemitaPayment(transactionId: string) {
         const data = await response.json();
         console.log("[Remita] Verification Response:", data);
         
-        // responseCode "00" or "01" usually means success in modern Remita
         const isSuccess = data.responseCode === "00" || data.responseCode === "01";
         
         return {

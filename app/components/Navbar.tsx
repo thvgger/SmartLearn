@@ -73,8 +73,7 @@ export default function Navbar() {
                 <div className="w-20 h-8 bg-white/5 animate-pulse rounded-lg" />
               ) : user ? (
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button className="flex items-center gap-2 p-1.5 pl-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all group outline-none">
+                  <DropdownMenuTrigger className="flex items-center gap-2 p-1.5 pl-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all group outline-none">
                       <div className="hidden sm:block text-right mr-1">
                         <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">Signed in as</p>
                         <p className="text-xs font-bold text-white leading-none">{user.contact_name.split(' ')[0]}</p>
@@ -85,7 +84,6 @@ export default function Navbar() {
                         </AvatarFallback>
                       </Avatar>
                       <Icon icon="ri:arrow-down-s-line" className="w-4 h-4 text-slate-400 transition-transform duration-300 group-aria-expanded:rotate-180" />
-                    </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56 mt-2 bg-zinc-900/95 backdrop-blur-xl border-white/10 rounded-xl" align="end">
                     <DropdownMenuGroup>
