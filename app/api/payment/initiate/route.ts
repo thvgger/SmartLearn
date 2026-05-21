@@ -67,11 +67,24 @@ export async function POST(req: NextRequest) {
 
         const remitaParams = await initiateRemitaPayment(remitaData);
 
+        let rrr = null;
+        try {
+            const rrrResponse = await generateRRR(remitaData);
+            if (rrrResponse && rrrResponse.statuscode === "025" && rrrResponse.RRR) {
+                rrr = rrrResponse.RRR;
+                console.log("[Payment] Successfully generated RRR:", rrr);
+            } else {
+                console.warn("[Payment] RRR generation failed or returned unexpected status:", rrrResponse);
+            }
+        } catch (rrrError) {
+            console.error("[Payment] RRR generation error:", rrrError);
+        }
+
         const finalResponse = {
             success: true,
             remitaParams,
             reference,
-            rrr: null
+            rrr: rrr
         };
         console.log("[Payment] Returning response to frontend:", JSON.stringify(finalResponse, null, 2));
         return NextResponse.json(finalResponse);

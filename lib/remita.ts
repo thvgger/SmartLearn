@@ -15,6 +15,7 @@ const REMITA_MERCHANT_ID = getEnv("REMITA_MERCHANT_ID");
 const REMITA_API_KEY = getEnv("REMITA_API_KEY"); // This is often the Secret Key in modern APIs
 const REMITA_PUBLIC_KEY = getEnv("NEXT_PUBLIC_REMITA_PUBLIC_KEY");
 const REMITA_SERVICE_TYPE_ID = getEnv("REMITA_SERVICE_TYPE_ID");
+const REMITA_SECRET_KEY = getEnv("REMITA_SECRET_KEY"); // Modern API secret key
 
 export interface RemitaPaymentParams {
     orderId: string;
@@ -70,18 +71,19 @@ export async function initiateRemitaPayment(params: RemitaPaymentParams) {
 export async function generateRRR(params: RemitaPaymentParams) {
     const hash = generateRemitaHash(params.orderId, params.amount);
     
-    const url = `${REMITA_BASE_URL_V1}/remita/exapp/api/v1/send/api/bgatesvc/billing/generate`;
+    // Modern standard endpoint for merchant invoice (RRR) generation
+    const url = `${REMITA_BASE_URL_V1}/remita/exapp/api/v1/send/api/echannelsvc/merchant/api/paymentinit`;
     
     const payload = {
         merchantId: REMITA_MERCHANT_ID,
         serviceTypeId: REMITA_SERVICE_TYPE_ID,
         orderId: params.orderId,
-        amount: params.amount,
+        amount: params.amount.toString(),
         payerName: params.payerName,
         payerEmail: params.payerEmail,
         payerPhone: params.payerPhone,
         description: params.description,
-        hash: hash
+        apiHash: hash
     };
 
     console.log("[Remita] Generating RRR with URL:", url);
@@ -94,9 +96,7 @@ export async function generateRRR(params: RemitaPaymentParams) {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
                 "Authorization": `remitaConsumerKey=${REMITA_MERCHANT_ID},remitaConsumerToken=${hash}`,
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                "Origin": "https://demo.remita.net",
-                "Referer": "https://demo.remita.net/"
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             },
             body: JSON.stringify(payload)
         });
@@ -132,7 +132,8 @@ export async function generateRRR(params: RemitaPaymentParams) {
 export async function verifyRemitaPayment(transactionId: string) {
     // Modern Remita API v1 Query (Used in both Demo and Production for most modern integrations)
     // Formula: SHA512(transactionId + secretKey)
-    const rawData = `${transactionId}${REMITA_API_KEY}`;
+    const secretKey = REMITA_SECRET_KEY || REMITA_API_KEY;
+    const rawData = `${transactionId}${secretKey}`;
     const hash = crypto.createHash("sha512").update(rawData).digest("hex");
 
     const url = `${REMITA_BASE_URL}/payment/v1/payment/query/${transactionId}`;
@@ -159,9 +160,9 @@ export async function verifyRemitaPayment(transactionId: string) {
         const isSuccess = data.responseCode === "00" || data.responseCode === "01";
         
         return {
+            ...data,
             status: isSuccess ? "00" : data.responseCode,
-            message: data.responseMsg,
-            ...data
+            message: data.responseMsg
         };
     } catch (error) {
         console.error("Remita verification error:", error);

@@ -101,7 +101,8 @@ export default function SettingsPage() {
       // @ts-expect-error - RemitaPay is loaded from external script
       const paymentEngine = window.RmPaymentEngine.init({
         key: process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY || "REVUVE9GR098NDY3OTE3OTd8YjU3M2IzYmI0OTU0YmNjYThhMGVkMjk0YThhNWRkYjI0OTZlNjA5MGRhZjI5ZTY5ZWY3YzU3YmI2M2Q1YjA5YTZlYzYyNjAyZWRlYjVjZDg2YmU1YjZlZTA2YzA4YmU1ZjkxYTQ0MTFkYjU1ZDBiZGE0Y2E5ZTEwOTBkYWY=",
-        processRrr: rrr ? false : true,
+        processRrr: !!rrr,
+        rrr: rrr || undefined,
         transactionId: reference,
         firstName: remitaParams.firstName,
         lastName: remitaParams.lastName,
