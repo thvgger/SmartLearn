@@ -94,6 +94,8 @@ export default function StudentsPage() {
           <Icon icon="ri:user-line-plus" className="w-4 h-4 mr-2" />
           Add New Student
         </Button>
+      </div>
+
       {error && (
         <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-bold flex items-center gap-3">
           <Icon icon="ri:error-warning-fill" className="w-4 h-4 shrink-0" />
