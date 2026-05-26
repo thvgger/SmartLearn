@@ -1,13 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { hashSync } from "bcryptjs";
-import { createSessionToken } from "@/lib/auth";
-import { cookies } from "next/headers";
+import { sendOTP } from "@/lib/email";
+import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password, school_name, contact_name, phone } =
-      await req.json();
+    const {
+      email,
+      password,
+      school_name,
+      contact_name,
+      phone,
+      role_title,
+      school_size,
+      country,
+      referral,
+    } = await req.json();
 
     if (!email || !password || !school_name || !contact_name) {
       return NextResponse.json(
@@ -36,6 +45,11 @@ export async function POST(req: NextRequest) {
         school_name,
         contact_name,
         phone: phone || null,
+        role_title: role_title || null,
+        school_size: school_size || null,
+        country: country || null,
+        referral: referral || null,
+        email_verified: false,
         subscription: {
           create: {
             plan: "free",
@@ -43,27 +57,27 @@ export async function POST(req: NextRequest) {
           },
         },
       },
-      include: { subscription: true },
     });
 
-    // Create session
-    const token = await createSessionToken(user.id);
-    const cookieStore = await cookies();
-    cookieStore.set("session", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: "/",
+    // Generate 6-digit OTP
+    const otp = crypto.randomInt(100000, 999999).toString();
+    const expires = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+
+    await prisma.verificationToken.create({
+      data: {
+        identifier: email,
+        token: otp,
+        expires,
+        type: "REGISTER",
+      },
     });
+
+    // Send email
+    await sendOTP(email, otp, "REGISTER");
 
     return NextResponse.json({
-      user: {
-        id: user.id,
-        email: user.email,
-        school_name: user.school_name,
-        contact_name: user.contact_name,
-      },
+      message: "Verification email sent",
+      email: user.email,
     });
   } catch (error) {
     console.error("Registration error:", error);
