@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Icon } from "@iconify/react";
+import { getErrorMessage } from "@/lib/utils";
 
 interface BackupEntry {
   id: string;
@@ -89,12 +90,11 @@ export default function SettingsPage() {
         body: JSON.stringify({ plan: selectedPlan }),
       });
       
-      const data = await res.json();
-      
       if (!res.ok) {
-        alert(data.error || "Failed to initiate payment");
-        return;
+        throw res;
       }
+      
+      const data = await res.json();
 
       const { remitaParams, reference, rrr } = data;
 
@@ -130,8 +130,8 @@ export default function SettingsPage() {
             alert("Payment successful! Your subscription is now active.");
             window.location.reload();
           } else {
-            const errorData = await verifyRes.json();
-            alert("Payment verification failed: " + (errorData.message || "Unknown error"));
+            const errMsg = await getErrorMessage(verifyRes, "Payment verification failed.");
+            alert(errMsg);
           }
         },
         onError: function (response: any) {
@@ -151,7 +151,8 @@ export default function SettingsPage() {
 
     } catch (err) {
       console.error("Subscription error:", err);
-      alert("An unexpected error occurred.");
+      const errMsg = await getErrorMessage(err, "An unexpected error occurred.");
+      alert(errMsg);
     } finally {
       setActionLoading("");
     }
@@ -168,11 +169,11 @@ export default function SettingsPage() {
         alert("Success! Dashboard has been synced with the backup data.");
         window.location.reload();
       } else {
-        const data = await res.json();
-        alert(`Error: ${data.error || "Failed to sync"}`);
+        throw res;
       }
-    } catch {
-      alert("Error: Network failure while syncing.");
+    } catch (err) {
+      const errMsg = await getErrorMessage(err, "Failed to restore backup.");
+      alert(`Error: ${errMsg}`);
     } finally {
       setRestoringId(null);
     }
@@ -299,15 +300,15 @@ export default function SettingsPage() {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ school_tag: schoolTag }),
                   });
-                  const data = await res.json();
-                  if (res.ok) {
-                    setSchoolTag(data.school_tag);
-                    setTagMessage({ type: "success", text: `Saved! Teachers use "${data.school_tag}" to log in.` });
-                  } else {
-                    setTagMessage({ type: "error", text: data.error });
+                  if (!res.ok) {
+                    throw res;
                   }
-                } catch {
-                  setTagMessage({ type: "error", text: "Network error" });
+                  const data = await res.json();
+                  setSchoolTag(data.school_tag);
+                  setTagMessage({ type: "success", text: `Saved! Teachers use "${data.school_tag}" to log in.` });
+                } catch (err) {
+                  const errMsg = await getErrorMessage(err, "Network error");
+                  setTagMessage({ type: "error", text: errMsg });
                 } finally {
                   setTagSaving(false);
                 }

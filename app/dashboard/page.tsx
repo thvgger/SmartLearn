@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { getErrorMessage } from "@/lib/utils";
 
 interface BackupEntry {
   id: string;
@@ -56,32 +57,37 @@ export default function DashboardOverview() {
   const [backupsLoading, setBackupsLoading] = useState(false);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [scoreTrend, setScoreTrend] = useState<ScoreTrendItem[]>([]);
+  const [error, setError] = useState("");
 
   const fetchBackups = useCallback(async () => {
     setBackupsLoading(true);
+    setError("");
     try {
       const res = await fetch("/api/backups");
-      if (res.ok) {
-        const data = await res.json();
-        setBackups(data.backups || []);
+      if (!res.ok) {
+        throw res;
       }
-    } catch {
-      // silent
+      const data = await res.json();
+      setBackups(data.backups || []);
+    } catch (err) {
+      setError(await getErrorMessage(err, "Failed to load dashboard data."));
     } finally {
       setBackupsLoading(false);
     }
   }, []);
 
   const fetchStats = useCallback(async () => {
+    setError("");
     try {
       const res = await fetch("/api/dashboard/stats");
-      if (res.ok) {
-        const data = await res.json();
-        setStats(data.stats);
-        setScoreTrend(data.scoreTrend || []);
+      if (!res.ok) {
+        throw res;
       }
-    } catch {
-      // silent
+      const data = await res.json();
+      setStats(data.stats);
+      setScoreTrend(data.scoreTrend || []);
+    } catch (err) {
+      setError(await getErrorMessage(err, "Failed to load dashboard statistics."));
     }
   }, []);
 
@@ -108,6 +114,16 @@ export default function DashboardOverview() {
           Here&apos;s what&apos;s happening with {user?.school_name} today.
         </p>
       </div>
+
+      {error && (
+        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-bold flex items-center gap-3 animate-fade-in-up">
+          <Icon icon="ri:error-warning-fill" className="w-4 h-4 shrink-0" />
+          <span className="flex-1">{error}</span>
+          <Button size="sm" variant="ghost" onClick={() => { fetchStats(); fetchBackups(); }} className="text-red-400 hover:text-red-300 hover:bg-red-500/10 h-8 px-3 border-none cursor-pointer">
+            Retry
+          </Button>
+        </div>
+      )}
 
       {/* Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

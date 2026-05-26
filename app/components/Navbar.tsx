@@ -54,6 +54,7 @@ export default function Navbar() {
                 { label: "Home", href: "/" },
                 { label: "Features", href: "/features" },
                 { label: "Pricing", href: "/pricing" },
+                { label: "Download", href: "/download" },
                 { label: "Contact", href: "/contact" },
               ].map((link) => (
                 <Link
@@ -154,6 +155,7 @@ export default function Navbar() {
                 { label: "Home", href: "/" },
                 { label: "Features", href: "/features" },
                 { label: "Pricing", href: "/pricing" },
+                { label: "Download", href: "/download" },
                 { label: "Contact", href: "/contact" },
               ].map((link) => (
                 <Link

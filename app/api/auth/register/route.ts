@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { hashSync } from "bcryptjs";
-import { sendOTP } from "@/lib/email";
-import crypto from "crypto";
+import { createSessionToken } from "@/lib/auth";
+import { cookies } from "next/headers";
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,12 +16,13 @@ export async function POST(req: NextRequest) {
       school_size,
       country,
       referral,
+      otp,
     } = await req.json();
 
-    if (!email || !password || !school_name || !contact_name) {
+    if (!email || !password || !school_name || !contact_name || !otp) {
       return NextResponse.json(
         {
-          error: "Email, password, school name, and contact name are required",
+          error: "Email, password, school name, contact name, and OTP are required",
         },
         { status: 400 },
       );
@@ -34,6 +35,23 @@ export async function POST(req: NextRequest) {
         { error: "An account with this email already exists" },
         { status: 409 },
       );
+    }
+
+    // Verify the OTP
+    const verification = await prisma.verificationToken.findFirst({
+      where: {
+        identifier: email,
+        token: otp,
+        type: "REGISTER",
+      },
+    });
+
+    if (!verification) {
+      return NextResponse.json({ error: "Invalid OTP" }, { status: 400 });
+    }
+
+    if (verification.expires < new Date()) {
+      return NextResponse.json({ error: "OTP expired" }, { status: 400 });
     }
 
     // Create user with hashed password
@@ -49,7 +67,7 @@ export async function POST(req: NextRequest) {
         school_size: school_size || null,
         country: country || null,
         referral: referral || null,
-        email_verified: false,
+        email_verified: true,
         subscription: {
           create: {
             plan: "free",
@@ -59,25 +77,25 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Generate 6-digit OTP
-    const otp = crypto.randomInt(100000, 999999).toString();
-    const expires = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
-
-    await prisma.verificationToken.create({
-      data: {
-        identifier: email,
-        token: otp,
-        expires,
-        type: "REGISTER",
-      },
+    // Delete token
+    await prisma.verificationToken.delete({
+      where: { id: verification.id },
     });
 
-    // Send email
-    await sendOTP(email, otp, "REGISTER");
+    // Create session
+    const token = await createSessionToken(user.id);
+    const cookieStore = await cookies();
+    cookieStore.set("session", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: "/",
+    });
 
     return NextResponse.json({
-      message: "Verification email sent",
-      email: user.email,
+      success: true,
+      user: { id: user.id, email: user.email },
     });
   } catch (error) {
     console.error("Registration error:", error);

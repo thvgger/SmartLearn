@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { getErrorMessage } from "@/lib/utils";
+
 export default function ResetPasswordPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -41,15 +43,14 @@ export default function ResetPasswordPage() {
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to reset password");
+        throw res;
       }
       
       await refreshUser();
       router.push("/dashboard");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      setError(err.message);
+      setError(await getErrorMessage(err, "Failed to reset password. Please ensure your OTP is correct."));
     } finally {
       setLoading(false);
     }

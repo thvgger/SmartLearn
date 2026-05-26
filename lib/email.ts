@@ -2,8 +2,8 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY || "dummy_key");
 
-const FROM_EMAIL = "SmartLearn <noreply@updates.smartlearn.app>"; // Update with your actual verified domain
-
+// Use your verified domain. You can override this via the RESEND_FROM_EMAIL env variable.
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "SmartLearn <noreply@smartlearn.ifeoluwaschools.com.ng>";
 export async function sendOTP(email: string, otp: string, type: "REGISTER" | "RESET_PASSWORD") {
   const subject =
     type === "REGISTER"

@@ -14,6 +14,8 @@ import { Label } from "@/components/ui/label";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 
+import { getErrorMessage } from "@/lib/utils";
+
 export default function RegisterPage() {
   const router = useRouter();
   const { refreshUser } = useAuth();
@@ -25,20 +27,19 @@ export default function RegisterPage() {
 
   // Form Data
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    contact_name: "",
-    role_title: "",
-    phone: "",
     school_name: "",
-    school_size: "",
-    country: "",
-    referral: "",
+    school_tag: "",
+    contact_name: "",
+    email: "",
+    phone: "",
+    password: "",
+    role: "",
+    other_role: "",
     otp: "",
   });
 
-  const updateForm = (key: keyof typeof formData, value: string) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const nextStep = () => {
@@ -54,21 +55,22 @@ export default function RegisterPage() {
   const handleRegister = async () => {
     setError("");
     setLoading(true);
+
     try {
-      const res = await fetch("/api/auth/register", {
+      // Send OTP first
+      const res = await fetch("/api/auth/send-registration-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ email: formData.email }),
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to create account");
+        throw res;
       }
       nextStep(); // Move to OTP step
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      setError(err.message);
+      setError(await getErrorMessage(err, "Failed to send verification code"));
     } finally {
       setLoading(false);
     }
@@ -78,22 +80,22 @@ export default function RegisterPage() {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/verify-otp", {
+      // Create user account now that OTP is provided
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: formData.email, otp: formData.otp }),
+        body: JSON.stringify(formData),
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Invalid OTP");
+        throw res;
       }
 
       await refreshUser();
       router.push("/dashboard");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      setError(err.message);
+      setError(await getErrorMessage(err, "Invalid OTP or registration failed"));
     } finally {
       setLoading(false);
     }

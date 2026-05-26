@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { getErrorMessage } from "@/lib/utils";
+
 export default function ForgotPasswordPage() {
   const router = useRouter();
   
@@ -31,7 +33,7 @@ export default function ForgotPasswordPage() {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to process request");
+        throw res;
       }
       setSuccess(true);
       
@@ -41,7 +43,7 @@ export default function ForgotPasswordPage() {
       }, 2000);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      setError(err.message);
+      setError(await getErrorMessage(err, "Failed to process forgot password request. Please try again."));
     } finally {
       setLoading(false);
     }

@@ -47,6 +47,14 @@ export default function Home() {
                 <Link href="/features">See how it works</Link>
               </Button>
             </div>
+
+            <p className="text-xs text-zinc-500 mt-6 flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider">
+              <Icon icon="ri:windows-fill" className="w-4 h-4 text-blue-500" />
+              Running offline exams?
+              <Link href="/download" className="text-indigo-400 hover:text-indigo-300 hover:underline transition-all">
+                Download Windows Offline Client
+              </Link>
+            </p>
           </div>
         </section>
 
@@ -122,15 +130,15 @@ export default function Home() {
               <div className="lg:w-1/2">
                 <h2 className="text-4xl md:text-5xl font-headline font-extrabold text-white mb-8 tracking-tight">Zero Hardware Barriers</h2>
                 <p className="text-slate-400 text-lg mb-12 leading-relaxed">
-                  Swift Learn works on any device with a browser. Tablets, laptops, or old desktops in your lab—we handle it all.
+                  Swift Learn works in any browser or through our dedicated offline Windows application. Host secure local assessments in your computer labs without constant internet access.
                 </p>
                 
                 <div className="space-y-6">
                   {[
-                    "Works offline on local networks",
-                    "Responsive design for all screen sizes",
-                    "Ultra-lightweight on bandwidth",
-                    "Automatic data sync when online"
+                    "Secure offline Windows desktop app",
+                    "Cheating prevention & locked exam browser",
+                    "Ultra-lightweight local networking",
+                    "Automatic grades sync back to the cloud"
                   ].map((t, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <div className="w-5 h-5 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">

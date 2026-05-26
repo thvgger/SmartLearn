@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@iconify/react";
-import { cn } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 
 interface Exam {
   id: string;
@@ -56,6 +56,7 @@ function getStatusConfig(status: string) {
 export default function ExamsPage() {
   const [exams, setExams] = useState<Exam[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -64,14 +65,17 @@ export default function ExamsPage() {
   const [totalQuestions, setTotalQuestions] = useState(0);
 
   const fetchExams = useCallback(async () => {
+    setLoading(true);
+    setError("");
     try {
       const res = await fetch("/api/exams");
-      if (res.ok) {
-        const data = await res.json();
-        setExams(data.exams || []);
+      if (!res.ok) {
+        throw res;
       }
-    } catch {
-      // silent
+      const data = await res.json();
+      setExams(data.exams || []);
+    } catch (err) {
+      setError(await getErrorMessage(err, "Failed to load exams."));
     } finally {
       setLoading(false);
     }
@@ -80,11 +84,12 @@ export default function ExamsPage() {
   const fetchQuestionCounts = useCallback(async () => {
     try {
       const res = await fetch("/api/questions?counts=true");
-      if (res.ok) {
-        const data = await res.json();
-        setQuestionCounts(data.counts || []);
-        setTotalQuestions(data.total || 0);
+      if (!res.ok) {
+        throw res;
       }
+      const data = await res.json();
+      setQuestionCounts(data.counts || []);
+      setTotalQuestions(data.total || 0);
     } catch {
       // silent
     }
@@ -118,6 +123,16 @@ export default function ExamsPage() {
           Create New Exam
         </Button>
       </div>
+
+      {error && (
+        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-bold flex items-center gap-3">
+          <Icon icon="ri:error-warning-fill" className="w-4 h-4 shrink-0" />
+          <span className="flex-1">{error}</span>
+          <Button size="sm" variant="ghost" onClick={() => { fetchExams(); fetchQuestionCounts(); }} className="text-red-400 hover:text-red-300 hover:bg-red-500/10 h-8 px-3 border-none cursor-pointer">
+            Retry
+          </Button>
+        </div>
+      )}
 
       {/* Search & Filter */}
       <Card className="bg-zinc-900 border-white/10 rounded-xl p-4">

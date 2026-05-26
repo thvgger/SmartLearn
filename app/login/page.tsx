@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 
+import { getErrorMessage } from "@/lib/utils";
+
 export default function LoginPage() {
   const router = useRouter();
   const { refreshUser } = useAuth();
@@ -32,15 +34,14 @@ export default function LoginPage() {
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to log in");
+        throw res;
       }
 
       await refreshUser();
       router.push("/dashboard");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      setError(err.message);
+      setError(await getErrorMessage(err, "Failed to log in. Please check your credentials."));
     } finally {
       setLoading(false);
     }

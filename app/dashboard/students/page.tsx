@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Icon } from "@iconify/react";
-import { cn } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 
 interface Student {
   id: string;
@@ -35,18 +35,22 @@ interface Student {
 export default function StudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [selectedClass, setSelectedClass] = useState("All");
 
   const fetchStudents = useCallback(async () => {
+    setLoading(true);
+    setError("");
     try {
       const res = await fetch("/api/students");
-      if (res.ok) {
-        const data = await res.json();
-        setStudents(data.students || []);
+      if (!res.ok) {
+        throw res;
       }
-    } catch {
-      // silent
+      const data = await res.json();
+      setStudents(data.students || []);
+    } catch (err) {
+      setError(await getErrorMessage(err, "Failed to load students. Please try again."));
     } finally {
       setLoading(false);
     }
@@ -90,7 +94,15 @@ export default function StudentsPage() {
           <Icon icon="ri:user-line-plus" className="w-4 h-4 mr-2" />
           Add New Student
         </Button>
-      </div>
+      {error && (
+        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-bold flex items-center gap-3">
+          <Icon icon="ri:error-warning-fill" className="w-4 h-4 shrink-0" />
+          <span className="flex-1">{error}</span>
+          <Button size="sm" variant="ghost" onClick={fetchStudents} className="text-red-400 hover:text-red-300 hover:bg-red-500/10 h-8 px-3 border-none">
+            Retry
+          </Button>
+        </div>
+      )}
 
       {/* Search & Filter */}
       <Card className="bg-zinc-900 border-white/10 rounded-xl p-4">
