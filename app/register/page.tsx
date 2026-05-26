@@ -27,19 +27,20 @@ export default function RegisterPage() {
 
   // Form Data
   const [formData, setFormData] = useState({
-    school_name: "",
-    school_tag: "",
-    contact_name: "",
     email: "",
-    phone: "",
     password: "",
-    role: "",
-    other_role: "",
+    contact_name: "",
+    role_title: "",
+    phone: "",
+    school_name: "",
+    school_size: "",
+    country: "",
+    referral: "",
     otp: "",
   });
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const updateForm = (key: keyof typeof formData, value: string) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
   const nextStep = () => {
