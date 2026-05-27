@@ -18,6 +18,7 @@ declare global {
 
 export default function PricingPage() {
   const [isYearly, setIsYearly] = useState(false);
+  const [autoRenew, setAutoRenew] = useState(true);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
   async function handlePayment(planKey: string) {
@@ -28,7 +29,7 @@ export default function PricingPage() {
       const response = await fetch("/api/payment/initiate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: actualPlan })
+        body: JSON.stringify({ plan: actualPlan, autoRenew })
       });
 
       if (response.status === 401) {
@@ -113,15 +114,26 @@ export default function PricingPage() {
         </header>
 
         {/* Toggle Switch */}
-        <div className="flex justify-center items-center gap-6 mb-20">
-          <span className={`text-sm font-bold transition-colors ${!isYearly ? "text-white" : "text-zinc-500"}`}>Monthly</span>
-          <Switch 
-            checked={isYearly} 
-            onCheckedChange={setIsYearly}
-            className="data-[state=checked]:bg-indigo-600"
-          />
-          <span className={`text-sm font-bold transition-colors ${isYearly ? "text-white" : "text-zinc-500"}`}>Yearly</span>
-          <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 font-black text-[10px]">SAVE 25%</Badge>
+        <div className="flex flex-col items-center gap-6 mb-20 animate-fade-in-up">
+          <div className="flex justify-center items-center gap-6">
+            <span className={`text-sm font-bold transition-colors ${!isYearly ? "text-white" : "text-zinc-500"}`}>Monthly</span>
+            <Switch 
+              checked={isYearly} 
+              onCheckedChange={setIsYearly}
+              className="data-[state=checked]:bg-indigo-600"
+            />
+            <span className={`text-sm font-bold transition-colors ${isYearly ? "text-white" : "text-zinc-500"}`}>Yearly</span>
+            <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 font-black text-[10px]">SAVE 25%</Badge>
+          </div>
+          
+          <div className="flex items-center gap-3 bg-zinc-900/50 border border-white/5 px-5 py-2.5 rounded-full">
+            <Switch 
+              checked={autoRenew} 
+              onCheckedChange={setAutoRenew}
+              className="data-[state=checked]:bg-indigo-600"
+            />
+            <span className="text-sm font-bold text-zinc-300">Auto-renew subscription</span>
+          </div>
         </div>
 
         {/* Pricing Grid */}

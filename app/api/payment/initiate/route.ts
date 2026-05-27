@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json().catch(() => ({}));
-        const { plan } = body;
+        const { plan, autoRenew } = body;
 
         if (!plan || PRICES[plan] === undefined) {
             console.error("[Payment] Invalid plan:", plan);
@@ -50,6 +50,7 @@ export async function POST(req: NextRequest) {
                 amount,
                 plan,
                 reference,
+                auto_renew: !!autoRenew,
                 status: "pending"
             }
         });

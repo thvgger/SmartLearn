@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/billing/auto-debit",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}

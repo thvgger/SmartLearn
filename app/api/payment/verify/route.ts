@@ -59,6 +59,7 @@ export async function POST(req: NextRequest) {
             }
 
             console.log("[Payment Verify] Updating subscription to expire at:", expiresAt);
+            const mandateId = verificationData.mandateId || null;
 
             await prisma.subscription.upsert({
                 where: { user_id: transaction.user_id },
@@ -66,14 +67,20 @@ export async function POST(req: NextRequest) {
                     plan: transaction.plan,
                     status: "active",
                     starts_at: now,
-                    expires_at: expiresAt
+                    expires_at: expiresAt,
+                    auto_renew: transaction.auto_renew,
+                    remita_mandate_id: mandateId,
+                    remita_token: rrr
                 },
                 create: {
                     user_id: transaction.user_id,
                     plan: transaction.plan,
                     status: "active",
                     starts_at: now,
-                    expires_at: expiresAt
+                    expires_at: expiresAt,
+                    auto_renew: transaction.auto_renew,
+                    remita_mandate_id: mandateId,
+                    remita_token: rrr
                 }
             });
 
