@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -80,85 +81,11 @@ export default function SettingsPage() {
     fetchBackups();
   }, [fetchBackups]);
 
+  const router = useRouter();
+
   async function handleSubscribe(plan: string) {
-    setActionLoading("subscribe");
-    try {
-      const selectedPlan = isYearly ? `${plan}_yearly` : plan;
-      const res = await fetch("/api/payment/initiate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: selectedPlan }),
-      });
-      
-      if (!res.ok) {
-        throw res;
-      }
-      
-      const data = await res.json();
-
-      const { remitaParams, reference, rrr } = data;
-
-      const paymentEngine = window.RmPaymentEngine.init({
-        key: process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY || "REVUVE9GR098NDY3OTE3OTd8YjU3M2IzYmI0OTU0YmNjYThhMGVkMjk0YThhNWRkYjI0OTZlNjA5MGRhZjI5ZTY5ZWY3YzU3YmI2M2Q1YjA5YTZlYzYyNjAyZWRlYjVjZDg2YmU1YjZlZTA2YzA4YmU1ZjkxYTQ0MTFkYjU1ZDBiZGE0Y2E5ZTEwOTBkYWY=",
-        processRrr: !!rrr,
-        rrr: rrr || undefined,
-        transactionId: reference,
-        firstName: remitaParams.firstName,
-        lastName: remitaParams.lastName,
-        email: remitaParams.email,
-        amount: remitaParams.amount,
-        customerId: remitaParams.email,
-        narration: remitaParams.narration,
-        extendedData: {
-          customFields: [
-            { name: "RRR", value: rrr || "" }
-          ]
-        },
-        onSuccess: async function (response: any) {
-          console.log('Payment Success:', response);
-          // Verify on backend
-          const verifyRes = await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
-              rrr: response.paymentReference || response.rrr, 
-              reference 
-            }),
-          });
-          
-          if (verifyRes.ok) {
-            alert("Payment successful! Your subscription is now active.");
-            window.location.reload();
-          } else {
-            const errMsg = await getErrorMessage(verifyRes, "Payment verification failed.");
-            alert(errMsg);
-          }
-        },
-        onError: function (response: any) {
-          console.error('Payment Error:', response);
-          alert("Payment failed or closed.");
-          setActionLoading("");
-        },
-        onClose: function () {
-          console.log('Payment Closed');
-          setActionLoading("");
-        }
-      });
-
-      paymentEngine.showPaymentWidget({
-        ...remitaParams
-      });
-
-    } catch (err) {
-      console.error("Subscription error:", err);
-      const errMsg = await getErrorMessage(err, "An unexpected error occurred.");
-      alert(errMsg);
-    } finally {
-      setActionLoading("");
-    }
+    router.push(`/checkout?plan=${plan}&yearly=${isYearly}`);
   }
-
-
 
   async function handleRestoreBackup(id: string) {
     if (!confirm("This will overwrite your current dashboard data (Students, Exams, Questions) with the data from this backup. Continue?")) return;
@@ -413,9 +340,9 @@ export default function SettingsPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                     {[
                       { id: "free", name: "Free", price: 0, students: "15" },
-                      { id: "starter", name: "Starter", price: 10000, students: "100" },
-                      { id: "school", name: "School", price: 20000, students: "500", popular: true },
-                      { id: "enterprise", name: "Enterprise", price: 33333, students: "Unlimited" },
+                      { id: "starter", name: "Starter", price: 1500, students: "100" },
+                      { id: "school", name: "School", price: 3000, students: "500", popular: true },
+                      { id: "enterprise", name: "Enterprise", price: 5000, students: "Unlimited" },
                     ].map((p) => {
                       const planId = isYearly ? `${p.id}_yearly` : p.id;
                       const isCurrent = sub?.plan === planId;
@@ -483,9 +410,9 @@ export default function SettingsPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                 {[
                   { id: "free", name: "Free", price: 0, students: "15" },
-                  { id: "starter", name: "Starter", price: 10000, students: "100" },
-                  { id: "school", name: "School", price: 20000, students: "500", popular: true },
-                  { id: "enterprise", name: "Enterprise", price: 33333, students: "Unlimited" },
+                  { id: "starter", name: "Starter", price: 1500, students: "100" },
+                  { id: "school", name: "School", price: 3000, students: "500", popular: true },
+                  { id: "enterprise", name: "Enterprise", price: 5000, students: "Unlimited" },
                 ].map((p) => {
                   const displayPrice = isYearly ? Math.round(p.price * 0.75) : p.price;
                   return (
