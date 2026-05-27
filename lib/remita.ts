@@ -132,7 +132,8 @@ export async function verifyRemitaPayment(transactionId: string) {
     const rawData = `${transactionId}${REMITA_API_KEY}${REMITA_MERCHANT_ID}`;
     const hash = crypto.createHash("sha512").update(rawData).digest("hex");
 
-    const url = `${REMITA_BASE_URL_V1}/remita/ecomm/${REMITA_MERCHANT_ID}/${transactionId}/${hash}/status.reg`;
+    const gatewayUrl = getEnv("REMITA_GATEWAY_URL", "https://demo.remita.net/remita/exapp/api/v1/send/api");
+    const url = `${gatewayUrl}/echannelsvc/${REMITA_MERCHANT_ID}/${transactionId}/${hash}/status.reg`;
 
     console.log("[Remita] Verifying payment (Legacy API):", url);
 
@@ -145,7 +146,15 @@ export async function verifyRemitaPayment(transactionId: string) {
             }
         });
 
-        const data = await response.json();
+        const text = await response.text();
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error("[Remita] Non-JSON response received:", text.substring(0, 200));
+            throw new Error("Invalid response from Remita status endpoint");
+        }
+
         console.log("[Remita] Verification Response:", data);
         
         // Remita legacy status.reg returns status "00" or "01" for success
