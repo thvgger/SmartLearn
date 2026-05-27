@@ -45,7 +45,6 @@ model Transaction {
     rrr             String?  @unique // Remita Retrieval Reference
     status          String   @default("pending") // pending, success, failed
     payment_method  String?
-    auto_renew      Boolean  @default(false)
     created_at      DateTime @default(now())
     updated_at      DateTime @updatedAt
 
@@ -60,14 +59,11 @@ model Subscription {
     id         String    @id @default(cuid())
     user_id    String    @unique
     plan       String    @default("free") // free, basic, premium
-    status            String    @default("inactive") // active, inactive, expired
-    starts_at         DateTime?
-    expires_at        DateTime?
-    auto_renew        Boolean   @default(false)
-    remita_mandate_id String?
-    remita_token      String?
-    created_at        DateTime  @default(now())
-    updated_at        DateTime  @updatedAt
+    status     String    @default("inactive") // active, inactive, expired
+    starts_at  DateTime?
+    expires_at DateTime?
+    created_at DateTime  @default(now())
+    updated_at DateTime  @updatedAt
 
     user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

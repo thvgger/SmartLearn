@@ -129,41 +129,36 @@ export async function generateRRR(params: RemitaPaymentParams) {
 }
 
 export async function verifyRemitaPayment(transactionId: string) {
-    const rawData = `${transactionId}${REMITA_API_KEY}${REMITA_MERCHANT_ID}`;
+    const secretKey = REMITA_SECRET_KEY || REMITA_API_KEY;
+    const rawData = `${transactionId}${secretKey}`;
     const hash = crypto.createHash("sha512").update(rawData).digest("hex");
 
-    const gatewayUrl = getEnv("REMITA_GATEWAY_URL", "https://demo.remita.net/remita/exapp/api/v1/send/api");
-    const url = `${gatewayUrl}/echannelsvc/${REMITA_MERCHANT_ID}/${transactionId}/${hash}/status.reg`;
+    const url = `${REMITA_BASE_URL}/payment/v1/payment/query/${transactionId}`;
 
-    console.log("[Remita] Verifying payment (Legacy API):", url);
+    console.log("[Remita] Verifying payment (Modern API):", url);
+    console.log("[Remita] Hashing string used:", `${transactionId}***`);
 
     try {
         const response = await fetch(url, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Accept": "application/json",
+                "publicKey": REMITA_PUBLIC_KEY || "",
+                "TXN_HASH": hash,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             }
         });
 
-        const text = await response.text();
-        let data;
-        try {
-            data = JSON.parse(text);
-        } catch (e) {
-            console.error("[Remita] Non-JSON response received:", text.substring(0, 200));
-            throw new Error("Invalid response from Remita status endpoint");
-        }
-
+        const data = await response.json();
         console.log("[Remita] Verification Response:", data);
         
-        // Remita legacy status.reg returns status "00" or "01" for success
-        const isSuccess = data.status === "00" || data.status === "01";
+        const isSuccess = data.responseCode === "00" || data.responseCode === "01";
         
         return {
             ...data,
-            status: isSuccess ? "00" : data.status,
-            message: data.message
+            status: isSuccess ? "00" : data.responseCode,
+            message: data.responseMsg
         };
     } catch (error) {
         console.error("Remita verification error:", error);

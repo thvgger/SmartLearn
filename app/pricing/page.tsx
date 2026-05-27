@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Icon } from "@iconify/react";
@@ -18,82 +19,12 @@ declare global {
 
 export default function PricingPage() {
   const [isYearly, setIsYearly] = useState(false);
-  const [autoRenew, setAutoRenew] = useState(true);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const router = useRouter();
 
-  async function handlePayment(planKey: string) {
+  function handlePayment(planKey: string) {
     setLoadingPlan(planKey);
-    try {
-      const actualPlan = isYearly ? `${planKey}_yearly` : planKey;
-      
-      const response = await fetch("/api/payment/initiate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: actualPlan, autoRenew })
-      });
-
-      if (response.status === 401) {
-        window.location.href = "/login?callback=/pricing";
-        return;
-      }
-
-      const data = await response.json();
-      if (!data.success) {
-        alert(data.error || "Failed to initiate payment");
-        setLoadingPlan(null);
-        return;
-      }
-
-      const { remitaParams, reference, rrr } = data;
-
-      const paymentEngine = window.RmPaymentEngine.init({
-        key: process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY || "REVUVE9GR098NDY3OTE3OTd8YjU3M2IzYmI0OTU0YmNjYThhMGVkMjk0YThhNWRkYjI0OTZlNjA5MGRhZjI5ZTY5ZWY3YzU3YmI2M2Q1YjA5YTZlYzYyNjAyZWRlYjVjZDg2YmU1YjZlZTA2YzA4YmU1ZjkxYTQ0MTFkYjU1ZDBiZGE0Y2E5ZTEwOTBkYWY=", // Demo key
-        processRrr: rrr ? false : true,
-        transactionId: reference,
-        firstName: remitaParams.firstName,
-        lastName: remitaParams.lastName,
-        email: remitaParams.email,
-        amount: remitaParams.amount,
-        customerId: remitaParams.email,
-        narration: remitaParams.narration,
-        extendedData: {
-          customFields: [
-            { name: "RRR", value: rrr || "" }
-          ]
-        },
-        onSuccess: async function (response: any) {
-          const verifyRes = await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              rrr: response.paymentReference || response.rrr,
-              reference: reference
-            })
-          });
-          const verifyData = await verifyRes.json();
-          if (verifyData.success) {
-            window.location.href = "/dashboard?payment=success";
-          } else {
-            alert("Payment verification failed: " + verifyData.message);
-          }
-        },
-        onError: function () {
-          alert("Payment failed or closed");
-          setLoadingPlan(null);
-        },
-        onClose: function () {
-          setLoadingPlan(null);
-        }
-      });
-
-      paymentEngine.showPaymentWidget({
-        ...remitaParams
-      });
-
-    } catch {
-      alert("An unexpected error occurred");
-      setLoadingPlan(null);
-    }
+    router.push(`/checkout?plan=${planKey}&yearly=${isYearly}`);
   }
 
   return (
@@ -114,26 +45,15 @@ export default function PricingPage() {
         </header>
 
         {/* Toggle Switch */}
-        <div className="flex flex-col items-center gap-6 mb-20 animate-fade-in-up">
-          <div className="flex justify-center items-center gap-6">
-            <span className={`text-sm font-bold transition-colors ${!isYearly ? "text-white" : "text-zinc-500"}`}>Monthly</span>
-            <Switch 
-              checked={isYearly} 
-              onCheckedChange={setIsYearly}
-              className="data-[state=checked]:bg-indigo-600"
-            />
-            <span className={`text-sm font-bold transition-colors ${isYearly ? "text-white" : "text-zinc-500"}`}>Yearly</span>
-            <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 font-black text-[10px]">SAVE 25%</Badge>
-          </div>
-          
-          <div className="flex items-center gap-3 bg-zinc-900/50 border border-white/5 px-5 py-2.5 rounded-full">
-            <Switch 
-              checked={autoRenew} 
-              onCheckedChange={setAutoRenew}
-              className="data-[state=checked]:bg-indigo-600"
-            />
-            <span className="text-sm font-bold text-zinc-300">Auto-renew subscription</span>
-          </div>
+        <div className="flex justify-center items-center gap-6 mb-20">
+          <span className={`text-sm font-bold transition-colors ${!isYearly ? "text-white" : "text-zinc-500"}`}>Monthly</span>
+          <Switch 
+            checked={isYearly} 
+            onCheckedChange={setIsYearly}
+            className="data-[state=checked]:bg-indigo-600"
+          />
+          <span className={`text-sm font-bold transition-colors ${isYearly ? "text-white" : "text-zinc-500"}`}>Yearly</span>
+          <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 font-black text-[10px]">SAVE 25%</Badge>
         </div>
 
         {/* Pricing Grid */}
