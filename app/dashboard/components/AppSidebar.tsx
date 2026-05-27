@@ -103,7 +103,7 @@ export function AppSidebar({ schoolName, plan }: AppSidebarProps) {
         </SidebarGroup>
 
         {/* Small System Widget - only shows when expanded */}
-        <div className="mt-auto pt-8 px-3 pb-2 group-data-[collapsible=icon]:hidden">
+        {/* <div className="mt-auto pt-8 px-3 pb-2 group-data-[collapsible=icon]:hidden">
           <div className="p-4 rounded-xl bg-zinc-900 border border-white/5">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center border border-white/5">
@@ -122,7 +122,7 @@ export function AppSidebar({ schoolName, plan }: AppSidebarProps) {
               <Progress value={32} className="h-1.5 bg-zinc-800" indicatorClassName="bg-indigo-500" />
             </div>
           </div>
-        </div>
+        </div> */}
       </SidebarContent>
 
       <SidebarFooter className="p-4 group-data-[collapsible=icon]:p-2 border-t border-white/5 flex justify-center">

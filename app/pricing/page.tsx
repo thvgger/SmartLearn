@@ -94,10 +94,10 @@ export default function PricingPage() {
             <div className="bg-zinc-800/80 p-8 pb-10 border-b border-white/5 relative">
               <CardTitle className="font-headline text-xl font-bold text-white mb-4">Starter</CardTitle>
               <div>
-                <span className="font-headline text-5xl font-extrabold text-white tracking-tighter">{isYearly ? "₦7.5k" : "₦10k"}</span>
+                <span className="font-headline text-5xl font-extrabold text-white tracking-tighter">{isYearly ? "₦1,250" : "₦1,500"}</span>
                 <span className="text-zinc-400 text-sm font-medium"> / Month</span>
               </div>
-              {isYearly && <p className="absolute bottom-3 left-8 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">₦90k billed annually</p>}
+              {isYearly && <p className="absolute bottom-3 left-8 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">₦15,000 billed annually</p>}
             </div>
             <div className="p-8 flex-grow flex flex-col bg-zinc-900">
               <ul className="space-y-5 mb-8 flex-grow">
@@ -135,10 +135,10 @@ export default function PricingPage() {
                   <Badge className="bg-white/20 text-white hover:bg-white/20 border-none rounded-full px-3 py-0.5 text-[10px] uppercase tracking-wider font-bold">Popular</Badge>
                 </div>
                 <div>
-                  <span className="font-headline text-5xl font-extrabold text-white tracking-tighter">{isYearly ? "₦15k" : "₦20k"}</span>
+                  <span className="font-headline text-5xl font-extrabold text-white tracking-tighter">{isYearly ? "₦2,500" : "₦3,000"}</span>
                   <span className="text-indigo-200 text-sm font-medium"> / Month</span>
                 </div>
-                {isYearly && <p className="absolute bottom-3 left-8 text-[10px] text-indigo-200 font-bold uppercase tracking-widest">₦180k billed annually</p>}
+                {isYearly && <p className="absolute bottom-3 left-8 text-[10px] text-indigo-200 font-bold uppercase tracking-widest">₦30,000 billed annually</p>}
               </div>
               <div className="p-8 flex-grow flex flex-col bg-zinc-900">
                 <ul className="space-y-5 mb-8 flex-grow">
@@ -172,10 +172,10 @@ export default function PricingPage() {
             <div className="bg-zinc-800/80 p-8 pb-10 border-b border-white/5 relative">
               <CardTitle className="font-headline text-xl font-bold text-white mb-4">Enterprise</CardTitle>
               <div>
-                <span className="font-headline text-5xl font-extrabold text-white tracking-tighter">{isYearly ? "₦25k+" : "₦33k+"}</span>
+                <span className="font-headline text-5xl font-extrabold text-white tracking-tighter">{isYearly ? "₦4,166" : "₦5,000"}</span>
                 <span className="text-zinc-400 text-sm font-medium"> / Month</span>
               </div>
-              {isYearly && <p className="absolute bottom-3 left-8 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Custom billing</p>}
+              {isYearly && <p className="absolute bottom-3 left-8 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">₦50,000 billed annually</p>}
             </div>
             <div className="p-8 flex-grow flex flex-col bg-zinc-900">
               <ul className="space-y-5 mb-8 flex-grow">

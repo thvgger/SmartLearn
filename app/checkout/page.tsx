@@ -15,9 +15,9 @@ declare global {
 }
 
 const PLANS: Record<string, { name: string; monthlyPrice: number; yearlyPrice: number; description: string }> = {
-  starter: { name: "Starter", monthlyPrice: 10000, yearlyPrice: 90000, description: "Perfect for growing schools with up to 100 students." },
-  school: { name: "School", monthlyPrice: 20000, yearlyPrice: 180000, description: "Our most popular plan for established schools with up to 500 students." },
-  enterprise: { name: "Enterprise", monthlyPrice: 33000, yearlyPrice: 396000, description: "Custom data retention and unlimited students for large organizations." },
+  starter: { name: "Starter", monthlyPrice: 1500, yearlyPrice: 15000, description: "Perfect for growing schools with up to 100 students." },
+  school: { name: "School", monthlyPrice: 3000, yearlyPrice: 30000, description: "Our most popular plan for established schools with up to 500 students." },
+  enterprise: { name: "Enterprise", monthlyPrice: 5000, yearlyPrice: 50000, description: "Custom data retention and unlimited students for large organizations." },
 };
 
 function CheckoutContent() {
