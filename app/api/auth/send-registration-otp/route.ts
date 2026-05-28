@@ -11,13 +11,31 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    // Check if user already exists
+    // Check if an account with this email already exists
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
       return NextResponse.json(
         { error: "An account with this email already exists" },
         { status: 409 }
       );
+    }
+
+    // Rate limit: check if a token was sent recently (last 60s)
+    const lastToken = await prisma.verificationToken.findFirst({
+      where: { identifier: email, type: "REGISTER" },
+      orderBy: { expires: "desc" },
+    });
+
+    if (lastToken) {
+      const now = Date.now();
+      const expiresAt = lastToken.expires.getTime();
+      // Tokens are valid for 15 mins. If it expires in > 14 mins, it was sent < 60s ago.
+      if (expiresAt - now > 14 * 60 * 1000) {
+        return NextResponse.json(
+          { error: "Please wait a minute before requesting another code" },
+          { status: 429 }
+        );
+      }
     }
 
     // Generate 6-digit OTP

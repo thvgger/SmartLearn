@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -22,6 +22,8 @@ export default function RegisterPage() {
   
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
   const [error, setError] = useState("");
   const [roleSelection, setRoleSelection] = useState("");
 
@@ -45,7 +47,45 @@ export default function RegisterPage() {
 
   const nextStep = () => {
     setError("");
-    setStep((s) => Math.min(s + 1, 4));
+    setStep((s) => {
+      const next = Math.min(s + 1, 4);
+      if (next === 4) setResendTimer(60);
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (resendTimer > 0) {
+      interval = setInterval(() => {
+        setResendTimer((t) => t - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [resendTimer]);
+
+  const handleResendOTP = async () => {
+    if (resendTimer > 0 || resendLoading) return;
+    
+    setResendLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/auth/send-registration-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email, name: formData.contact_name }),
+      });
+
+      if (!res.ok) throw res;
+      
+      setResendTimer(60);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError(await getErrorMessage(err, "Failed to resend code"));
+    } finally {
+      setResendLoading(false);
+    }
   };
   
   const prevStep = () => {
@@ -300,6 +340,23 @@ export default function RegisterPage() {
                       </div>
                       <div className="max-w-[200px] mx-auto mt-6">
                         <Input className="w-full bg-white/[0.03] border-white/10 hover:border-white/20 rounded-xl py-6 text-center text-2xl tracking-[0.5em] font-mono text-white placeholder:opacity-0 focus-visible:ring-indigo-500/50" placeholder="123456" maxLength={6} inputMode="numeric" pattern="[0-9]*" autoComplete="one-time-code" value={formData.otp} onChange={(e) => updateForm("otp", e.target.value)} required />
+                      </div>
+                      <div className="mt-6 text-xs font-medium">
+                        <p className="text-zinc-500">
+                          Didn't receive the code?{" "}
+                          {resendTimer > 0 ? (
+                            <span className="text-zinc-400">Resend in {resendTimer}s</span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={handleResendOTP}
+                              disabled={resendLoading}
+                              className="text-white hover:underline cursor-pointer disabled:opacity-50 font-bold"
+                            >
+                              {resendLoading ? "Sending..." : "Resend Code"}
+                            </button>
+                          )}
+                        </p>
                       </div>
                     </motion.div>
                   )}
