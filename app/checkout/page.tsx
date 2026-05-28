@@ -229,7 +229,11 @@ function CheckoutContent() {
                   </div>
                   <div className="flex items-center gap-1.5 text-[10px] text-zinc-600 uppercase tracking-widest font-black mt-2">
                     <span>Secured By</span>
-                    <span className="font-extrabold text-orange-500 tracking-tight flex items-center bg-gradient-to-r from-red-600 to-orange-500 px-2 py-0.5 rounded text-[9px] font-black text-white ml-1">remita</span>
+                    <img 
+                      src="https://cdn.brandfetch.io/idXGt7uGXJ/w/820/h/229/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1777908111401" 
+                      alt="Remita" 
+                      className="h-3.5 w-auto ml-1.5 opacity-80"
+                    />
                   </div>
                 </div>
 
