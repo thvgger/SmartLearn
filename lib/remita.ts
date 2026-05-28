@@ -9,7 +9,7 @@ const getEnv = (key: string, defaultValue: string = "") => {
 
 const IS_PRODUCTION = getEnv("NEXT_PUBLIC_REMITA_ENV") === "production";
 const REMITA_BASE_URL = IS_PRODUCTION ? "https://api.remita.net" : "https://remitademo.net";
-const REMITA_BASE_URL_V1 = IS_PRODUCTION ? "https://remita.net" : "https://remitademo.net";
+const REMITA_BASE_URL_V1 = IS_PRODUCTION ? "https://remita.net" : "https://demo.remita.net";
 
 const REMITA_MERCHANT_ID = getEnv("REMITA_MERCHANT_ID");
 const REMITA_API_KEY = getEnv("REMITA_API_KEY");
