@@ -33,12 +33,24 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: true, message: "Already verified" });
         }
 
-        // Modern API uses transactionId (reference) for verification
-        const verificationData = await verifyRemitaPayment(reference);
-        console.log("[Payment Verify] Remita raw verification response:", JSON.stringify(verificationData, null, 2));
+        // Prefer verifying with RRR if available, as some payment methods index by RRR
+        const verificationId = rrr || reference;
+        console.log(`[Payment Verify] Attempting verification with ID: ${verificationId}`);
         
-        // Remita success code is "00" for success in modern API
-        const isSuccess = verificationData.status === "00";
+        let verificationData = await verifyRemitaPayment(verificationId);
+        console.log("[Payment Verify] Remita verification response:", JSON.stringify(verificationData, null, 2));
+        
+        // If RRR verification failed with hashing error, try with reference as a fallback
+        if (!verificationData.status || verificationData.status === "34") {
+            if (rrr && verificationId !== reference) {
+                console.log("[Payment Verify] RRR verification failed/hashing error. Trying reference fallback...");
+                verificationData = await verifyRemitaPayment(reference);
+                console.log("[Payment Verify] Reference fallback response:", JSON.stringify(verificationData, null, 2));
+            }
+        }
+        
+        // Remita success code is "00" or "01" for success in modern API
+        const isSuccess = verificationData.status === "00" || verificationData.status === "01";
 
         if (isSuccess) {
             console.log("[Payment Verify] Verification SUCCESS!");

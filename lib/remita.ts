@@ -3,8 +3,8 @@ import crypto from "crypto";
 const getEnv = (key: string, defaultValue: string = "") => {
     const value = process.env[key];
     if (!value) return defaultValue;
-    // Strip leading/trailing quotes that might be in the .env file
-    return value.replace(/^['"]|['"]$/g, "");
+    // Strip leading/trailing quotes that might be in the .env file and trim whitespace
+    return value.replace(/^['"]|['"]$/g, "").trim();
 };
 
 const IS_PRODUCTION = getEnv("NEXT_PUBLIC_REMITA_ENV") === "production";
