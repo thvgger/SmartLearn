@@ -73,54 +73,20 @@ export default function Navbar() {
               {loading ? (
                 <div className="w-20 h-8 bg-white/5 animate-pulse rounded-lg" />
               ) : user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="flex items-center gap-2 p-1.5 pl-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all group outline-none">
-                      <div className="hidden sm:block text-right mr-1">
-                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">Signed in as</p>
-                        <p className="text-xs font-bold text-white leading-none">{user.contact_name.split(' ')[0]}</p>
-                      </div>
-                      <Avatar className="w-8 h-8 border-none ring-offset-background group-hover:scale-105 transition-transform shadow-lg shadow-indigo-500/20">
-                        <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-[10px] font-bold border-none">
-                          {initials}
-                        </AvatarFallback>
-                      </Avatar>
-                      <Icon icon="ri:arrow-down-s-line" className="w-4 h-4 text-slate-400 transition-transform duration-300 group-aria-expanded:rotate-180" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56 mt-2 bg-zinc-900/95 backdrop-blur-xl border-white/10 rounded-xl" align="end">
-                    <DropdownMenuGroup>
-                      <DropdownMenuLabel className="font-normal p-4">
-                        <div className="flex flex-col space-y-1">
-                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Institution</p>
-                          <p className="text-sm font-bold text-white truncate">{user.school_name}</p>
-                          <p className="text-[11px] text-slate-400 truncate mt-0.5">{user.email}</p>
-                        </div>
-                      </DropdownMenuLabel>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator className="bg-white/5" />
-                    <DropdownMenuItem 
-                      onClick={() => router.push("/dashboard")}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-slate-300 hover:text-white transition-colors cursor-pointer"
-                    >
-                      <Icon icon="ri:dashboard-line" className="w-4 h-4 text-indigo-400" />
-                      Go to Dashboard
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      onClick={() => router.push("/dashboard/settings")}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-slate-300 hover:text-white transition-colors cursor-pointer"
-                    >
-                      <Icon icon="ri:user-line" className="w-4 h-4 text-indigo-400" />
-                      Account Settings
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="bg-white/5" />
-                    <DropdownMenuItem 
-                      onClick={handleLogout}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-red-400 hover:text-red-300 focus:text-red-300 focus:bg-red-400/10 transition-colors cursor-pointer"
-                    >
-                      <Icon icon="ri:logout-box-r-line" className="w-4 h-4" />
-                      Sign Out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Link 
+                  href="/dashboard"
+                  className="flex items-center gap-2 p-1.5 pl-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all group outline-none"
+                >
+                  <div className="hidden sm:block text-right mr-1">
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">Signed in as</p>
+                    <p className="text-xs font-bold text-white leading-none">{user.contact_name.split(' ')[0]}</p>
+                  </div>
+                  <Avatar className="w-8 h-8 border-none ring-offset-background group-hover:scale-105 transition-transform shadow-lg shadow-indigo-500/20">
+                    <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-[10px] font-bold border-none">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                </Link>
               ) : (
                 <>
                   <Link href="/login" className="text-sm font-bold text-slate-400 hover:text-white transition-colors">

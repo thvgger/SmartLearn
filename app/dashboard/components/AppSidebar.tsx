@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
+import { useAuth } from "@/lib/AuthContext";
 import {
   Sidebar,
   SidebarContent,
@@ -40,6 +41,13 @@ interface AppSidebarProps {
 
 export function AppSidebar({ schoolName, plan }: AppSidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  async function handleLogout() {
+    await logout();
+    router.push("/login");
+  }
 
   return (
     <Sidebar collapsible="icon" className="border-r border-white/5 bg-zinc-950">
@@ -159,7 +167,10 @@ export function AppSidebar({ schoolName, plan }: AppSidebarProps) {
                   <span className="font-medium text-sm">Billing & Plan</span>
                 </DropdownMenuItem>
                 <div className="h-px bg-white/5 my-1 mx-2" />
-                <DropdownMenuItem className="text-red-400 hover:text-red-300 focus:bg-red-500/10 focus:text-red-300 cursor-pointer rounded-lg px-3 py-2">
+                <DropdownMenuItem 
+                  onClick={handleLogout}
+                  className="text-red-400 hover:text-red-300 focus:bg-red-500/10 focus:text-red-300 cursor-pointer rounded-lg px-3 py-2"
+                >
                   <Icon icon="ri:logout-circle-r-line" className="w-4 h-4 mr-2" />
                   <span className="font-medium text-sm">Sign Out</span>
                 </DropdownMenuItem>
