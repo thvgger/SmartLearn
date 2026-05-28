@@ -115,22 +115,22 @@ export async function sendPaymentReceipt(email: string, details: ReceiptDetails)
             <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
               <tr>
                 <td style="padding: 8px 0; color: #78716c; font-weight: 500;">Plan Activated</td>
-                <td style="padding: 8px 0; text-align: right; color: #ffffff; font-weight: bold; text-transform: capitalize;">${details.plan.replace("_", " ")} Plan</td>
+                <td style="padding: 8px 0; text-align: right; color: #78716c; font-weight: bold; text-transform: capitalize;">${details.plan.replace("_", " ")} Plan</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #78716c; font-weight: 500;">Remita RRR</td>
-                <td style="padding: 8px 0; text-align: right; color: #ffffff; font-weight: bold; font-family: monospace;">${details.rrr}</td>
+                <td style="padding: 8px 0; text-align: right; color: #78716c; font-weight: bold; font-family: monospace;">${details.rrr}</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #78716c; font-weight: 500;">Transaction Ref</td>
-                <td style="padding: 8px 0; text-align: right; color: #ffffff; font-family: monospace;">${details.reference}</td>
+                <td style="padding: 8px 0; text-align: right; color: #78716c; font-family: monospace;">${details.reference}</td>
               </tr>
               <tr>
                 <td style="padding: 8px 0; color: #78716c; font-weight: 500;">Date & Time</td>
-                <td style="padding: 8px 0; text-align: right; color: #d6d3d1;">${formattedDate}</td>
+                <td style="padding: 8px 0; text-align: right; color: #78716c;">${formattedDate}</td>
               </tr>
               <tr style="border-top: 1px solid rgba(255,255,255,0.05);">
-                <td style="padding: 15px 0 0; color: #ffffff; font-weight: bold; font-size: 15px;">Total Paid</td>
+                <td style="padding: 15px 0 0; color: #78716c; font-weight: bold; font-size: 15px;">Total Paid</td>
                 <td style="padding: 15px 0 0; text-align: right; color: #6366f1; font-weight: 800; font-size: 18px;">${formattedAmount}</td>
               </tr>
             </table>
