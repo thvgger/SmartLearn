@@ -33,20 +33,21 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: true, message: "Already verified" });
         }
 
-        // Prefer verifying with RRR if available, as some payment methods index by RRR
-        const verificationId = rrr || reference;
-        console.log(`[Payment Verify] Attempting verification with ID: ${verificationId}`);
+        // The inline widget is initialized with `transactionId: reference`, so Remita expects `reference` for the modern API query
+        console.log(`[Payment Verify] Attempting verification with Reference: ${reference}`);
+        let verificationData = await verifyRemitaPayment(reference);
+        console.log("[Payment Verify] Remita verification response (Reference):", JSON.stringify(verificationData, null, 2));
         
-        let verificationData = await verifyRemitaPayment(verificationId);
-        console.log("[Payment Verify] Remita verification response:", JSON.stringify(verificationData, null, 2));
-        
-        // If RRR verification failed with hashing error, try with reference as a fallback
-        if (!verificationData.status || verificationData.status === "34") {
-            if (rrr && verificationId !== reference) {
-                console.log("[Payment Verify] RRR verification failed/hashing error. Trying reference fallback...");
-                verificationData = await verifyRemitaPayment(reference);
-                console.log("[Payment Verify] Reference fallback response:", JSON.stringify(verificationData, null, 2));
-            }
+        // If reference verification failed, try with RRR as a fallback
+        const needsFallback = !verificationData.status || 
+                              verificationData.status === "34" || 
+                              verificationData.status === "99" || 
+                              verificationData.status === "025";
+                              
+        if (needsFallback && rrr && rrr !== reference) {
+            console.log("[Payment Verify] Reference verification failed. Trying RRR fallback...");
+            verificationData = await verifyRemitaPayment(rrr);
+            console.log("[Payment Verify] RRR fallback response:", JSON.stringify(verificationData, null, 2));
         }
         
         // Remita success code is "00" or "01" for success in modern API
