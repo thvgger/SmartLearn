@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     const subscription = license.user.subscription;
     if (
       !subscription ||
-      subscription.status !== "active" ||
+      (subscription.status !== "active" && subscription.plan !== "free") ||
       (subscription.expires_at &&
         new Date(subscription.expires_at) < new Date())
     ) {

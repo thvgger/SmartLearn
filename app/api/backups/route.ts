@@ -24,7 +24,7 @@ async function getLicenseUser(licenseKey: string) {
   const sub = license.user.subscription;
   if (
     !sub ||
-    sub.status !== "active" ||
+    (sub.status !== "active" && sub.plan !== "free") ||
     (sub.expires_at && new Date(sub.expires_at) < new Date())
   ) {
     return null;

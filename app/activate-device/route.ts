@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
 
     if (
       !subscription ||
-      subscription.status !== "active" ||
+      (subscription.status !== "active" && subscription.plan !== "free") ||
       (subscription.expires_at &&
         new Date(subscription.expires_at) < new Date())
     ) {
