@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Send email
-    await sendOTP(email, otp, "RESET_PASSWORD");
+    await sendOTP(email, otp, "RESET_PASSWORD", user.contact_name);
 
     return NextResponse.json({ message: "If an account exists, a reset code was sent" });
   } catch (error) {

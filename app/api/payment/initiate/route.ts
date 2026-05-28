@@ -7,12 +7,12 @@ import crypto from "crypto";
 const PRICES: Record<string, number> = {
     free: 0,
     free_yearly: 0,
-    starter: 10000,
-    starter_yearly: 90000,
-    school: 20000,
-    school_yearly: 180000,
-    enterprise: 33333,
-    enterprise_yearly: 300000
+    starter: 1500,
+    starter_yearly: 15000,
+    school: 3000,
+    school_yearly: 30000,
+    enterprise: 5000,
+    enterprise_yearly: 50000
 };
 
 export async function POST(req: NextRequest) {

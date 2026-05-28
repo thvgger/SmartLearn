@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { verifyRemitaPayment } from "@/lib/remita";
+import { sendPaymentReceipt } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
     try {
@@ -14,9 +15,10 @@ export async function POST(req: NextRequest) {
 
         console.log("[Payment Verify] Verifying:", { rrr, reference });
 
-        // Check if transaction exists
+        // Check if transaction exists and include user details for emailing
         const transaction = await prisma.transaction.findUnique({
-            where: { reference }
+            where: { reference },
+            include: { user: true }
         });
 
         if (!transaction) {
@@ -76,6 +78,24 @@ export async function POST(req: NextRequest) {
                     expires_at: expiresAt
                 }
             });
+
+            // Send beautifully styled receipt to the school admin
+            if (transaction.user) {
+                try {
+                    await sendPaymentReceipt(transaction.user.email, {
+                        contactName: transaction.user.contact_name,
+                        schoolName: transaction.user.school_name,
+                        plan: transaction.plan,
+                        amount: transaction.amount,
+                        reference: transaction.reference,
+                        rrr: rrr || "N/A",
+                        date: now
+                    });
+                    console.log("[Payment Verify] Receipt emailed successfully to:", transaction.user.email);
+                } catch (emailErr) {
+                    console.error("[Payment Verify] Failed to send receipt email:", emailErr);
+                }
+            }
 
             return NextResponse.json({
                 success: true,

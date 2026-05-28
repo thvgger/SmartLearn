@@ -58,6 +58,19 @@ export default function DashboardOverview() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [scoreTrend, setScoreTrend] = useState<ScoreTrendItem[]>([]);
   const [error, setError] = useState("");
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("payment") === "success") {
+        setShowPaymentSuccess(true);
+        // Clean URL to prevent recurring modal on refresh
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+      }
+    }
+  }, []);
 
   const fetchBackups = useCallback(async () => {
     setBackupsLoading(true);
@@ -385,6 +398,54 @@ export default function DashboardOverview() {
           </Card>
         </Link>
       </div>
+
+      {showPaymentSuccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all duration-300">
+          <div className="bg-zinc-900 border border-emerald-500/20 rounded-3xl w-full max-w-md overflow-hidden shadow-[0_0_50px_-10px_rgba(16,185,129,0.3)] animate-in fade-in zoom-in-95 duration-200">
+            {/* Glow */}
+            <div className="bg-emerald-500/10 p-8 text-center border-b border-white/5 relative">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-emerald-500/20 blur-2xl rounded-full"></div>
+              <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-4 text-emerald-400 relative z-10">
+                <Icon icon="ri:checkbox-circle-fill" className="w-10 h-10 animate-bounce" />
+              </div>
+              <h2 className="text-2xl font-extrabold text-white tracking-tight relative z-10">Payment Successful!</h2>
+              <p className="text-emerald-400/80 text-[10px] font-bold uppercase tracking-widest mt-1.5 relative z-10 flex items-center justify-center gap-1">
+                <span>Secured via Remita</span>
+              </p>
+            </div>
+            <div className="p-6 space-y-4">
+              <p className="text-zinc-400 text-sm leading-relaxed text-center">
+                Thank you! Your school subscription has been activated successfully and all premium CBT features have been unlocked.
+              </p>
+              <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4 space-y-3">
+                <div className="flex justify-between text-xs font-medium">
+                  <span className="text-zinc-500">Plan Activated</span>
+                  <span className="text-white font-bold capitalize">{user?.subscription?.plan || "Starter"} Plan</span>
+                </div>
+                <div className="flex justify-between text-xs font-medium">
+                  <span className="text-zinc-500">Status</span>
+                  <span className="text-emerald-400 font-bold">Active</span>
+                </div>
+                {user?.subscription?.expires_at && (
+                  <div className="flex justify-between text-xs font-medium">
+                    <span className="text-zinc-500">Billing Renewal</span>
+                    <span className="text-white font-bold">
+                      {new Date(user.subscription.expires_at).toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
+                      })}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <Button onClick={() => setShowPaymentSuccess(false)} className="w-full h-12 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-600/20 mt-2 cursor-pointer">
+                Go to Dashboard
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

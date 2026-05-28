@@ -54,7 +54,7 @@ export default function DashboardHeader({
               <div className="w-full bg-white/[0.03] border border-white/5 group-hover:border-white/10 rounded-xl py-2 pl-10 pr-4 text-sm text-zinc-500 flex items-center justify-between transition-all">
                 <span>Search for students, exams...</span>
                 <kbd className="hidden lg:inline-flex items-center gap-1 rounded border border-white/10 bg-white/5 px-1.5 font-mono text-[10px] font-medium text-zinc-400">
-                  <span className="text-xs">⌘</span>K
+                  <span className="text-xs">Ctrl</span>K
                 </kbd>
               </div>
             </button>
@@ -85,7 +85,7 @@ export default function DashboardHeader({
                 </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-48 bg-zinc-900 border-white/10" align="end">
+            {/* <DropdownMenuContent className="w-48 bg-zinc-900 border-white/10" align="end">
               <DropdownMenuItem render={<button onClick={() => router.push("/dashboard/settings")} className="w-full text-left cursor-pointer" />}>
                 Settings
               </DropdownMenuItem>
@@ -93,7 +93,7 @@ export default function DashboardHeader({
                 <Icon icon="ri:logout-box-r-line" className="mr-2 h-4 w-4" />
                 <span>Sign out</span>
               </DropdownMenuItem>
-            </DropdownMenuContent>
+            </DropdownMenuContent> */}
           </DropdownMenu>
         </div>
       </header>

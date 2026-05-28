@@ -5,7 +5,7 @@ import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email } = await req.json();
+    const { email, name } = await req.json().catch(() => ({}));
 
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
@@ -38,8 +38,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Send email
-    await sendOTP(email, otp, "REGISTER");
+    // Send email with user's full name if provided
+    await sendOTP(email, otp, "REGISTER", name || "User");
 
     return NextResponse.json({
       message: "Verification email sent",

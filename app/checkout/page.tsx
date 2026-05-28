@@ -70,7 +70,10 @@ function CheckoutContent() {
       const { remitaParams, reference, rrr } = data;
 
       const paymentEngine = window.RmPaymentEngine.init({
-        key: process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY || "REVUVE9GR098NDY3OTE3OTd8YjU3M2IzYmI0OTU0YmNjYThhMGVkMjk0YThhNWRkYjI0OTZlNjA5MGRhZjI5ZTY5ZWY3YzU3YmI2M2Q1YjA5YTZlYzYyNjAyZWRlYjVjZDg2YmU1YjZlZTA2YzA4YmU1ZjkxYTQ0MTFkYjU1ZDBiZGE0Y2E5ZTEwOTBkYWY=", // Demo key
+        key: (process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY || "").replace(/^['"]|['"]$/g, "") || 
+             (process.env.NEXT_PUBLIC_REMITA_ENV === "production" 
+               ? "" 
+               : "REVUVE9GR098NDY3OTE3OTd8YjU3M2IzYmI0OTU0YmNjYThhMGVkMjk0YThhNWRkYjI0OTZlNjA5MGRhZjI5ZTY5ZWY3YzU3YmI2M2Q1YjA5YTZlYzYyNjAyZWRlYjVjZDg2YmU1YjZlZTA2YzA4YmU1ZjkxYTQ0MTFkYjU1ZDBiZGE0Y2E5ZTEwOTBkYWY="),
         processRrr: rrr ? false : true,
         transactionId: reference,
         firstName: remitaParams.firstName,
@@ -219,9 +222,15 @@ function CheckoutContent() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs text-zinc-500 font-medium justify-center py-2">
-                  <Icon icon="ri:lock-fill" className="w-3.5 h-3.5 text-zinc-600" />
-                  Payments are 256-bit encrypted and secure.
+                 <div className="flex flex-col items-center justify-center gap-2 py-1">
+                  <div className="flex items-center gap-2 text-xs text-zinc-500 font-medium">
+                    <Icon icon="ri:lock-fill" className="w-3.5 h-3.5 text-zinc-600" />
+                    Payments are 256-bit encrypted and secure.
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[10px] text-zinc-600 uppercase tracking-widest font-black mt-2">
+                    <span>Secured By</span>
+                    <span className="font-extrabold text-orange-500 tracking-tight flex items-center bg-gradient-to-r from-red-600 to-orange-500 px-2 py-0.5 rounded text-[9px] font-black text-white ml-1">remita</span>
+                  </div>
                 </div>
 
                 {/* Actions */}
