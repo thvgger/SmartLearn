@@ -8,12 +8,12 @@ const getEnv = (key: string, defaultValue: string = "") => {
 };
 
 const IS_PRODUCTION = getEnv("NEXT_PUBLIC_REMITA_ENV") === "production";
-const REMITA_BASE_URL = IS_PRODUCTION ? "https://api.remita.net" : "https://demo.remita.net";
-const REMITA_BASE_URL_V1 = IS_PRODUCTION ? "https://remita.net" : "https://demo.remita.net";
+const REMITA_BASE_URL = IS_PRODUCTION ? "https://api.remita.net" : "https://remitademo.net";
+const REMITA_BASE_URL_V1 = IS_PRODUCTION ? "https://remita.net" : "https://remitademo.net";
 
 const REMITA_MERCHANT_ID = getEnv("REMITA_MERCHANT_ID");
 const REMITA_API_KEY = getEnv("REMITA_API_KEY");
-const REMITA_PUBLIC_KEY = getEnv("NEXT_PUBLIC_REMITA_PUBLIC_KEY");
+const REMITA_PUBLIC_KEY = getEnv("NEXT_PUBLIC_REMITA_PUBLIC_KEY") || (IS_PRODUCTION ? "" : "REVUVE9GR098NDY3OTE3OTd8YjU3M2IzYmI0OTU0YmNjYThhMGVkMjk0YThhNWRkYjI0OTZlNjA5MGRhZjI5ZTY5ZWY3YzU3YmI2M2Q1YjA5YTZlYzYyNjAyZWRlYjVjZDg2YmU1YjZlZTA2YzA4YmU1ZjkxYTQ0MTFkYjU1ZDBiZGE0Y2E5ZTEwOTBkYWY=");
 const REMITA_SERVICE_TYPE_ID = getEnv("REMITA_SERVICE_TYPE_ID");
 const REMITA_SECRET_KEY = getEnv("REMITA_SECRET_KEY");
 
@@ -136,7 +136,9 @@ export async function verifyRemitaPayment(transactionId: string) {
     const url = `${REMITA_BASE_URL}/payment/v1/payment/query/${transactionId}`;
 
     console.log("[Remita] Verifying payment (Modern API):", url);
+    console.log("[Remita] Public Key Used:", REMITA_PUBLIC_KEY ? `${REMITA_PUBLIC_KEY.substring(0, 10)}...` : "MISSING");
     console.log("[Remita] Hashing string used:", `${transactionId}***`);
+    console.log("[Remita] Resulting TXN_HASH:", hash);
 
     try {
         const response = await fetch(url, {

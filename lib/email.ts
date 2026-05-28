@@ -24,11 +24,10 @@ export async function sendOTP(email: string, otp: string, type: "REGISTER" | "RE
         <div style="font-family: sans-serif; max-w-xl; margin: 0 auto; padding: 20px; color: #374151;">
           <h2 style="color: #4f46e5; margin-bottom: 20px;">SwiftLearn</h2>
           <p style="font-size: 15px; margin-bottom: 15px;">Dear <strong>${name}</strong>,</p>
-          <p style="font-size: 14px; line-height: 1.5;">${
-            type === "REGISTER"
-              ? "Thanks for signing up! Please verify your email address to activate your account."
-              : "We received a request to reset the password for your account."
-          }</p>
+          <p style="font-size: 14px; line-height: 1.5;">${type === "REGISTER"
+          ? "Thanks for signing up! Please verify your email address to activate your account."
+          : "We received a request to reset the password for your account."
+        }</p>
           <div style="background-color: #f3f4f6; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0;">
             <p style="margin: 0; font-size: 13px; color: #6b7280; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Your Verification Code</p>
             <h1 style="margin: 10px 0 0; font-size: 32px; letter-spacing: 4px; color: #111827; font-family: monospace;">${otp}</h1>
@@ -136,6 +135,7 @@ export async function sendPaymentReceipt(email: string, details: ReceiptDetails)
               </tr>
             </table>
           </div>
+          
 
           <!-- Call to Action -->
           <div style="text-align: center; margin-bottom: 30px;">
