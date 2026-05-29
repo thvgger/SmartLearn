@@ -31,15 +31,49 @@ function CheckoutContent() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
+  const planDetails = PLANS[planKey] || PLANS["starter"];
+  const actualPlan = isYearly ? `${planKey}_yearly` : planKey;
+  const amount = isYearly ? planDetails.yearlyPrice : planDetails.monthlyPrice;
+  const billingCycle = isYearly ? "Billed Annually" : "Billed Monthly";
+
+  const [calcLoading, setCalcLoading] = useState(true);
+  const [calcData, setCalcData] = useState<{
+    subtotal: number;
+    creditApplied: number;
+    totalDue: number;
+    extraDays: number;
+  } | null>(null);
+
+  useEffect(() => {
+    async function loadCalc() {
+      try {
+        const res = await fetch(`/api/subscription/calculate?plan=${actualPlan}`);
+        if (res.status === 401) {
+          window.location.href = `/login?callback=/checkout?plan=${planKey}&yearly=${isYearly}`;
+          return;
+        }
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            setCalcData(data);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load calculation", err);
+      } finally {
+        setCalcLoading(false);
+      }
+    }
+    loadCalc();
+  }, [actualPlan, planKey, isYearly]);
+
   // Clear errors when leaving the page or remounting
   useEffect(() => {
     setError(null);
     setSuccess(null);
   }, []);
 
-  const planDetails = PLANS[planKey] || PLANS["starter"];
-  const amount = isYearly ? planDetails.yearlyPrice : planDetails.monthlyPrice;
-  const billingCycle = isYearly ? "Billed Annually" : "Billed Monthly";
+
 
   async function handleConfirmPayment() {
     setLoading(true);
@@ -47,8 +81,6 @@ function CheckoutContent() {
     setSuccess(null);
 
     try {
-      const actualPlan = isYearly ? `${planKey}_yearly` : planKey;
-      
       const response = await fetch("/api/payment/initiate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -64,6 +96,14 @@ function CheckoutContent() {
       if (!data.success) {
         setError(data.error || "Failed to initiate payment. Please try again.");
         setLoading(false);
+        return;
+      }
+
+      if (data.bypassed) {
+        setSuccess("Plan successfully updated! Redirecting to dashboard...");
+        setTimeout(() => {
+          window.location.href = "/dashboard?payment=success";
+        }, 2000);
         return;
       }
 
@@ -207,8 +247,26 @@ function CheckoutContent() {
                 <div className="rounded-xl border border-white/5 bg-white/[0.02] overflow-hidden">
                   <div className="p-4 border-b border-white/5 flex justify-between items-center text-sm">
                     <span className="text-zinc-400 font-medium">Subtotal</span>
-                    <span className="text-white font-bold">₦{amount.toLocaleString()}</span>
+                    <span className="text-white font-bold">₦{calcLoading ? "..." : (calcData?.subtotal || amount).toLocaleString()}</span>
                   </div>
+                  {calcData && calcData.creditApplied > 0 && (
+                    <div className="p-4 border-b border-white/5 flex justify-between items-center text-sm bg-indigo-500/5">
+                      <span className="text-indigo-400 font-medium flex items-center gap-2">
+                        Unused Time Credit
+                        <Icon icon="ri:information-line" className="w-3.5 h-3.5 text-indigo-400/70" />
+                      </span>
+                      <span className="text-indigo-400 font-bold">- ₦{calcData.creditApplied.toLocaleString()}</span>
+                    </div>
+                  )}
+                  {calcData && calcData.extraDays > 0 && (
+                    <div className="p-4 border-b border-white/5 flex justify-between items-center text-sm bg-emerald-500/5">
+                      <span className="text-emerald-400 font-medium flex items-center gap-2">
+                        Rollover Days
+                        <Icon icon="ri:information-line" className="w-3.5 h-3.5 text-emerald-400/70" />
+                      </span>
+                      <span className="text-emerald-400 font-bold">+{calcData.extraDays} Days</span>
+                    </div>
+                  )}
                   <div className="p-4 border-b border-white/5 flex justify-between items-center text-sm">
                     <span className="text-zinc-400 font-medium flex items-center gap-2">
                       Taxes & Fees 
@@ -218,7 +276,7 @@ function CheckoutContent() {
                   </div>
                   <div className="p-4 bg-white/[0.02] flex justify-between items-center">
                     <span className="text-white font-bold">Total Due Today</span>
-                    <span className="text-white font-extrabold text-lg">₦{amount.toLocaleString()}</span>
+                    <span className="text-white font-extrabold text-lg">₦{calcLoading ? "..." : (calcData?.totalDue !== undefined ? calcData.totalDue : amount).toLocaleString()}</span>
                   </div>
                 </div>
 
@@ -265,7 +323,7 @@ function CheckoutContent() {
                       </>
                     ) : (
                       <>
-                        Confirm & Pay ₦{amount.toLocaleString()}
+                        Confirm {calcData?.totalDue === 0 ? "Plan Switch" : `& Pay ₦${(calcData?.totalDue !== undefined ? calcData.totalDue : amount).toLocaleString()}`}
                         <Icon icon="ri:arrow-right-line" className="w-4 h-4 ml-1" />
                       </>
                     )}

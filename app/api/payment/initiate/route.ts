@@ -3,17 +3,7 @@ import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { initiateRemitaPayment, generateRRR } from "@/lib/remita";
 import crypto from "crypto";
-
-const PRICES: Record<string, number> = {
-    free: 0,
-    free_yearly: 0,
-    starter: 1500,
-    starter_yearly: 15000,
-    school: 3000,
-    school_yearly: 30000,
-    enterprise: 5000,
-    enterprise_yearly: 50000
-};
+import { calculatePlanSwitch, PRICES } from "@/lib/billing";
 
 export async function POST(req: NextRequest) {
     try {
@@ -31,19 +21,76 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Invalid plan selected" }, { status: 400 });
         }
 
-        const amount = PRICES[plan];
-        const reference = `SL-${crypto.randomBytes(4).toString("hex").toUpperCase()}-${Date.now()}`;
-
         // Get user details
         const user = await prisma.user.findUnique({
-            where: { id: session.userId }
+            where: { id: session.userId },
+            include: { subscription: true }
         });
 
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        // Create pending transaction
+        const currentPlan = user.subscription?.plan || "free";
+        const currentStatus = user.subscription?.status || "inactive";
+        let expiresAt = user.subscription?.expires_at || null;
+
+        if (currentStatus !== "active" || (expiresAt && new Date(expiresAt) < new Date())) {
+            expiresAt = null;
+        }
+
+        const calc = calculatePlanSwitch(currentPlan, expiresAt, plan);
+        const amount = calc.totalDue;
+        const reference = `SL-${crypto.randomBytes(4).toString("hex").toUpperCase()}-${Date.now()}`;
+
+        if (amount === 0) {
+            // Zero-dollar transaction (e.g. downgrading or switching to Free). Bypass Remita completely.
+            await prisma.transaction.create({
+                data: {
+                    user_id: user.id,
+                    amount: 0,
+                    plan,
+                    reference,
+                    status: "success"
+                }
+            });
+
+            // Update subscription with extra days if applicable
+            const now = new Date();
+            const newExpiresAt = new Date(now);
+            if (calc.extraDays > 0) {
+                newExpiresAt.setDate(newExpiresAt.getDate() + calc.extraDays);
+            } else if (plan.endsWith("_yearly")) {
+                newExpiresAt.setFullYear(newExpiresAt.getFullYear() + 1);
+            } else {
+                newExpiresAt.setMonth(newExpiresAt.getMonth() + 1);
+            }
+
+            await prisma.subscription.upsert({
+                where: { user_id: user.id },
+                update: {
+                    plan: plan,
+                    status: "active",
+                    starts_at: now,
+                    expires_at: newExpiresAt
+                },
+                create: {
+                    user_id: user.id,
+                    plan: plan,
+                    status: "active",
+                    starts_at: now,
+                    expires_at: newExpiresAt
+                }
+            });
+
+            return NextResponse.json({
+                success: true,
+                bypassed: true,
+                reference
+            });
+        }
+
+        // Non-zero amount: Proceed with Remita initiation
         await prisma.transaction.create({
             data: {
                 user_id: user.id,
