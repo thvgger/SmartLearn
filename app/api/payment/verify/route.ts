@@ -116,18 +116,40 @@ export async function POST(req: NextRequest) {
             });
         } else {
             console.error("[Payment Verify] Verification FAILED:", verificationData.message);
-            // Update transaction status to failed if explicitly failed
-            await prisma.transaction.update({
-                where: { reference },
-                data: {
-                    status: "failed",
-                    rrr: rrr
-                }
-            });
+            
+            // Check if the status indicates a pending or transient state.
+            // Remita codes starting with "02" (e.g., "02", "021", "025") are pending. 
+            // "99" represents an unknown transaction (often returned if payment hasn't been completed/routed yet).
+            const pendingCodes = ["02", "021", "025", "99"];
+            const isPending = 
+                pendingCodes.includes(verificationData.status) || 
+                (verificationData.message && verificationData.message.toLowerCase().includes("pending")) ||
+                (verificationData.message && verificationData.message.toLowerCase().includes("unknown"));
+
+            if (!isPending) {
+                console.log("[Payment Verify] Explicitly marking transaction as failed.");
+                // Update transaction status to failed if explicitly failed
+                await prisma.transaction.update({
+                    where: { reference },
+                    data: {
+                        status: "failed",
+                        rrr: rrr
+                    }
+                });
+            } else {
+                console.log("[Payment Verify] Transaction remains pending.");
+                // Update RRR in case it has changed/been set, but keep status as pending
+                await prisma.transaction.update({
+                    where: { reference },
+                    data: {
+                        rrr: rrr
+                    }
+                });
+            }
 
             return NextResponse.json({
                 success: false,
-                message: verificationData.message || "Payment verification failed"
+                message: verificationData.message || "Payment is still pending"
             });
         }
 

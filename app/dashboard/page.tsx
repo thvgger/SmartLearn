@@ -52,13 +52,19 @@ function formatBytes(bytes: number) {
 }
 
 export default function DashboardOverview() {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [backups, setBackups] = useState<BackupEntry[]>([]);
   const [backupsLoading, setBackupsLoading] = useState(false);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [scoreTrend, setScoreTrend] = useState<ScoreTrendItem[]>([]);
   const [error, setError] = useState("");
   const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
+
+  // Pay Later RRR support
+  const [pendingTx, setPendingTx] = useState<any>(null);
+  const [verifying, setVerifying] = useState(false);
+  const [verifyMsg, setVerifyMsg] = useState<string | null>(null);
+  const [rrrCopied, setRrrCopied] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -104,10 +110,70 @@ export default function DashboardOverview() {
     }
   }, []);
 
+  const fetchPendingTx = useCallback(async () => {
+    try {
+      const res = await fetch("/api/payment/pending");
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.transaction) {
+          setPendingTx(data.transaction);
+          return data.transaction;
+        }
+      }
+    } catch (err) {
+      console.error("Failed to load pending transaction:", err);
+    }
+    return null;
+  }, []);
+
+  const verifyTx = useCallback(async (tx: any, isBackground = false) => {
+    if (!tx) return;
+    if (!isBackground) {
+      setVerifying(true);
+      setVerifyMsg(null);
+    }
+    try {
+      const res = await fetch("/api/payment/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          rrr: tx.rrr,
+          reference: tx.reference
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setShowPaymentSuccess(true);
+        setPendingTx(null);
+        await refreshUser();
+      } else {
+        if (!isBackground) {
+          setVerifyMsg(data.message || "Payment is still pending. Please check again after paying at the bank or via your app.");
+        }
+      }
+    } catch (err) {
+      console.error("Error verifying transaction:", err);
+      if (!isBackground) {
+        setVerifyMsg("A network error occurred while verifying your payment. Please try again.");
+      }
+    } finally {
+      if (!isBackground) {
+        setVerifying(false);
+      }
+    }
+  }, [refreshUser]);
+
   useEffect(() => {
-    fetchBackups();
-    fetchStats();
-  }, [fetchBackups, fetchStats]);
+    async function loadDashboard() {
+      fetchBackups();
+      fetchStats();
+      const tx = await fetchPendingTx();
+      if (tx) {
+        verifyTx(tx, true); // Run background verification check silently
+      }
+    }
+    loadDashboard();
+  }, [fetchBackups, fetchStats, fetchPendingTx, verifyTx]);
 
   const sub = user?.subscription;
   const isActive = sub?.status === "active";
@@ -127,6 +193,74 @@ export default function DashboardOverview() {
           Here&apos;s what&apos;s happening with {user?.school_name} today.
         </p>
       </div>
+
+      {pendingTx && (
+        <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/[0.15] to-amber-500/10 border border-amber-500/20 rounded-3xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl relative overflow-hidden animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 blur-2xl rounded-full pointer-events-none" />
+          
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+              <Icon icon="ri:bank-card-line" className="w-6 h-6 animate-pulse" />
+            </div>
+            <div className="flex-grow">
+              <h3 className="text-white font-bold text-base flex items-center gap-2">
+                Pending Subscription Invoice
+                <Badge className="bg-amber-500/20 text-amber-400 border-none font-bold text-[9px]">Pay Later RRR</Badge>
+              </h3>
+              <p className="text-zinc-400 text-sm mt-1 max-w-xl">
+                You generated a payment reference for the <span className="text-amber-400 font-bold capitalize">{pendingTx.plan.replace("_yearly", " Yearly")}</span> plan (amounting to <span className="text-white font-extrabold">₦{pendingTx.amount.toLocaleString()}</span>). 
+                You can pay at any bank branch or via your banking app using the RRR below:
+              </p>
+              
+              {/* Copyable RRR Box */}
+              <div className="flex items-center gap-3 bg-zinc-950/80 border border-white/5 rounded-xl px-4 py-2 mt-3 w-fit">
+                <span className="font-headline font-black text-white tracking-widest text-base">
+                  {pendingTx.rrr}
+                </span>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(pendingTx.rrr);
+                    setRrrCopied(true);
+                    setTimeout(() => setRrrCopied(false), 2000);
+                  }}
+                  className="text-zinc-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5 text-xs bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-md border border-white/5"
+                  title="Copy RRR"
+                >
+                  <Icon icon={rrrCopied ? "ri:check-line" : "ri:file-copy-line"} className={`w-3.5 h-3.5 ${rrrCopied ? "text-emerald-400" : ""}`} />
+                  <span className="text-[10px] uppercase tracking-wider font-bold">{rrrCopied ? "Copied!" : "Copy"}</span>
+                </button>
+              </div>
+              
+              {verifyMsg && (
+                <p className="text-rose-400 text-xs font-bold mt-3 flex items-center gap-1.5 animate-in fade-in slide-in-from-top-1">
+                  <Icon icon="ri:error-warning-line" className="w-3.5 h-3.5" />
+                  {verifyMsg}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0 self-end md:self-center">
+            <Button
+              onClick={() => verifyTx(pendingTx, false)}
+              disabled={verifying}
+              className="h-11 px-5 bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-amber-500/10 flex items-center gap-2"
+            >
+              {verifying ? (
+                <>
+                  <div className="w-3.5 h-3.5 border-2 border-zinc-950/30 border-t-zinc-950 rounded-full animate-spin" />
+                  Verifying...
+                </>
+              ) : (
+                <>
+                  <Icon icon="ri:refresh-line" className="w-4 h-4" />
+                  Check Status
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-bold flex items-center gap-3 animate-fade-in-up">
@@ -214,10 +348,12 @@ export default function DashboardOverview() {
                 className={
                   isActive
                     ? "border-emerald-500/30 text-emerald-400 bg-emerald-500/10 font-medium"
-                    : "border-amber-500/30 text-amber-400 bg-amber-500/10 font-medium"
+                    : pendingTx
+                      ? "border-amber-500/30 text-amber-400 bg-amber-500/10 font-medium"
+                      : "border-zinc-500/30 text-zinc-400 bg-zinc-500/10 font-medium"
                 }
               >
-                {isActive ? "Active" : "Inactive"}
+                {isActive ? "Active" : pendingTx ? "Pending Payment" : "Inactive"}
               </Badge>
             </CardHeader>
             <CardContent className="p-6 pt-0">
@@ -242,9 +378,68 @@ export default function DashboardOverview() {
                   <Button asChild variant="outline" size="sm" className="w-full mt-4 border-white/10 hover:bg-white/5">
                     <Link href="/dashboard/settings">Manage Plan</Link>
                   </Button>
+                </div>
+              ) : pendingTx ? (
+                <div className="space-y-4">
+                  <p className="text-zinc-500 text-xs leading-relaxed">
+                    You have a pending subscription transaction. You can copy the RRR to pay later, or verify the payment status below.
+                  </p>
+                  <div className="rounded-xl border border-white/5 bg-zinc-950/40 p-4 space-y-3">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-zinc-500 font-medium">Pending Plan</span>
+                      <span className="text-white font-bold capitalize">{pendingTx.plan.replace("_yearly", " Yearly")}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-zinc-500 font-medium">Amount Due</span>
+                      <span className="text-white font-bold">₦{pendingTx.amount.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-zinc-500 font-medium">RRR Reference</span>
+                      <span className="text-amber-400 font-extrabold tracking-widest">{pendingTx.rrr}</span>
+                    </div>
                   </div>
-                  ) : (
-                  <div>
+                  <div className="flex gap-2.5 mt-4">
+                    <Button
+                      onClick={() => {
+                        navigator.clipboard.writeText(pendingTx.rrr);
+                        setRrrCopied(true);
+                        setTimeout(() => setRrrCopied(false), 2000);
+                      }}
+                      variant="outline"
+                      type="button"
+                      className="flex-1 h-10 border-white/10 hover:bg-white/5 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all"
+                    >
+                      <Icon icon={rrrCopied ? "ri:check-line" : "ri:file-copy-line"} className={`w-3.5 h-3.5 mr-1.5 ${rrrCopied ? "text-emerald-400" : ""}`} />
+                      {rrrCopied ? "Copied" : "Copy RRR"}
+                    </Button>
+                    <Button
+                      onClick={() => verifyTx(pendingTx, false)}
+                      disabled={verifying}
+                      type="button"
+                      className="flex-1 h-10 bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-amber-500/10 flex items-center justify-center gap-1.5"
+                    >
+                      {verifying ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-zinc-950/30 border-t-zinc-950 rounded-full animate-spin" />
+                          Checking...
+                        </>
+                      ) : (
+                        <>
+                          <Icon icon="ri:checkbox-circle-line" className="w-3.5 h-3.5" />
+                          Verify Payment
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                  {verifyMsg && (
+                    <p className="text-rose-400 text-[10px] font-bold mt-2 flex items-start gap-1 leading-snug animate-in fade-in slide-in-from-top-1">
+                      <Icon icon="ri:error-warning-line" className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                      <span>{verifyMsg}</span>
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div>
                   <p className="text-zinc-500 text-sm mb-6 leading-relaxed">
                     Activate a plan to unlock all CBT features and start running secure exams.
                   </p>
@@ -254,8 +449,8 @@ export default function DashboardOverview() {
                       <Icon icon="ri:arrow-right-line" className="ml-2 w-4 h-4" />
                     </Link>
                   </Button>
-                  </div>
-                  )}
+                </div>
+              )}
                   </CardContent>
                   </Card>
 

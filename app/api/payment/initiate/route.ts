@@ -120,6 +120,11 @@ export async function POST(req: NextRequest) {
             if (rrrResponse && rrrResponse.statuscode === "025" && rrrResponse.RRR) {
                 rrr = rrrResponse.RRR;
                 console.log("[Payment] Successfully generated RRR:", rrr);
+                // Update transaction with the generated RRR
+                await prisma.transaction.update({
+                    where: { reference },
+                    data: { rrr }
+                });
             } else {
                 console.warn("[Payment] RRR generation failed or returned unexpected status:", rrrResponse);
             }

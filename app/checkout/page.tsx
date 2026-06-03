@@ -30,6 +30,13 @@ function CheckoutContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  
+  const [paymentData, setPaymentData] = useState<{
+    rrr: string | null;
+    reference: string;
+    remitaParams: any;
+  } | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const planDetails = PLANS[planKey] || PLANS["starter"];
   const actualPlan = isYearly ? `${planKey}_yearly` : planKey;
@@ -108,8 +115,23 @@ function CheckoutContent() {
       }
 
       const { remitaParams, reference, rrr } = data;
+      setPaymentData({ rrr, reference, remitaParams });
+      setLoading(false);
 
-      const paymentEngine = window.RmPaymentEngine.init({
+    } catch (err) {
+      setError("An unexpected network error occurred while contacting the payment server. Please try again.");
+      setLoading(false);
+    }
+  }
+
+  function handlePayOnline() {
+    if (!paymentData) return;
+    const { remitaParams, reference, rrr } = paymentData;
+    
+    setError(null);
+    setSuccess(null);
+
+    const paymentEngine = window.RmPaymentEngine.init({
         key: (process.env.NEXT_PUBLIC_REMITA_PUBLIC_KEY || "").replace(/^['"]|['"]$/g, "") || 
              (process.env.NEXT_PUBLIC_REMITA_ENV === "production" 
                ? "" 
@@ -174,12 +196,48 @@ function CheckoutContent() {
       paymentEngine.showPaymentWidget({
         ...remitaParams
       });
+  }
 
-    } catch (err) {
-      setError("An unexpected network error occurred while contacting the payment server. Please try again.");
+  async function handleVerifyPayment() {
+    if (!paymentData) return;
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const verifyRes = await fetch("/api/payment/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          rrr: paymentData.rrr,
+          reference: paymentData.reference
+        })
+      });
+      const verifyData = await verifyRes.json();
+      
+      if (verifyData.success) {
+        setSuccess("Payment verified successfully! Redirecting to your dashboard...");
+        setTimeout(() => {
+          window.location.href = "/dashboard?payment=success";
+        }, 2000);
+      } else {
+        setError("Payment verification failed: " + verifyData.message);
+        setSuccess(null);
+        setLoading(false);
+      }
+    } catch (verifyErr) {
+      setError("A network error occurred while verifying your payment. Please contact support if you were debited.");
+      setSuccess(null);
       setLoading(false);
     }
   }
+
+  const handleCopyRRR = () => {
+    if (paymentData?.rrr) {
+      navigator.clipboard.writeText(paymentData.rrr);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
     <div className="bg-background text-foreground font-body min-h-screen flex flex-col selection:bg-indigo-500/30">
@@ -296,39 +354,101 @@ function CheckoutContent() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-col sm:flex-row gap-4 mt-2">
-                  <Button 
-                    onClick={() => router.back()}
-                    variant="outline"
-                    type="button"
-                    disabled={loading || !!success}
-                    className="flex-1 h-14 bg-transparent border-white/10 text-white hover:bg-white/5 font-bold rounded-xl transition-all"
-                  >
-                    Cancel
-                  </Button>
-                  <Button 
-                    onClick={handleConfirmPayment}
-                    disabled={loading || !!success}
-                    className="flex-[2] h-14 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2"
-                  >
-                    {loading ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        Processing...
-                      </>
-                    ) : success ? (
-                      <>
-                        <Icon icon="ri:check-line" className="w-5 h-5" />
-                        Authorized
-                      </>
-                    ) : (
-                      <>
-                        Confirm {calcData?.totalDue === 0 ? "Plan Switch" : `& Pay ₦${(calcData?.totalDue !== undefined ? calcData.totalDue : amount).toLocaleString()}`}
-                        <Icon icon="ri:arrow-right-line" className="w-4 h-4 ml-1" />
-                      </>
-                    )}
-                  </Button>
-                </div>
+                {!paymentData ? (
+                  <div className="flex flex-col sm:flex-row gap-4 mt-2">
+                    <Button 
+                      onClick={() => router.back()}
+                      variant="outline"
+                      type="button"
+                      disabled={loading || !!success}
+                      className="flex-1 h-14 bg-transparent border-white/10 text-white hover:bg-white/5 font-bold rounded-xl transition-all"
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      onClick={handleConfirmPayment}
+                      disabled={loading || !!success}
+                      className="flex-[2] h-14 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2"
+                    >
+                      {loading ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Processing...
+                        </>
+                      ) : success ? (
+                        <>
+                          <Icon icon="ri:check-line" className="w-5 h-5" />
+                          Authorized
+                        </>
+                      ) : (
+                        <>
+                          Generate Invoice {calcData?.totalDue === 0 ? "" : `& Pay ₦${(calcData?.totalDue !== undefined ? calcData.totalDue : amount).toLocaleString()}`}
+                          <Icon icon="ri:arrow-right-line" className="w-4 h-4 ml-1" />
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="mt-4 animate-in fade-in slide-in-from-bottom-4">
+                    <div className="p-5 bg-indigo-900/20 border border-indigo-500/30 rounded-2xl flex flex-col items-center justify-center text-center gap-3 mb-6 relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500"></div>
+                      <h3 className="text-indigo-300 font-bold uppercase tracking-widest text-xs">Your Payment Reference (RRR)</h3>
+                      <div className="flex items-center justify-center gap-3">
+                        <span className="font-headline text-2xl md:text-4xl font-black text-white tracking-wider">
+                          {paymentData.rrr || "N/A"}
+                        </span>
+                        {paymentData.rrr && (
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={handleCopyRRR}
+                            className="text-indigo-400 hover:text-white hover:bg-indigo-500/20 shrink-0"
+                            title="Copy RRR"
+                          >
+                            <Icon icon={copied ? "ri:check-line" : "ri:file-copy-line"} className="w-5 h-5" />
+                          </Button>
+                        )}
+                      </div>
+                      <p className="text-zinc-400 text-sm max-w-sm">
+                        You can copy this RRR to pay later at any bank branch or via your banking app.
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                      <Button 
+                        onClick={handlePayOnline}
+                        disabled={loading || !!success}
+                        className="w-full h-14 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2"
+                      >
+                        <Icon icon="ri:bank-card-line" className="w-5 h-5" />
+                        Pay Now Online
+                      </Button>
+                      
+                      <div className="flex gap-3">
+                        <Button 
+                          onClick={handleVerifyPayment}
+                          disabled={loading || !!success}
+                          className="flex-1 h-12 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2"
+                        >
+                          {loading ? (
+                            <div className="w-4 h-4 border-2 border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin" />
+                          ) : (
+                            <Icon icon="ri:checkbox-circle-line" className="w-4 h-4" />
+                          )}
+                          I Have Paid
+                        </Button>
+                        
+                        <Button 
+                          onClick={() => router.push("/dashboard")}
+                          disabled={loading || !!success}
+                          className="flex-1 h-12 bg-transparent border-white/10 text-white hover:bg-white/5 font-bold rounded-xl transition-all"
+                        >
+                          Pay Later
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
               </div>
             </CardContent>
