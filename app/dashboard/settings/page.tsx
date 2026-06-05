@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "@/lib/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -447,6 +448,20 @@ export default function SettingsPage() {
               </div>
             </div>
           )}
+
+          <div className="mt-6 border-t border-white/5 pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Icon icon="ri:history-line" className="w-4 h-4 text-zinc-500" />
+              <span className="text-xs text-zinc-500 font-medium">
+                Generated multiple RRRs or need to verify a manual payment?
+              </span>
+            </div>
+            <Button asChild variant="link" className="text-xs font-bold text-indigo-400 hover:text-indigo-300 p-0 h-auto cursor-pointer">
+              <Link href="/dashboard/settings/transactions" className="flex items-center gap-1">
+                View RRR & Transaction History <Icon icon="ri:arrow-right-line" className="w-3.5 h-3.5" />
+              </Link>
+            </Button>
+          </div>
         </CardContent>
       </Card>
 

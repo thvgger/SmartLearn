@@ -357,18 +357,9 @@ function CheckoutContent() {
                 {!paymentData ? (
                   <div className="flex flex-col sm:flex-row gap-4 mt-2">
                     <Button 
-                      onClick={() => router.back()}
-                      variant="outline"
-                      type="button"
-                      disabled={loading || !!success}
-                      className="flex-1 h-14 bg-transparent border-white/10 text-white hover:bg-white/5 font-bold rounded-xl transition-all"
-                    >
-                      Cancel
-                    </Button>
-                    <Button 
                       onClick={handleConfirmPayment}
                       disabled={loading || !!success}
-                      className="flex-[2] h-14 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2"
+                      className="w-full sm:flex-[2] h-auto min-h-14 py-3.5 px-6 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2 order-1 sm:order-2"
                     >
                       {loading ? (
                         <>
@@ -381,11 +372,25 @@ function CheckoutContent() {
                           Authorized
                         </>
                       ) : (
-                        <>
-                          Generate Invoice {calcData?.totalDue === 0 ? "" : `& Pay ₦${(calcData?.totalDue !== undefined ? calcData.totalDue : amount).toLocaleString()}`}
-                          <Icon icon="ri:arrow-right-line" className="w-4 h-4 ml-1" />
-                        </>
+                        <span className="flex items-center gap-2 flex-wrap justify-center text-center">
+                          <span>Generate Invoice</span>
+                          {calcData?.totalDue !== 0 && (
+                            <span className="opacity-90">
+                              & Pay ₦{(calcData?.totalDue !== undefined ? calcData.totalDue : amount).toLocaleString()}
+                            </span>
+                          )}
+                          <Icon icon="ri:arrow-right-line" className="w-4 h-4 shrink-0" />
+                        </span>
                       )}
+                    </Button>
+                    <Button 
+                      onClick={() => router.back()}
+                      variant="outline"
+                      type="button"
+                      disabled={loading || !!success}
+                      className="w-full sm:flex-1 h-14 bg-transparent border-white/10 text-white hover:bg-white/5 font-bold rounded-xl transition-all order-2 sm:order-1"
+                    >
+                      Cancel
                     </Button>
                   </div>
                 ) : (
@@ -424,11 +429,11 @@ function CheckoutContent() {
                         Pay Now Online
                       </Button>
                       
-                      <div className="flex gap-3">
+                      <div className="flex flex-col sm:flex-row gap-3">
                         <Button 
                           onClick={handleVerifyPayment}
                           disabled={loading || !!success}
-                          className="flex-1 h-12 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2"
+                          className="w-full sm:flex-1 h-12 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2"
                         >
                           {loading ? (
                             <div className="w-4 h-4 border-2 border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin" />
@@ -441,7 +446,7 @@ function CheckoutContent() {
                         <Button 
                           onClick={() => router.push("/dashboard")}
                           disabled={loading || !!success}
-                          className="flex-1 h-12 bg-transparent border-white/10 text-white hover:bg-white/5 font-bold rounded-xl transition-all"
+                          className="w-full sm:flex-1 h-12 bg-transparent border-white/10 text-white hover:bg-white/5 font-bold rounded-xl transition-all"
                         >
                           Pay Later
                         </Button>
