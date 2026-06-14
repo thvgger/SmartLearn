@@ -42,12 +42,7 @@ export function calculatePlanSwitch(
     let extraDays = 0;
 
     if (totalDue <= 0) {
-        // If downgrading, total due is 0. 
-        // We convert the remaining credit to extra days on the new plan.
         const leftoverCredit = credit - targetPrice; 
-        // Wait, if totalDue <= 0, the credit fully covers the targetPrice.
-        // The remaining value is actually the full `credit`, because the user is paying 0 today.
-        // Wait, if they switch today, they consume the full credit.
         totalDue = 0;
         
         if (targetPrice > 0) {
