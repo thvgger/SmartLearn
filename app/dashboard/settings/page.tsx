@@ -53,7 +53,8 @@ export default function SettingsPage() {
   }, [user]);
 
   const sub = user?.subscription;
-  const isActive = sub?.status === "active";
+  const isExpired = sub?.expires_at ? new Date(sub.expires_at).getTime() < Date.now() : false;
+  const isActive = sub?.status === "active" && !isExpired;
   const expiresAt =
     sub?.expires_at
       ? new Date(sub.expires_at).toLocaleDateString("en-US", {

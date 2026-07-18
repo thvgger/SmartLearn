@@ -176,7 +176,8 @@ export default function DashboardOverview() {
   }, [fetchBackups, fetchStats, fetchPendingTx, verifyTx]);
 
   const sub = user?.subscription;
-  const isActive = sub?.status === "active";
+  const isExpired = sub?.expires_at ? new Date(sub.expires_at).getTime() < Date.now() : false;
+  const isActive = sub?.status === "active" && !isExpired;
 
   const maxTrend = scoreTrend.length > 0
     ? Math.max(...scoreTrend.map((s) => s.score || 0))
