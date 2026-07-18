@@ -29,8 +29,8 @@ export default function PublicDownloadPage() {
 
       <main className="flex-grow pt-32 pb-20 relative overflow-hidden">
         {/* Ambient background glows */}
-        <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-violet-500/5 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-4xl mx-auto px-6 space-y-8 relative z-10 animate-fade-in-up">
           {/* Header */}
@@ -52,7 +52,7 @@ export default function PublicDownloadPage() {
 
               <div>
                 <div className="flex items-center justify-between mb-8">
-                  <div className="p-3.5 rounded-2xl bg-gradient-to-br from-blue-600/10 to-indigo-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center group-hover:scale-105 transition-all duration-300">
+                  <div className="p-3.5 rounded-2xl bg-gradient-to-br from-blue-600/10 to-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center group-hover:scale-105 transition-all duration-300">
                     <Icon icon="ri:windows-line" className="w-8 h-8" />
                   </div>
                   <div className="text-right">
@@ -91,7 +91,7 @@ export default function PublicDownloadPage() {
               <Card className="bg-zinc-900 border-white/10 rounded-xl p-6 flex flex-col justify-between">
                 <div>
                   <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 mb-4">
-                    <Icon icon="ri:key-2-line" className="w-4 h-4 text-indigo-400" />
+                    <Icon icon="ri:key-2-line" className="w-4 h-4 text-blue-400" />
                     Activation Code
                   </h3>
                   {user ? (
@@ -100,7 +100,7 @@ export default function PublicDownloadPage() {
                         Use this School Tag inside the desktop client settings to sync the app with your school profile.
                       </p>
                       <div className="flex items-center gap-2 bg-zinc-950 px-3 py-2 rounded-lg border border-white/5">
-                        <span className="text-xs text-indigo-300 font-mono font-bold select-all flex-1 truncate">{schoolTag}</span>
+                        <span className="text-xs text-blue-300 font-mono font-bold select-all flex-1 truncate">{schoolTag}</span>
                         <Button
                           variant="ghost"
                           size="icon"
@@ -121,7 +121,7 @@ export default function PublicDownloadPage() {
                         Administrators can copy their custom School Tag here to authorize the client. Log in or create a school profile to generate your tag.
                       </p>
                       <div className="flex flex-col gap-2">
-                        <Button asChild className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold h-10 text-xs border-none cursor-pointer">
+                        <Button asChild className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold h-10 text-xs border-none cursor-pointer">
                           <Link href="/login">Log In to View Tag</Link>
                         </Button>
                         <Link href="/register" className="text-[10px] text-center text-zinc-400 hover:text-white font-bold uppercase tracking-wider transition-colors py-1">
@@ -165,7 +165,7 @@ export default function PublicDownloadPage() {
           {/* Installation Guide */}
           <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
             <CardHeader className="p-6 pb-4 flex flex-row items-center gap-3">
-              <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-violet-400 shrink-0">
+              <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-blue-400 shrink-0">
                 <Icon icon="ri:guide-line" className="w-5 h-5" />
               </div>
               <CardTitle className="font-headline font-bold text-lg text-white">How to Set Up offline assessments</CardTitle>

@@ -43,7 +43,7 @@ export default function Navbar() {
     <nav className={isAuthPage ? "absolute top-0 w-full z-50 p-8 flex justify-center md:justify-start" : "fixed top-0 w-full z-50 bg-background/50 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] border-b border-white/5"}>
       <div className={isAuthPage ? "" : "flex justify-between items-center px-8 py-4 max-w-7xl mx-auto"}>
         <Link href="/" className="text-xl font-bold tracking-tighter text-white flex items-center gap-2 font-headline cursor-pointer hover:opacity-90 transition-opacity">
-          <Icon icon="ri:flashlight-line" className="text-indigo-300 w-6 h-6" />
+          <Icon icon="ri:flashlight-line" className="text-blue-300 w-6 h-6" />
           Swift Learn
         </Link>
         
@@ -61,7 +61,7 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={`font-headline font-bold tracking-tight text-sm transition-colors ${
-                    pathname === link.href ? "text-indigo-300 border-b-2 border-indigo-400 pb-1" : "text-slate-400 hover:text-white pb-1 border-b-2 border-transparent"
+                    pathname === link.href ? "text-blue-300 border-b-2 border-blue-400 pb-1" : "text-slate-400 hover:text-white pb-1 border-b-2 border-transparent"
                   }`}
                 >
                   {link.label}
@@ -81,8 +81,8 @@ export default function Navbar() {
                     <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">Signed in as</p>
                     <p className="text-xs font-bold text-white leading-none">{user.contact_name.split(' ')[0]}</p>
                   </div>
-                  <Avatar className="w-8 h-8 border-none ring-offset-background group-hover:scale-105 transition-transform shadow-lg shadow-indigo-500/20">
-                    <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-[10px] font-bold border-none">
+                  <Avatar className="w-8 h-8 border-none ring-offset-background group-hover:scale-105 transition-transform shadow-lg shadow-blue-500/20">
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white text-[10px] font-bold border-none">
                       {initials}
                     </AvatarFallback>
                   </Avatar>
@@ -92,7 +92,7 @@ export default function Navbar() {
                   <Link href="/login" className="text-sm font-bold text-slate-400 hover:text-white transition-colors">
                     Sign In
                   </Link>
-                  <Button asChild className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 shadow-lg shadow-indigo-600/20">
+                  <Button asChild className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 shadow-lg shadow-blue-600/20">
                     <Link href="/register">Get Started</Link>
                   </Button>
                 </>
@@ -129,7 +129,7 @@ export default function Navbar() {
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={`font-headline font-bold tracking-tight text-xl transition-colors py-2 ${
-                    pathname === link.href ? "text-indigo-300" : "text-white hover:text-indigo-200"
+                    pathname === link.href ? "text-blue-300" : "text-white hover:text-blue-200"
                   }`}
                 >
                   {link.label}
@@ -144,8 +144,8 @@ export default function Navbar() {
             ) : user ? (
               <div className="flex flex-col gap-4">
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4">
-                  <Avatar className="w-12 h-12 border-none shadow-lg shadow-indigo-500/20">
-                    <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-sm font-bold border-none">
+                  <Avatar className="w-12 h-12 border-none shadow-lg shadow-blue-500/20">
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white text-sm font-bold border-none">
                       {initials}
                     </AvatarFallback>
                   </Avatar>
@@ -158,7 +158,7 @@ export default function Navbar() {
                 <div className="flex flex-col gap-2 mt-2">
                   <Button 
                     onClick={() => { setMobileMenuOpen(false); router.push("/dashboard"); }}
-                    className="w-full h-12 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl justify-start px-4 shadow-lg shadow-indigo-500/20"
+                    className="w-full h-12 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl justify-start px-4 shadow-lg shadow-blue-500/20"
                   >
                     <Icon icon="ri:dashboard-line" className="w-5 h-5 mr-3" />
                     Go to Dashboard
@@ -186,7 +186,7 @@ export default function Navbar() {
                 <Button 
                   asChild 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full h-12 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/20 text-lg"
+                  className="w-full h-12 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-600/20 text-lg"
                 >
                   <Link href="/register">Get Started Free</Link>
                 </Button>

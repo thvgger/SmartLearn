@@ -145,7 +145,7 @@ export default function SettingsPage() {
       {/* School Profile */}
       <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-center gap-3">
-          <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-indigo-400">
+          <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-blue-400">
             <Icon icon="ri:building-2-line" className="w-5 h-5" />
           </div>
           <CardTitle className="font-headline font-bold text-lg text-white">School Profile</CardTitle>
@@ -195,7 +195,7 @@ export default function SettingsPage() {
       {/* School Tag for Teacher Portal */}
       <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-start gap-3">
-          <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-violet-400 shrink-0">
+          <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-blue-400 shrink-0">
             <Icon icon="ri:price-tag-3-line" className="w-5 h-5" />
           </div>
           <div>
@@ -242,7 +242,7 @@ export default function SettingsPage() {
                 }
               }}
               disabled={tagSaving}
-              className="h-11 bg-indigo-600 hover:bg-indigo-500 text-white font-bold"
+              className="h-11 bg-blue-600 hover:bg-blue-500 text-white font-bold"
             >
               {tagSaving ? "Saving..." : "Save Tag"}
             </Button>
@@ -313,7 +313,7 @@ export default function SettingsPage() {
                 <Button
                   variant="link"
                   onClick={() => setShowPlans(!showPlans)}
-                  className="text-xs font-bold text-indigo-400 hover:text-indigo-300 p-0 h-auto"
+                  className="text-xs font-bold text-blue-400 hover:text-blue-300 p-0 h-auto"
                 >
                   {showPlans ? "Hide plans" : "Change plan"}
                 </Button>
@@ -331,7 +331,7 @@ export default function SettingsPage() {
                       <Switch 
                         checked={isYearly} 
                         onCheckedChange={setIsYearly}
-                        className="data-[state=checked]:bg-indigo-600"
+                        className="data-[state=checked]:bg-blue-600"
                       />
                       <span className={`text-[10px] font-bold uppercase tracking-widest ${isYearly ? "text-white" : "text-zinc-600"}`}>Yearly</span>
                       <Badge className="bg-emerald-500/10 text-emerald-400 border-none font-black text-[9px]">SAVE 25%</Badge>
@@ -353,11 +353,11 @@ export default function SettingsPage() {
                         <div 
                           key={p.id}
                           className={`bg-zinc-900 rounded-xl p-6 border transition-all flex flex-col relative overflow-hidden ${
-                            isCurrent ? "border-indigo-500/30 bg-indigo-600/5" : "border-white/10 hover:border-white/20"
+                            isCurrent ? "border-blue-500/30 bg-blue-600/5" : "border-white/10 hover:border-white/20"
                           }`}
                         >
                           {p.popular && (
-                            <span className="absolute top-0 right-0 bg-indigo-600 text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-bl-lg">
+                            <span className="absolute top-0 right-0 bg-blue-600 text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-bl-lg">
                               Popular
                             </span>
                           )}
@@ -367,7 +367,7 @@ export default function SettingsPage() {
                             ₦{displayPrice.toLocaleString()}
                             <span className="text-xs font-medium text-zinc-600 tracking-normal ml-1">/mo</span>
                           </p>
-                          <div className="text-[10px] text-indigo-400 h-3 mt-1 font-bold">
+                          <div className="text-[10px] text-blue-400 h-3 mt-1 font-bold">
                             {isYearly && p.price > 0 && `₦${(displayPrice * 12).toLocaleString()} / yr`}
                           </div>
                           <Button
@@ -401,7 +401,7 @@ export default function SettingsPage() {
                   <Switch 
                     checked={isYearly} 
                     onCheckedChange={setIsYearly}
-                    className="data-[state=checked]:bg-indigo-600"
+                    className="data-[state=checked]:bg-blue-600"
                   />
                   <span className={`text-[10px] font-bold uppercase tracking-widest ${isYearly ? "text-white" : "text-zinc-600"}`}>Yearly</span>
                   <Badge className="bg-emerald-500/10 text-emerald-400 border-none font-black text-[9px]">SAVE 25%</Badge>
@@ -422,7 +422,7 @@ export default function SettingsPage() {
                       className="bg-zinc-900 rounded-xl p-6 border border-white/10 hover:border-white/20 transition-all flex flex-col relative overflow-hidden"
                     >
                       {p.popular && (
-                        <span className="absolute top-0 right-0 bg-indigo-600 text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-bl-lg">
+                        <span className="absolute top-0 right-0 bg-blue-600 text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-bl-lg">
                           Popular
                         </span>
                       )}
@@ -432,13 +432,13 @@ export default function SettingsPage() {
                         ₦{displayPrice.toLocaleString()}
                         <span className="text-xs font-medium text-zinc-600 tracking-normal ml-1">/mo</span>
                       </p>
-                      <div className="text-[10px] text-indigo-400 h-3 mt-1 font-bold">
+                      <div className="text-[10px] text-blue-400 h-3 mt-1 font-bold">
                         {isYearly && p.price > 0 && `₦${(displayPrice * 12).toLocaleString()} billed annually`}
                       </div>
                       <Button
                         onClick={() => handleSubscribe(p.id)}
                         disabled={actionLoading === "subscribe"}
-                        className="mt-4 w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs uppercase tracking-widest h-11"
+                        className="mt-4 w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-xs uppercase tracking-widest h-11"
                       >
                         {actionLoading === "subscribe" ? "..." : "Subscribe"}
                       </Button>
@@ -456,7 +456,7 @@ export default function SettingsPage() {
                 Generated multiple RRRs or need to verify a manual payment?
               </span>
             </div>
-            <Button asChild variant="link" className="text-xs font-bold text-indigo-400 hover:text-indigo-300 p-0 h-auto cursor-pointer">
+            <Button asChild variant="link" className="text-xs font-bold text-blue-400 hover:text-blue-300 p-0 h-auto cursor-pointer">
               <Link href="/dashboard/settings/transactions" className="flex items-center gap-1">
                 View RRR & Transaction History <Icon icon="ri:arrow-right-line" className="w-3.5 h-3.5" />
               </Link>
@@ -469,7 +469,7 @@ export default function SettingsPage() {
       <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-3">
-            <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-indigo-400">
+            <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-blue-400">
               <Icon icon="ri:cloud-line" className="w-5 h-5" />
             </div>
             <div>
@@ -491,7 +491,7 @@ export default function SettingsPage() {
         <CardContent className="p-6 pt-0 mt-4">
           {backupsLoading && backups.length === 0 ? (
             <div className="text-center py-12">
-              <Icon icon="ri:refresh-line" className="w-8 h-8 text-indigo-500/30 animate-spin mx-auto mb-3" />
+              <Icon icon="ri:refresh-line" className="w-8 h-8 text-blue-500/30 animate-spin mx-auto mb-3" />
               <p className="text-zinc-500 text-sm font-medium">Loading backups...</p>
             </div>
           ) : backups.length === 0 ? (
@@ -514,7 +514,7 @@ export default function SettingsPage() {
                       <p className="text-sm font-bold text-white truncate">
                         {b.label || "Untitled Backup"}
                       </p>
-                      <Badge variant="secondary" className="bg-indigo-500/10 text-indigo-400 border-none font-bold text-[9px] px-2 py-0.5">
+                      <Badge variant="secondary" className="bg-blue-500/10 text-blue-400 border-none font-bold text-[9px] px-2 py-0.5">
                         {formatBytes(b.size_bytes)}
                       </Badge>
                     </div>
@@ -529,7 +529,7 @@ export default function SettingsPage() {
                       <span className="text-zinc-700">•</span>
                       <span>{b.record_count} records</span>
                       <span className="text-zinc-700">•</span>
-                      <span className="text-indigo-500/60">
+                      <span className="text-blue-500/60">
                         {b.entities.split(',').length} modules
                       </span>
                     </div>
@@ -545,7 +545,7 @@ export default function SettingsPage() {
                         size="sm"
                         onClick={() => handleRestoreBackup(b.id)}
                         disabled={restoringId === b.id}
-                        className="flex-1 lg:flex-none h-10 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest bg-indigo-600 hover:bg-indigo-500 text-white"
+                        className="flex-1 lg:flex-none h-10 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest bg-blue-600 hover:bg-blue-500 text-white"
                       >
                         <Icon icon="ri:refresh-line" className={`w-3.5 h-3.5 mr-2 ${restoringId === b.id ? "animate-spin" : ""}`} />
                         {restoringId === b.id ? "Syncing..." : "Sync Dashboard"}

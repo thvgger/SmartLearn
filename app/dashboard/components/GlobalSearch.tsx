@@ -87,12 +87,12 @@ export function GlobalSearch({ open, setOpen }: GlobalSearchProps) {
 
         <CommandGroup heading="Recent Entities (Demo)">
           <CommandItem onSelect={() => runCommand(() => console.log("View Student"))}>
-            <Icon icon="ri:user-line" className="mr-2 h-4 w-4 text-indigo-400" />
+            <Icon icon="ri:user-line" className="mr-2 h-4 w-4 text-blue-400" />
             <span>John Doe</span>
             <span className="ml-auto text-xs text-zinc-500">Student</span>
           </CommandItem>
           <CommandItem onSelect={() => runCommand(() => console.log("View Exam"))}>
-            <Icon icon="ri:file-paper-2-line" className="mr-2 h-4 w-4 text-indigo-400" />
+            <Icon icon="ri:file-paper-2-line" className="mr-2 h-4 w-4 text-blue-400" />
             <span>Mid-term Mathematics 2026</span>
             <span className="ml-auto text-xs text-zinc-500">Exam</span>
           </CommandItem>

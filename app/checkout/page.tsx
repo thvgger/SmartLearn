@@ -240,13 +240,13 @@ function CheckoutContent() {
   };
 
   return (
-    <div className="bg-background text-foreground font-body min-h-screen flex flex-col selection:bg-indigo-500/30">
+    <div className="bg-background text-foreground font-body min-h-screen flex flex-col selection:bg-blue-500/30">
       <Navbar />
       
       <main className="flex-grow flex items-center justify-center pt-32 pb-24 px-4 sm:px-6 relative overflow-hidden">
         {/* Ambient Background Gradient */}
-        <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-indigo-500/10 blur-[150px] rounded-full pointer-events-none -z-10"></div>
-        <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-violet-500/10 blur-[150px] rounded-full pointer-events-none -z-10"></div>
+        <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-blue-500/10 blur-[150px] rounded-full pointer-events-none -z-10"></div>
+        <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-blue-500/10 blur-[150px] rounded-full pointer-events-none -z-10"></div>
 
         <div className="w-full max-w-2xl mx-auto z-10 animate-fade-in-up">
           <div className="mb-8 text-center">
@@ -261,7 +261,7 @@ function CheckoutContent() {
               <div className="bg-zinc-800/50 p-6 md:p-8 border-b border-white/5 flex flex-col md:flex-row justify-between md:items-center gap-6">
                 <div>
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
                       <Icon icon="ri:vip-crown-line" className="w-5 h-5" />
                     </div>
                     <h2 className="font-headline text-xl md:text-2xl font-bold text-white">{planDetails.name} Plan</h2>
@@ -272,7 +272,7 @@ function CheckoutContent() {
                   <div className="font-headline text-3xl md:text-4xl font-extrabold text-white tracking-tight">
                     ₦{amount.toLocaleString()}
                   </div>
-                  <div className="text-indigo-400 font-bold text-xs uppercase tracking-widest mt-1">
+                  <div className="text-blue-400 font-bold text-xs uppercase tracking-widest mt-1">
                     {billingCycle}
                   </div>
                 </div>
@@ -308,12 +308,12 @@ function CheckoutContent() {
                     <span className="text-white font-bold">₦{calcLoading ? "..." : (calcData?.subtotal || amount).toLocaleString()}</span>
                   </div>
                   {calcData && calcData.creditApplied > 0 && (
-                    <div className="p-4 border-b border-white/5 flex justify-between items-center text-sm bg-indigo-500/5">
-                      <span className="text-indigo-400 font-medium flex items-center gap-2">
+                    <div className="p-4 border-b border-white/5 flex justify-between items-center text-sm bg-blue-500/5">
+                      <span className="text-blue-400 font-medium flex items-center gap-2">
                         Unused Time Credit
-                        <Icon icon="ri:information-line" className="w-3.5 h-3.5 text-indigo-400/70" />
+                        <Icon icon="ri:information-line" className="w-3.5 h-3.5 text-blue-400/70" />
                       </span>
-                      <span className="text-indigo-400 font-bold">- ₦{calcData.creditApplied.toLocaleString()}</span>
+                      <span className="text-blue-400 font-bold">- ₦{calcData.creditApplied.toLocaleString()}</span>
                     </div>
                   )}
                   {calcData && calcData.extraDays > 0 && (
@@ -359,7 +359,7 @@ function CheckoutContent() {
                     <Button 
                       onClick={handleConfirmPayment}
                       disabled={loading || !!success}
-                      className="w-full sm:flex-[2] h-auto min-h-14 py-3.5 px-6 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2 order-1 sm:order-2"
+                      className="w-full sm:flex-[2] h-auto min-h-14 py-3.5 px-6 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-600/20 transition-all flex items-center justify-center gap-2 order-1 sm:order-2"
                     >
                       {loading ? (
                         <>
@@ -395,9 +395,9 @@ function CheckoutContent() {
                   </div>
                 ) : (
                   <div className="mt-4 animate-in fade-in slide-in-from-bottom-4">
-                    <div className="p-5 bg-indigo-900/20 border border-indigo-500/30 rounded-2xl flex flex-col items-center justify-center text-center gap-3 mb-6 relative overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500"></div>
-                      <h3 className="text-indigo-300 font-bold uppercase tracking-widest text-xs">Your Payment Reference (RRR)</h3>
+                    <div className="p-5 bg-blue-900/20 border border-blue-500/30 rounded-2xl flex flex-col items-center justify-center text-center gap-3 mb-6 relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-blue-500 to-blue-500"></div>
+                      <h3 className="text-blue-300 font-bold uppercase tracking-widest text-xs">Your Payment Reference (RRR)</h3>
                       <div className="flex items-center justify-center gap-3">
                         <span className="font-headline text-2xl md:text-4xl font-black text-white tracking-wider">
                           {paymentData.rrr || "N/A"}
@@ -407,7 +407,7 @@ function CheckoutContent() {
                             variant="ghost" 
                             size="icon" 
                             onClick={handleCopyRRR}
-                            className="text-indigo-400 hover:text-white hover:bg-indigo-500/20 shrink-0"
+                            className="text-blue-400 hover:text-white hover:bg-blue-500/20 shrink-0"
                             title="Copy RRR"
                           >
                             <Icon icon={copied ? "ri:check-line" : "ri:file-copy-line"} className="w-5 h-5" />
@@ -423,7 +423,7 @@ function CheckoutContent() {
                       <Button 
                         onClick={handlePayOnline}
                         disabled={loading || !!success}
-                        className="w-full h-14 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2"
+                        className="w-full h-14 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-blue-600/20 transition-all flex items-center justify-center gap-2"
                       >
                         <Icon icon="ri:bank-card-line" className="w-5 h-5" />
                         Pay Now Online
@@ -470,7 +470,7 @@ export default function CheckoutPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-background flex flex-col items-center justify-center text-white gap-4">
-        <div className="w-8 h-8 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
         <p className="text-zinc-500 font-bold text-sm tracking-widest uppercase animate-pulse">Loading Checkout...</p>
       </div>
     }>

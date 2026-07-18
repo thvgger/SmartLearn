@@ -62,7 +62,7 @@ function ResetPasswordForm() {
 
       <main className="relative flex-grow flex items-center justify-center pt-32 pb-20 overflow-hidden">
         {/* Ambient Background Glows */}
-        <div className="absolute top-1/4 -right-20 w-[600px] h-[600px] bg-violet-500/10 blur-[150px] rounded-full pointer-events-none"></div>
+        <div className="absolute top-1/4 -right-20 w-[600px] h-[600px] bg-blue-500/10 blur-[150px] rounded-full pointer-events-none"></div>
 
         <div className="relative z-10 w-full max-w-[900px] px-6 mx-auto">
           <div className="bg-zinc-900 rounded-2xl overflow-hidden flex flex-col md:flex-row shadow-2xl">
@@ -96,9 +96,9 @@ function ResetPasswordForm() {
                 <div className="space-y-2">
                   <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">6-Digit Code</Label>
                   <div className="relative group">
-                    <Icon icon="ri:key-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
+                    <Icon icon="ri:key-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-blue-400 transition-colors" />
                     <Input 
-                      className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-center text-lg tracking-[0.3em] font-mono text-white focus-visible:ring-indigo-500/50" 
+                      className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-center text-lg tracking-[0.3em] font-mono text-white focus-visible:ring-blue-500/50" 
                       placeholder="000000" 
                       maxLength={6}
                       type="text" 
@@ -112,9 +112,9 @@ function ResetPasswordForm() {
                 <div className="space-y-2">
                   <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">New Password</Label>
                   <div className="relative group">
-                    <Icon icon="ri:lock-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
+                    <Icon icon="ri:lock-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-blue-400 transition-colors" />
                     <Input 
-                      className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white focus-visible:ring-indigo-500/50" 
+                      className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white focus-visible:ring-blue-500/50" 
                       placeholder="••••••••" 
                       type="password" 
                       value={password} 
@@ -127,7 +127,7 @@ function ResetPasswordForm() {
                 <Button 
                   type="submit" 
                   disabled={loading}
-                  className="w-full h-12 bg-indigo-500 hover:bg-indigo-600 text-white font-black text-sm shadow-xl mt-4 border-none"
+                  className="w-full h-12 bg-blue-500 hover:bg-blue-600 text-white font-black text-sm shadow-xl mt-4 border-none"
                 >
                   {loading ? "Updating..." : "Update Password & Login"}
                 </Button>
@@ -150,7 +150,7 @@ export default function ResetPasswordPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <div className="w-10 h-10 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+        <div className="w-10 h-10 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
       </div>
     }>
       <ResetPasswordForm />

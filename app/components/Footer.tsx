@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 px-8 max-w-7xl mx-auto mb-16">
         <div className="lg:col-span-2">
           <Link href="/" className="text-xl font-extrabold text-white flex items-center gap-2 font-headline mb-6 hover:opacity-80 transition-opacity">
-            <Icon icon="ri:flashlight-line" className="text-indigo-400 w-6 h-6" />
+            <Icon icon="ri:flashlight-line" className="text-blue-400 w-6 h-6" />
             Swift Learn
           </Link>
           <p className="text-zinc-500 text-sm max-w-sm leading-relaxed mb-8">
@@ -31,17 +31,17 @@ export default function Footer() {
           <div className="text-xs font-black uppercase tracking-[0.2em] text-white mb-6 font-headline">Product</div>
           <ul className="space-y-4">
             <li>
-              <Link href="/features" className="text-xs font-bold text-zinc-500 hover:text-indigo-400 transition-colors">
+              <Link href="/features" className="text-xs font-bold text-zinc-500 hover:text-blue-400 transition-colors">
                 Features
               </Link>
             </li>
             <li>
-              <Link href="/pricing" className="text-xs font-bold text-zinc-500 hover:text-indigo-400 transition-colors">
+              <Link href="/pricing" className="text-xs font-bold text-zinc-500 hover:text-blue-400 transition-colors">
                 Pricing
               </Link>
             </li>
             <li>
-              <Link href="#" className="text-xs font-bold text-zinc-500 hover:text-indigo-400 transition-colors">
+              <Link href="#" className="text-xs font-bold text-zinc-500 hover:text-blue-400 transition-colors">
                 Security
               </Link>
             </li>
@@ -52,17 +52,17 @@ export default function Footer() {
           <div className="text-xs font-black uppercase tracking-[0.2em] text-white mb-6 font-headline">Account</div>
           <ul className="space-y-4">
             <li>
-              <Link href="/login" className="text-xs font-bold text-zinc-500 hover:text-indigo-400 transition-colors">
+              <Link href="/login" className="text-xs font-bold text-zinc-500 hover:text-blue-400 transition-colors">
                 Sign In
               </Link>
             </li>
             <li>
-              <Link href="/register" className="text-xs font-bold text-zinc-500 hover:text-indigo-400 transition-colors">
+              <Link href="/register" className="text-xs font-bold text-zinc-500 hover:text-blue-400 transition-colors">
                 Register School
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="text-xs font-bold text-zinc-500 hover:text-indigo-400 transition-colors">
+              <Link href="/contact" className="text-xs font-bold text-zinc-500 hover:text-blue-400 transition-colors">
                 Contact Sales
               </Link>
             </li>
@@ -73,17 +73,17 @@ export default function Footer() {
           <div className="text-xs font-black uppercase tracking-[0.2em] text-white mb-6 font-headline">Support</div>
           <ul className="space-y-4">
             <li>
-              <Link href="#" className="text-xs font-bold text-zinc-500 hover:text-indigo-400 transition-colors">
+              <Link href="#" className="text-xs font-bold text-zinc-500 hover:text-blue-400 transition-colors">
                 Documentation
               </Link>
             </li>
             <li>
-              <Link href="#" className="text-xs font-bold text-zinc-500 hover:text-indigo-400 transition-colors">
+              <Link href="#" className="text-xs font-bold text-zinc-500 hover:text-blue-400 transition-colors">
                 Help Center
               </Link>
             </li>
             <li>
-              <Link href="#" className="text-xs font-bold text-zinc-500 hover:text-indigo-400 transition-colors">
+              <Link href="#" className="text-xs font-bold text-zinc-500 hover:text-blue-400 transition-colors">
                 Privacy Policy
               </Link>
             </li>

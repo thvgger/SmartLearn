@@ -53,7 +53,7 @@ export function AppSidebar({ schoolName, plan }: AppSidebarProps) {
     <Sidebar collapsible="icon" className="border-r border-white/5 bg-zinc-950">
       <SidebarHeader className="h-20 flex items-center justify-center group-data-[collapsible=icon]:px-0 px-6">
         <div className="flex items-center gap-3 w-full group-data-[collapsible=icon]:w-auto group-data-[collapsible=icon]:justify-center">
-          <div className="w-9 h-9 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 rounded-xl bg-indigo-600 flex items-center justify-center flex-shrink-0 transition-all">
+          <div className="w-9 h-9 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0 transition-all">
             <Icon icon="ri:flashlight-fill" className="text-white w-5 h-5 group-data-[collapsible=icon]:w-4 group-data-[collapsible=icon]:h-4" />
           </div>
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
@@ -86,18 +86,18 @@ export function AppSidebar({ schoolName, plan }: AppSidebarProps) {
                       tooltip={item.label}
                       className={`h-11 rounded-lg transition-colors group-data-[collapsible=icon]:!size-10 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!p-0 group-data-[collapsible=icon]:justify-center ${
                         isActive 
-                          ? "bg-indigo-600/10 text-white" 
+                          ? "bg-blue-600/10 text-white" 
                           : "text-zinc-400 hover:text-white hover:bg-white/5"
                       }`}
                     >
                       {/* Active Indicator Line */}
                       {isActive && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-indigo-500 rounded-r-full group-data-[collapsible=icon]:left-0" />
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-blue-500 rounded-r-full group-data-[collapsible=icon]:left-0" />
                       )}
                       
                       <Icon 
                         icon={isActive ? item.activeIcon : item.icon} 
-                        className={`w-5 h-5 ${isActive ? "text-indigo-400" : "text-zinc-500 group-hover:text-zinc-400"}`} 
+                        className={`w-5 h-5 ${isActive ? "text-blue-400" : "text-zinc-500 group-hover:text-zinc-400"}`} 
                       />
                       <span className="font-medium text-sm group-data-[collapsible=icon]:hidden">
                         {item.label}
@@ -127,7 +127,7 @@ export function AppSidebar({ schoolName, plan }: AppSidebarProps) {
                 <span className="text-zinc-400">Storage Usage</span>
                 <span className="text-zinc-300">32%</span>
               </div>
-              <Progress value={32} className="h-1.5 bg-zinc-800" indicatorClassName="bg-indigo-500" />
+              <Progress value={32} className="h-1.5 bg-zinc-800" indicatorClassName="bg-blue-500" />
             </div>
           </div>
         </div> */}

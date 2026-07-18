@@ -136,7 +136,7 @@ export default function TransactionsPage() {
       <Card className="bg-zinc-900 border-white/10 rounded-2xl overflow-hidden p-0">
         <CardHeader className="p-6 pb-2 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-indigo-400">
+            <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-blue-400">
               <Icon icon="ri:history-line" className="w-5 h-5" />
             </div>
             <div>
@@ -158,7 +158,7 @@ export default function TransactionsPage() {
                 }}
                 className={`px-4 py-2 rounded-lg text-xs font-bold capitalize transition-all cursor-pointer ${
                   activeTab === tab
-                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
                     : "text-zinc-500 hover:text-zinc-300"
                 }`}
               >
@@ -203,7 +203,7 @@ export default function TransactionsPage() {
                   : `You don't have any ${activeTab} RRRs at this time.`}
               </p>
               {activeTab === "all" && (
-                <Button asChild className="mt-5 bg-indigo-600 hover:bg-indigo-500 h-10 px-5 text-xs font-bold rounded-xl">
+                <Button asChild className="mt-5 bg-blue-600 hover:bg-blue-500 h-10 px-5 text-xs font-bold rounded-xl">
                   <Link href="/dashboard/settings">Choose Plan</Link>
                 </Button>
               )}
@@ -377,7 +377,7 @@ export default function TransactionsPage() {
                   </div>
                 )}
               </div>
-              <Button onClick={() => setShowPaymentSuccess(false)} className="w-full h-12 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-600/20 mt-2 cursor-pointer">
+              <Button onClick={() => setShowPaymentSuccess(false)} className="w-full h-12 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20 mt-2 cursor-pointer">
                 Done
               </Button>
             </div>

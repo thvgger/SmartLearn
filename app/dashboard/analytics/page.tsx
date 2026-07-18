@@ -94,7 +94,7 @@ export default function AnalyticsPage() {
   }));
 
   const barColors = [
-    "bg-indigo-500", "bg-violet-500", "bg-blue-500",
+    "bg-blue-500", "bg-blue-500", "bg-blue-500",
     "bg-cyan-500", "bg-emerald-500", "bg-amber-500",
   ];
 
@@ -105,7 +105,7 @@ export default function AnalyticsPage() {
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto flex flex-col items-center justify-center min-h-[50vh] text-zinc-500">
-        <div className="w-10 h-10 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mb-4" />
+        <div className="w-10 h-10 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4" />
         <p className="text-sm font-bold uppercase tracking-widest">Calculating analytics...</p>
       </div>
     );
@@ -128,9 +128,9 @@ export default function AnalyticsPage() {
       {/* Top Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { icon: "ri:bar-chart-2-line", label: "School Average", value: stats ? `${stats.avgScore}%` : "—", color: "text-indigo-400" },
+          { icon: "ri:bar-chart-2-line", label: "School Average", value: stats ? `${stats.avgScore}%` : "—", color: "text-blue-400" },
           { icon: "ri:line-chart-line", label: "Score Trend", value: scoreTrend.length > 1 ? `${scoreTrend[scoreTrend.length - 1].score && scoreTrend[0].score ? (Number(scoreTrend[scoreTrend.length - 1].score) - Number(scoreTrend[0].score) > 0 ? "+" : "") + (Number(scoreTrend[scoreTrend.length - 1].score) - Number(scoreTrend[0].score)).toFixed(1) + "%" : "—"}` : "—", color: "text-emerald-400" },
-          { icon: "ri:book-open-line", label: "Tests administered", value: stats?.exams || 0, color: "text-violet-400" },
+          { icon: "ri:book-open-line", label: "Tests administered", value: stats?.exams || 0, color: "text-blue-400" },
           { icon: "ri:user-line", label: "Students assessed", value: stats?.students || 0, color: "text-amber-400" },
         ].map((s, i) => (
           <Card key={i} className="bg-zinc-900 border-white/10 rounded-xl p-5">
@@ -195,12 +195,12 @@ export default function AnalyticsPage() {
                     {scoreTrend.map((w, i) => (
                       <div key={i} className="flex-1 flex flex-col items-center justify-end h-full group">
                         <div className="opacity-0 group-hover:opacity-100 transition-opacity mb-2">
-                          <Badge className="bg-indigo-600 text-white border-none text-[9px] font-black px-1.5 py-0.5">
+                          <Badge className="bg-blue-600 text-white border-none text-[9px] font-black px-1.5 py-0.5">
                             {w.score ? `${Math.round(w.score)}%` : "—"}
                           </Badge>
                         </div>
                         <div
-                          className="w-full bg-gradient-to-t from-indigo-600 to-violet-500 rounded-t-md transition-all duration-500 min-h-[8px] group-hover:scale-x-110 shadow-lg shadow-indigo-500/20"
+                          className="w-full bg-gradient-to-t from-blue-600 to-blue-500 rounded-t-md transition-all duration-500 min-h-[8px] group-hover:scale-x-110 shadow-lg shadow-blue-500/20"
                           style={{ height: `${((w.score || 0) / maxTrend) * 70}%` }}
                         />
                         <span className="text-[9px] text-zinc-500 mt-3 font-bold truncate w-full text-center uppercase tracking-tighter">
@@ -243,7 +243,7 @@ export default function AnalyticsPage() {
                           #{i + 1}
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">{s.name}</p>
+                          <p className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">{s.name}</p>
                           <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">{s.class_name}</p>
                         </div>
                         <Badge className="bg-emerald-500/10 text-emerald-400 border-none font-black">
@@ -259,7 +259,7 @@ export default function AnalyticsPage() {
             {/* Class Distribution */}
             <Card className="lg:col-span-2 bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
               <CardHeader className="p-6 pb-4 flex flex-row items-center gap-3">
-                <Icon icon="ri:focus-3-line" className="w-5 h-5 text-indigo-400" />
+                <Icon icon="ri:focus-3-line" className="w-5 h-5 text-blue-400" />
                 <CardTitle className="font-headline font-bold text-lg text-white">Class Distribution</CardTitle>
               </CardHeader>
               <CardContent className="p-6 pt-0 mt-2">
@@ -277,7 +277,7 @@ export default function AnalyticsPage() {
                       .map(([className, count]) => (
                         <div key={className} className="flex items-center justify-between py-3 px-4 rounded-xl bg-white/[0.02] border border-white/5">
                           <span className="text-xs font-black uppercase tracking-widest text-zinc-300">{className}</span>
-                          <Badge variant="secondary" className="bg-indigo-600 text-white border-none font-black text-[10px]">
+                          <Badge variant="secondary" className="bg-blue-600 text-white border-none font-black text-[10px]">
                             {count} students
                           </Badge>
                         </div>

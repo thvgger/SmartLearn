@@ -53,8 +53,8 @@ export default function LoginPage() {
 
       <main className="flex-grow flex items-center justify-center relative overflow-hidden pt-20">
         {/* Ambient Background Glows */}
-        <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none"></div>
-        <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-violet-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none"></div>
         
         <div className="relative z-10 w-full max-w-[460px] px-6 animate-fade-in-up">
           <Card className="bg-zinc-900 border-white/10 rounded-2xl p-0">
@@ -74,9 +74,9 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Email Address</Label>
                   <div className="relative group">
-                    <Icon icon="ri:send-plane-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
+                    <Icon icon="ri:send-plane-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-blue-400 transition-colors" />
                     <Input 
-                      className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus-visible:ring-indigo-500/50 transition-all font-medium" 
+                      className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus-visible:ring-blue-500/50 transition-all font-medium" 
                       placeholder="admin@school.edu" 
                       type="email"
                       value={email}
@@ -89,14 +89,14 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <div className="flex justify-between items-end mb-1">
                     <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Password</Label>
-                    <Link href="/forgot-password" className="text-[10px] uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors font-black">
+                    <Link href="/forgot-password" className="text-[10px] uppercase tracking-widest text-blue-400 hover:text-blue-300 transition-colors font-black">
                       Forgot Password?
                     </Link>
                   </div>
                   <div className="relative group">
-                    <Icon icon="ri:lock-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
+                    <Icon icon="ri:lock-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-blue-400 transition-colors" />
                     <Input 
-                      className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus-visible:ring-indigo-500/50 transition-all font-medium" 
+                      className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white placeholder:text-zinc-700 focus-visible:ring-blue-500/50 transition-all font-medium" 
                       placeholder="••••••••" 
                       type="password"
                       value={password}
@@ -129,7 +129,7 @@ export default function LoginPage() {
           </Card>
           
           <div className="mt-8 flex justify-center items-center gap-4 py-4 px-6 rounded-2xl bg-white/[0.02] border border-white/5">
-            <Icon icon="ri:shield-line-check" className="w-4 h-4 text-indigo-400" />
+            <Icon icon="ri:shield-line-check" className="w-4 h-4 text-blue-400" />
             <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-black">Secure AES-256 Encryption</span>
           </div>
         </div>

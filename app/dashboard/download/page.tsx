@@ -42,7 +42,7 @@ export default function DownloadAppPage() {
 
           <div>
             <div className="flex items-center justify-between mb-8">
-              <div className="p-3.5 rounded-2xl bg-gradient-to-br from-blue-600/10 to-indigo-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center group-hover:scale-105 transition-all duration-300">
+              <div className="p-3.5 rounded-2xl bg-gradient-to-br from-blue-600/10 to-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center group-hover:scale-105 transition-all duration-300">
                 <Icon icon="ri:windows-line" className="w-8 h-8" />
               </div>
               <div className="text-right">
@@ -81,7 +81,7 @@ export default function DownloadAppPage() {
           <Card className="bg-zinc-900 border-white/10 rounded-xl p-6">
             <CardHeader className="p-0 pb-4">
               <CardTitle className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <Icon icon="ri:key-2-line" className="w-4 h-4 text-indigo-400" />
+                <Icon icon="ri:key-2-line" className="w-4 h-4 text-blue-400" />
                 Activation Code
               </CardTitle>
             </CardHeader>
@@ -91,7 +91,7 @@ export default function DownloadAppPage() {
               </p>
               
               <div className="flex items-center gap-2.5 bg-zinc-950 px-3 py-2.5 rounded-lg border border-white/5">
-                <span className="text-xs text-indigo-300 font-mono font-bold select-all flex-1 truncate">{schoolTag}</span>
+                <span className="text-xs text-blue-300 font-mono font-bold select-all flex-1 truncate">{schoolTag}</span>
                 {user?.school_tag && (
                   <Button
                     variant="ghost"
@@ -146,7 +146,7 @@ export default function DownloadAppPage() {
       {/* Installation Guide */}
       <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         <CardHeader className="p-6 pb-4 flex flex-row items-center gap-3">
-          <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-violet-400 shrink-0">
+          <div className="p-2.5 rounded-md bg-white/5 border border-white/5 text-blue-400 shrink-0">
             <Icon icon="ri:guide-line" className="w-5 h-5" />
           </div>
           <CardTitle className="font-headline font-bold text-lg text-white">How to Set Up offline assessments</CardTitle>

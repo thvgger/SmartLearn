@@ -50,7 +50,7 @@ export default function DashboardHeader({
               onClick={() => setSearchOpen(true)}
               className="relative group w-full text-left"
             >
-              <Icon icon="ri:search-line" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-hover:text-indigo-400 transition-colors" />
+              <Icon icon="ri:search-line" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-hover:text-blue-400 transition-colors" />
               <div className="w-full bg-white/[0.03] border border-white/5 group-hover:border-white/10 rounded-xl py-2 pl-10 pr-4 text-sm text-zinc-500 flex items-center justify-between transition-all">
                 <span>Search for students, exams...</span>
                 <kbd className="hidden lg:inline-flex items-center gap-1 rounded border border-white/10 bg-white/5 px-1.5 font-mono text-[10px] font-medium text-zinc-400">
@@ -65,22 +65,22 @@ export default function DashboardHeader({
           {/* Notifications */}
           <Button variant="ghost" size="icon-sm" className="relative text-zinc-400 hover:text-white hover:bg-white/5 group">
             <Icon icon="ri:notification-3-line" className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-500 rounded-full border-2 border-zinc-950" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-blue-500 rounded-full border-2 border-zinc-950" />
           </Button>
 
           {/* User Profile */}
           <DropdownMenu>
             <DropdownMenuTrigger render={<button className="flex items-center gap-3 pl-3 lg:pl-5 border-l border-white/5 outline-none group" />}>
               <div className="hidden lg:block text-right">
-                <p className="text-sm font-bold text-white leading-none mb-1 group-hover:text-indigo-300 transition-colors">
+                <p className="text-sm font-bold text-white leading-none mb-1 group-hover:text-blue-300 transition-colors">
                   {contactName}
                 </p>
                 <p className="text-[11px] font-medium text-zinc-500 leading-none">
                   {email}
                 </p>
               </div>
-              <Avatar className="w-9 h-9 border-none shadow-lg shadow-indigo-500/10 transition-transform group-hover:scale-105">
-                <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-xs font-black">
+              <Avatar className="w-9 h-9 border-none shadow-lg shadow-blue-500/10 transition-transform group-hover:scale-105">
+                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-black">
                   {initials}
                 </AvatarFallback>
               </Avatar>

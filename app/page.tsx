@@ -16,13 +16,13 @@ export default function Home() {
         {/* Hero Section */}
         <section className="relative pt-48 pb-32 px-6 overflow-hidden min-h-screen flex flex-col justify-center items-center">
           {/* Softened Background Glows */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-indigo-500/5 blur-[140px] rounded-full -z-10 pointer-events-none"></div>
-          <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-violet-500/[0.03] blur-[120px] rounded-full -z-10 pointer-events-none"></div>
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-500/5 blur-[140px] rounded-full -z-10 pointer-events-none"></div>
+          <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-blue-500/[0.03] blur-[120px] rounded-full -z-10 pointer-events-none"></div>
           
           <div className="max-w-5xl mx-auto text-center animate-fade-in-up relative z-10">
             {/* <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-300">
+              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300">
                 The Future of School Assessments
               </span>
             </div>
@@ -37,7 +37,7 @@ export default function Home() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-              <Button asChild size="lg" className="h-14 px-10 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg shadow-[0_20px_40px_-10px_rgba(99,102,241,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]">
+              <Button asChild size="lg" className="h-14 px-10 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-lg shadow-[0_20px_40px_-10px_rgba(99,102,241,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]">
                 <Link href="/register">
                   Get Started Free
                   <Icon icon="ri:arrow-right-line" className="ml-2 w-5 h-5" />
@@ -51,7 +51,7 @@ export default function Home() {
             <p className="text-xs text-zinc-500 mt-6 flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider">
               <Icon icon="ri:windows-fill" className="w-4 h-4 text-blue-500" />
               Running offline exams?
-              <Link href="/download" className="text-indigo-400 hover:text-indigo-300 hover:underline transition-all">
+              <Link href="/download" className="text-blue-400 hover:text-blue-300 hover:underline transition-all">
                 Download Windows Offline Client
               </Link>
             </p>
@@ -69,7 +69,7 @@ export default function Home() {
               { val: "90%", lab: "Cost Reduction" }
             ].map((s, i) => (
               <div key={i} className="text-center group">
-                <div className="text-4xl font-headline font-extrabold text-white mb-2 group-hover:text-indigo-400 transition-colors">{s.val}</div>
+                <div className="text-4xl font-headline font-extrabold text-white mb-2 group-hover:text-blue-400 transition-colors">{s.val}</div>
                 <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">{s.lab}</div>
               </div>
             ))}
@@ -101,7 +101,7 @@ export default function Home() {
                   </div>
                   
                   {/* Icon */}
-                  <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-400 mb-6 relative z-10 transition-colors group-hover:bg-indigo-500/10">
+                  <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-blue-400 mb-6 relative z-10 transition-colors group-hover:bg-blue-500/10">
                     <Icon icon={f.icon} className="w-6 h-6" />
                   </div>
                   
@@ -114,7 +114,7 @@ export default function Home() {
                   </p>
                   
                   {/* Footer Link */}
-                  <div className="flex items-center gap-1.5 text-sm font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors relative z-10 mt-auto">
+                  <div className="flex items-center gap-1.5 text-sm font-semibold text-blue-400 group-hover:text-blue-300 transition-colors relative z-10 mt-auto">
                     Learn more <Icon icon="ri:arrow-right-line" className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </div>
                 </Card>
@@ -141,8 +141,8 @@ export default function Home() {
                     "Automatic grades sync back to the cloud"
                   ].map((t, i) => (
                     <div key={i} className="flex items-center gap-3">
-                      <div className="w-5 h-5 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-                        <Icon icon="ri:checkbox-circle-line" className="w-3 h-3 text-indigo-400" />
+                      <div className="w-5 h-5 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                        <Icon icon="ri:checkbox-circle-line" className="w-3 h-3 text-blue-400" />
                       </div>
                       <span className="text-zinc-300 font-medium">{t}</span>
                     </div>
@@ -151,7 +151,7 @@ export default function Home() {
               </div>
               
               <div className="lg:w-1/2 relative">
-                <div className="absolute -inset-4 bg-indigo-500/20 blur-[80px] rounded-full opacity-30"></div>
+                <div className="absolute -inset-4 bg-blue-500/20 blur-[80px] rounded-full opacity-30"></div>
                 <Card className="bg-zinc-900 border-white/10 p-2 rounded-3xl overflow-hidden shadow-2xl">
                   <img 
                     className="rounded-2xl w-full border border-white/10" 
@@ -167,7 +167,7 @@ export default function Home() {
         {/* CTA Section */}
         <section className="py-40 px-6">
           <div className="max-w-5xl mx-auto relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/20 to-violet-500/20 rounded-[2.5rem] blur opacity-50 group-hover:opacity-75 transition duration-1000"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-blue-500/20 rounded-[2.5rem] blur opacity-50 group-hover:opacity-75 transition duration-1000"></div>
             <Card className="relative bg-zinc-900 border-white/10 rounded-[2.5rem] text-center overflow-hidden">
               <CardContent className="py-24 px-10 md:px-20">
                 <div className="mb-12">

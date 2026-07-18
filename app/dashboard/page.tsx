@@ -288,7 +288,7 @@ export default function DashboardOverview() {
           icon="ri:bar-chart-2-line"
           label="Avg Score"
           value={stats ? `${stats.avgScore}%` : "—"}
-          accent="text-violet-400"
+          accent="text-blue-400"
         />
       </div>
 
@@ -311,12 +311,12 @@ export default function DashboardOverview() {
                 {scoreTrend.map((s, i) => (
                   <div key={i} className="flex-1 flex flex-col items-center justify-end h-full group">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity mb-2">
-                      <Badge variant="secondary" className="text-[10px] bg-indigo-500/20 text-indigo-300 border-none">
+                      <Badge variant="secondary" className="text-[10px] bg-blue-500/20 text-blue-300 border-none">
                         {s.score ? `${Math.round(s.score)}%` : "—"}
                       </Badge>
                     </div>
                     <div
-                      className="w-full bg-gradient-to-t from-indigo-600 to-violet-500 rounded-t-md transition-all duration-500 min-h-[8px] hover:scale-x-110 shadow-lg shadow-indigo-500/20"
+                      className="w-full bg-gradient-to-t from-blue-600 to-blue-500 rounded-t-md transition-all duration-500 min-h-[8px] hover:scale-x-110 shadow-lg shadow-blue-500/20"
                       style={{ height: `${((s.score || 0) / maxTrend) * 70}%` }}
                     />
                     <span className="text-[9px] text-zinc-500 mt-3 font-medium truncate w-full text-center">
@@ -443,7 +443,7 @@ export default function DashboardOverview() {
                   <p className="text-zinc-500 text-sm mb-6 leading-relaxed">
                     Activate a plan to unlock all CBT features and start running secure exams.
                   </p>
-                  <Button asChild className="w-full bg-indigo-600 hover:bg-indigo-500">
+                  <Button asChild className="w-full bg-blue-600 hover:bg-blue-500">
                     <Link href="/dashboard/settings">
                       Upgrade Now
                       <Icon icon="ri:arrow-right-line" className="ml-2 w-4 h-4" />
@@ -488,7 +488,7 @@ export default function DashboardOverview() {
                     </div>
                   ))}
                   {backups.length > 3 && (
-                    <Button asChild variant="link" size="sm" className="h-auto p-0 text-indigo-400 hover:text-indigo-300">
+                    <Button asChild variant="link" size="sm" className="h-auto p-0 text-blue-400 hover:text-blue-300">
                       <Link href="/dashboard/settings">View all backups →</Link>
                     </Button>
                   )}
@@ -503,13 +503,13 @@ export default function DashboardOverview() {
           <Card className="relative overflow-hidden bg-zinc-900 border-white/10 hover:border-white/20 transition-all group rounded-2xl p-6 flex flex-col items-start h-full">
             {/* Top Right Decorative Background */}
             <div className="absolute top-0 right-0 w-48 h-48 pointer-events-none overflow-hidden rounded-tr-2xl">
-              <div className="absolute top-[-20%] right-[-10%] w-full h-full bg-indigo-500/[0.03] rotate-12 rounded-3xl" />
+              <div className="absolute top-[-20%] right-[-10%] w-full h-full bg-blue-500/[0.03] rotate-12 rounded-3xl" />
               <div className="absolute top-[10%] right-[-20%] w-full h-full border border-white/5 rotate-12 rounded-3xl" />
               
               {/* Mini UI Graphic - Users */}
               <div className="absolute right-[10px] top-[20px] w-32 bg-zinc-800 border border-white/10 rounded-lg p-2.5 shadow-2xl transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-2">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-5 h-5 rounded-full bg-indigo-500/20 flex-shrink-0" />
+                  <div className="w-5 h-5 rounded-full bg-blue-500/20 flex-shrink-0" />
                   <div className="space-y-1 w-full">
                     <div className="h-1.5 w-full bg-white/20 rounded-full" />
                     <div className="h-1.5 w-2/3 bg-white/10 rounded-full" />
@@ -526,7 +526,7 @@ export default function DashboardOverview() {
             </div>
 
             {/* Icon */}
-            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-400 mb-6 relative z-10 group-hover:bg-indigo-500/10 transition-colors">
+            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-blue-400 mb-6 relative z-10 group-hover:bg-blue-500/10 transition-colors">
               <Icon icon="ri:user-line" className="w-6 h-6" />
             </div>
 
@@ -539,7 +539,7 @@ export default function DashboardOverview() {
             </p>
 
             {/* Footer Link */}
-            <div className="flex items-center gap-1.5 text-sm font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors relative z-10 mt-auto">
+            <div className="flex items-center gap-1.5 text-sm font-semibold text-blue-400 group-hover:text-blue-300 transition-colors relative z-10 mt-auto">
               Manage now <Icon icon="ri:arrow-right-line" className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </div>
           </Card>
@@ -634,7 +634,7 @@ export default function DashboardOverview() {
                   </div>
                 )}
               </div>
-              <Button onClick={() => setShowPaymentSuccess(false)} className="w-full h-12 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-600/20 mt-2 cursor-pointer">
+              <Button onClick={() => setShowPaymentSuccess(false)} className="w-full h-12 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20 mt-2 cursor-pointer">
                 Go to Dashboard
               </Button>
             </div>

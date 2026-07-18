@@ -59,7 +59,7 @@ export default function DevicesPage() {
             Manage your CBT application license keys and connected devices.
           </p>
         </div>
-        <Button className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold h-11 px-6 shadow-lg shadow-indigo-600/20">
+        <Button className="bg-blue-600 hover:bg-blue-500 text-white font-bold h-11 px-6 shadow-lg shadow-blue-600/20">
           <Icon icon="ri:add-line" className="w-4 h-4 mr-2" />
           Generate License
         </Button>
@@ -68,7 +68,7 @@ export default function DevicesPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { icon: "ri:computer-line", label: "Total Devices", value: licenses.length, color: "text-indigo-400" },
+          { icon: "ri:computer-line", label: "Total Devices", value: licenses.length, color: "text-blue-400" },
           { icon: "ri:checkbox-circle-line", label: "Active", value: activeCount, color: "text-emerald-400" },
           { icon: "ri:close-circle-line", label: "Revoked", value: licenses.length - activeCount, color: "text-rose-400" },
         ].map((s, i) => (
@@ -99,7 +99,7 @@ export default function DevicesPage() {
         <CardContent className="p-0">
           {loading ? (
             <div className="p-20 flex flex-col items-center justify-center text-zinc-500">
-              <div className="w-10 h-10 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mb-4" />
+              <div className="w-10 h-10 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4" />
               <p className="text-sm font-bold uppercase tracking-widest">Syncing devices...</p>
             </div>
           ) : licenses.length === 0 ? (
@@ -126,7 +126,7 @@ export default function DevicesPage() {
                       <Icon icon="ri:computer-line" className="w-5 h-5" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">
+                      <p className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">
                         {lic.device_name || "Unnamed Device"}
                       </p>
                       <div className="flex items-center gap-2 mt-1">
@@ -137,7 +137,7 @@ export default function DevicesPage() {
                           variant="ghost"
                           size="icon"
                           onClick={() => handleCopy(lic.key)}
-                          className="h-7 w-7 text-zinc-600 hover:text-indigo-400 hover:bg-indigo-500/10"
+                          className="h-7 w-7 text-zinc-600 hover:text-blue-400 hover:bg-blue-500/10"
                         >
                           {copiedKey === lic.key ? (
                             <Icon icon="ri:check-line" className="w-3.5 h-3.5 text-emerald-400" />

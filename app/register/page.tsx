@@ -161,8 +161,8 @@ export default function RegisterPage() {
 
       <main className="relative flex-grow flex items-center justify-center pt-20 sm:pt-24 md:pt-32 pb-10 sm:pb-12 md:pb-20 overflow-hidden">
         {/* Ambient Background Glows */}
-        <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-indigo-500/10 blur-[150px] rounded-full pointer-events-none"></div>
-        <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-violet-500/10 blur-[150px] rounded-full pointer-events-none"></div>
+        <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-blue-500/10 blur-[150px] rounded-full pointer-events-none"></div>
+        <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-blue-500/10 blur-[150px] rounded-full pointer-events-none"></div>
 
         <div className="relative z-10 w-full max-w-[900px] px-4 sm:px-6 mx-auto">
           <div className="bg-zinc-900 rounded-2xl overflow-hidden flex flex-col md:flex-row shadow-2xl">
@@ -171,8 +171,8 @@ export default function RegisterPage() {
             <div className="hidden md:flex md:w-5/12 bg-zinc-950 p-10 flex-col justify-between relative overflow-hidden border-r border-white/5">
               <div className="relative z-10">
                 {/* <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 mb-6">
-                  <Icon icon="ri:sparkling-line" className="w-3 h-3 text-indigo-400" />
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-300">Join the Future</span>
+                  <Icon icon="ri:sparkling-line" className="w-3 h-3 text-blue-400" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300">Join the Future</span>
                 </div> */}
                 <h2 className="text-2xl font-black text-white leading-tight">Elevate your school's learning experience.</h2>
                 <p className="text-zinc-500 text-sm mt-3 font-medium">Join hundreds of modern institutions using SmartLearn today.</p>
@@ -193,7 +193,7 @@ export default function RegisterPage() {
                 </h1>
                 <div className="flex gap-1.5 sm:gap-2">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className={`w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full transition-all ${step >= i ? "bg-indigo-500" : "bg-white/10"}`} />
+                    <div key={i} className={`w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full transition-all ${step >= i ? "bg-blue-500" : "bg-white/10"}`} />
                   ))}
                 </div>
               </div>
@@ -213,15 +213,15 @@ export default function RegisterPage() {
                       <div className="space-y-2">
                         <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Work Email</Label>
                         <div className="relative group">
-                          <Icon icon="ri:send-plane-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
-                          <Input className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white focus-visible:ring-indigo-500/50" placeholder="admin@institution.edu" type="email" inputMode="email" autoComplete="email" value={formData.email} onChange={(e) => updateForm("email", e.target.value)} required />
+                          <Icon icon="ri:send-plane-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-blue-400 transition-colors" />
+                          <Input className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white focus-visible:ring-blue-500/50" placeholder="admin@institution.edu" type="email" inputMode="email" autoComplete="email" value={formData.email} onChange={(e) => updateForm("email", e.target.value)} required />
                         </div>
                       </div>
                       <div className="space-y-2">
                         <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Password</Label>
                         <div className="relative group">
-                          <Icon icon="ri:lock-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" />
-                          <Input className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white focus-visible:ring-indigo-500/50" placeholder="••••••••" type="password" autoComplete="new-password" value={formData.password} onChange={(e) => updateForm("password", e.target.value)} required />
+                          <Icon icon="ri:lock-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-blue-400 transition-colors" />
+                          <Input className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white focus-visible:ring-blue-500/50" placeholder="••••••••" type="password" autoComplete="new-password" value={formData.password} onChange={(e) => updateForm("password", e.target.value)} required />
                         </div>
                       </div>
                     </motion.div>
@@ -233,7 +233,7 @@ export default function RegisterPage() {
                       <div className="space-y-2">
                         <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Full Name</Label>
                         <div className="relative group">
-                          <Icon icon="ri:user-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400" />
+                          <Icon icon="ri:user-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-blue-400" />
                           <Input className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white" placeholder="John Doe" autoComplete="name" value={formData.contact_name} onChange={(e) => updateForm("contact_name", e.target.value)} required />
                         </div>
                       </div>
@@ -242,9 +242,9 @@ export default function RegisterPage() {
                           <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Role / Title</Label>
                           <div className="relative group flex flex-col">
                             <div className="relative">
-                              <Icon icon="ri:briefcase-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400 pointer-events-none" />
+                              <Icon icon="ri:briefcase-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-blue-400 pointer-events-none" />
                               <select 
-                                className="w-full bg-white/[0.03] border border-white/5 rounded-xl py-3.5 pl-11 pr-10 text-sm text-white outline-none focus:ring-1 focus:ring-indigo-500/50 appearance-none cursor-pointer" 
+                                className="w-full bg-white/[0.03] border border-white/5 rounded-xl py-3.5 pl-11 pr-10 text-sm text-white outline-none focus:ring-1 focus:ring-blue-500/50 appearance-none cursor-pointer" 
                                 value={roleSelection} 
                                 onChange={(e) => {
                                   setRoleSelection(e.target.value);
@@ -286,7 +286,7 @@ export default function RegisterPage() {
                               value={formData.phone} 
                               onChange={(val) => updateForm("phone", val || "")} 
                               autoComplete="tel"
-                              className="w-full bg-white/[0.03] border border-white/5 rounded-xl py-2 px-4 text-sm text-white focus-within:ring-1 focus-within:ring-indigo-500/50 phone-custom min-h-[50px]" 
+                              className="w-full bg-white/[0.03] border border-white/5 rounded-xl py-2 px-4 text-sm text-white focus-within:ring-1 focus-within:ring-blue-500/50 phone-custom min-h-[50px]" 
                             />
                           </div>
                         </div>
@@ -300,7 +300,7 @@ export default function RegisterPage() {
                       <div className="space-y-2">
                         <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">Institution Name</Label>
                         <div className="relative group">
-                          <Icon icon="ri:government-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-indigo-400" />
+                          <Icon icon="ri:government-line" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-blue-400" />
                           <Input className="w-full bg-white/[0.03] border-white/5 rounded-xl py-6 pl-11 pr-4 text-sm text-white" placeholder="Global High School" autoComplete="organization" value={formData.school_name} onChange={(e) => updateForm("school_name", e.target.value)} required />
                         </div>
                       </div>
@@ -308,7 +308,7 @@ export default function RegisterPage() {
                         <div className="space-y-2">
                           <Label className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold ml-1">School Size</Label>
                           <div className="relative">
-                            <select className="w-full bg-white/[0.03] border border-white/5 rounded-xl py-3.5 pl-4 pr-10 text-sm text-white outline-none focus:ring-1 focus:ring-indigo-500/50 appearance-none cursor-pointer" value={formData.school_size} onChange={(e) => updateForm("school_size", e.target.value)}>
+                            <select className="w-full bg-white/[0.03] border border-white/5 rounded-xl py-3.5 pl-4 pr-10 text-sm text-white outline-none focus:ring-1 focus:ring-blue-500/50 appearance-none cursor-pointer" value={formData.school_size} onChange={(e) => updateForm("school_size", e.target.value)}>
                               <option value="" className="bg-zinc-900">Select size...</option>
                               <option value="1-100" className="bg-zinc-900">1 - 100 students</option>
                               <option value="101-500" className="bg-zinc-900">101 - 500 students</option>
@@ -331,15 +331,15 @@ export default function RegisterPage() {
                   {/* STEP 4: OTP Verification */}
                   {step === 4 && (
                     <motion.div key="step4" variants={variants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3 }} className="space-y-6 text-center pt-4">
-                      <div className="mx-auto w-16 h-16 bg-indigo-500/10 rounded-full flex items-center justify-center mb-6 border border-indigo-500/20">
-                        <Icon icon="ri:mail-send-line" className="w-8 h-8 text-indigo-400" />
+                      <div className="mx-auto w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mb-6 border border-blue-500/20">
+                        <Icon icon="ri:mail-send-line" className="w-8 h-8 text-blue-400" />
                       </div>
                       <div>
                         <h3 className="text-white font-bold text-lg">Check your email</h3>
                         <p className="text-zinc-400 text-sm mt-2">We sent a 6-digit code to <span className="text-white font-medium">{formData.email}</span>.</p>
                       </div>
                       <div className="max-w-[200px] mx-auto mt-6">
-                        <Input className="w-full bg-white/[0.03] border-white/10 hover:border-white/20 rounded-xl py-6 text-center text-2xl tracking-[0.5em] font-mono text-white placeholder:opacity-0 focus-visible:ring-indigo-500/50" placeholder="123456" maxLength={6} inputMode="numeric" pattern="[0-9]*" autoComplete="one-time-code" value={formData.otp} onChange={(e) => updateForm("otp", e.target.value)} required />
+                        <Input className="w-full bg-white/[0.03] border-white/10 hover:border-white/20 rounded-xl py-6 text-center text-2xl tracking-[0.5em] font-mono text-white placeholder:opacity-0 focus-visible:ring-blue-500/50" placeholder="123456" maxLength={6} inputMode="numeric" pattern="[0-9]*" autoComplete="one-time-code" value={formData.otp} onChange={(e) => updateForm("otp", e.target.value)} required />
                       </div>
                       <div className="mt-6 text-xs font-medium">
                         <p className="text-zinc-500">

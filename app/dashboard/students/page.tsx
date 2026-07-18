@@ -90,7 +90,7 @@ export default function StudentsPage() {
             {students.length} students across {allClasses.length - 1} classes
           </p>
         </div>
-        <Button className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold h-11 px-6 shadow-lg shadow-indigo-600/20">
+        <Button className="bg-blue-600 hover:bg-blue-500 text-white font-bold h-11 px-6 shadow-lg shadow-blue-600/20">
           <Icon icon="ri:user-line-plus" className="w-4 h-4 mr-2" />
           Add New Student
         </Button>
@@ -110,7 +110,7 @@ export default function StudentsPage() {
       <Card className="bg-zinc-900 border-white/10 rounded-xl p-4">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-1 group">
-            <Icon icon="ri:search-line" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
+            <Icon icon="ri:search-line" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-blue-400 transition-colors" />
             <Input
               type="text"
               placeholder="Search by name or email..."
@@ -126,7 +126,7 @@ export default function StudentsPage() {
                 onClick={() => setSelectedClass(cls)}
                 className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
                   selectedClass === cls
-                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
                     : "text-zinc-500 hover:text-white"
                 }`}
               >
@@ -141,7 +141,7 @@ export default function StudentsPage() {
       <Card className="bg-zinc-900 border-white/10 rounded-xl p-0 overflow-hidden">
         {loading ? (
           <div className="p-20 flex flex-col items-center justify-center text-zinc-500">
-            <div className="w-10 h-10 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mb-4" />
+            <div className="w-10 h-10 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4" />
             <p className="text-sm font-bold uppercase tracking-widest">Loading students...</p>
           </div>
         ) : filtered.length === 0 ? (
@@ -172,12 +172,12 @@ export default function StudentsPage() {
                 <TableRow key={student.id} className="hover:bg-white/[0.02] border-white/5 group">
                   <TableCell className="py-4">
                     <div className="flex items-center gap-4">
-                      <Avatar className="w-10 h-10 border-none group-hover:scale-105 transition-transform shadow-lg shadow-indigo-500/10">
-                        <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-xs font-black">
+                      <Avatar className="w-10 h-10 border-none group-hover:scale-105 transition-transform shadow-lg shadow-blue-500/10">
+                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-black">
                           {student.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)}
                         </AvatarFallback>
                       </Avatar>
-                      <p className="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">{student.name}</p>
+                      <p className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">{student.name}</p>
                     </div>
                   </TableCell>
                   <TableCell>

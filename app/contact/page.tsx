@@ -14,13 +14,13 @@ export default function ContactPage() {
 
       <main className="relative pt-32 pb-24 overflow-hidden flex-grow">
         {/* Ambient Glow Background */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-indigo-500 to-violet-500 opacity-15 blur-[100px] -z-10 translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-br from-indigo-500 to-violet-500 opacity-15 blur-[100px] -z-10 -translate-x-1/2 translate-y-1/2"></div>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-blue-500 to-blue-500 opacity-15 blur-[100px] -z-10 translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-500 to-blue-500 opacity-15 blur-[100px] -z-10 -translate-x-1/2 translate-y-1/2"></div>
         
         <div className="max-w-7xl mx-auto px-8 animate-fade-in-up">
           {/* Header Section */}
           <div className="mb-20">
-            {/* <Badge variant="outline" className="text-indigo-400 font-bold tracking-[0.2em] uppercase text-[10px] mb-6 px-4 py-1.5 border-indigo-500/20 bg-indigo-500/5">
+            {/* <Badge variant="outline" className="text-blue-400 font-bold tracking-[0.2em] uppercase text-[10px] mb-6 px-4 py-1.5 border-blue-500/20 bg-blue-500/5">
               GET SUPPORT
             </Badge> */}
             <h1 className="text-5xl md:text-6xl font-headline font-extrabold tracking-tighter text-white mb-6">
@@ -36,12 +36,12 @@ export default function ContactPage() {
             {/* WhatsApp Card */}
             <Card className="bg-zinc-900 border-white/10 rounded-2xl overflow-hidden group hover:border-white/20 transition-all p-0">
               <CardContent className="p-8">
-                <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-8">
-                  <Icon icon="ri:message-3-line" className="text-indigo-400 w-6 h-6" />
+                <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-8">
+                  <Icon icon="ri:message-3-line" className="text-blue-400 w-6 h-6" />
                 </div>
                 <CardTitle className="text-xl font-headline font-bold text-white mb-2">WhatsApp</CardTitle>
                 <CardDescription className="text-zinc-500 text-sm mb-8 leading-relaxed">Chat with our team for immediate assistance with onboarding.</CardDescription>
-                <Link href="#" className="inline-flex items-center gap-2 text-indigo-400 font-bold hover:gap-3 transition-all text-sm uppercase tracking-widest">
+                <Link href="#" className="inline-flex items-center gap-2 text-blue-400 font-bold hover:gap-3 transition-all text-sm uppercase tracking-widest">
                   Chat now <Icon icon="ri:arrow-right-line" className="w-4 h-4" />
                 </Link>
               </CardContent>
@@ -50,8 +50,8 @@ export default function ContactPage() {
             {/* Email Card */}
             <Card className="bg-zinc-900 border-white/10 rounded-2xl overflow-hidden group hover:border-white/20 transition-all p-0 opacity-80">
               <CardContent className="p-8">
-                <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-8">
-                  <Icon icon="ri:send-plane-line" className="text-indigo-400 w-6 h-6" />
+                <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-8">
+                  <Icon icon="ri:send-plane-line" className="text-blue-400 w-6 h-6" />
                 </div>
                 <CardTitle className="text-xl font-headline font-bold text-white mb-2">Email</CardTitle>
                 <CardDescription className="text-zinc-500 text-sm mb-8 leading-relaxed">Detailed inquiries regarding billing and partnerships.</CardDescription>
@@ -62,8 +62,8 @@ export default function ContactPage() {
             {/* Phone Card */}
             <Card className="bg-zinc-900 border-white/10 rounded-2xl overflow-hidden group hover:border-white/20 transition-all p-0 opacity-80">
               <CardContent className="p-8">
-                <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-8">
-                  <Icon icon="ri:phone-line" className="text-indigo-400 w-6 h-6" />
+                <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-8">
+                  <Icon icon="ri:phone-line" className="text-blue-400 w-6 h-6" />
                 </div>
                 <CardTitle className="text-xl font-headline font-bold text-white mb-2">Phone</CardTitle>
                 <CardDescription className="text-zinc-500 text-sm mb-8 leading-relaxed">Direct line for urgent technical support calls.</CardDescription>
@@ -106,7 +106,7 @@ export default function ContactPage() {
                 <details key={i} className="group bg-white/[0.01] backdrop-blur-xl border-white/5 rounded-xl overflow-hidden ring-1 ring-white/5" open={faq.open}>
                   <summary className="flex justify-between items-center p-6 cursor-pointer hover:bg-white/5 transition-colors list-none [&::-webkit-details-marker]:hidden">
                     <span className="font-headline font-bold text-white">{faq.q}</span>
-                    <Icon icon="ri:arrow-down-s-line" className="text-indigo-400 w-5 h-5 transition-transform group-open:rotate-180" />
+                    <Icon icon="ri:arrow-down-s-line" className="text-blue-400 w-5 h-5 transition-transform group-open:rotate-180" />
                   </summary>
                   <div className="px-6 pb-6 text-zinc-400 text-sm leading-relaxed border-t border-white/5 pt-4">
                     {faq.a}

@@ -29,8 +29,8 @@ export default function Sidebar({ schoolName, plan }: SidebarProps) {
     >
       {/* Logo Section */}
       <div className="flex items-center gap-3 px-6 py-8">
-        <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
-          <Icon icon="ri:flashlight-fill" className="text-indigo-400 w-5 h-5" />
+        <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
+          <Icon icon="ri:flashlight-fill" className="text-blue-400 w-5 h-5" />
         </div>
         {!collapsed && (
           <span className="font-semibold text-lg tracking-tight text-white">
@@ -60,13 +60,13 @@ export default function Sidebar({ schoolName, plan }: SidebarProps) {
             >
               <Icon icon={iconName}
                 className={`w-[18px] h-[18px] shrink-0 transition-colors duration-300 ${
-                  isActive ? "text-indigo-400" : "text-zinc-500 group-hover:text-zinc-300"
+                  isActive ? "text-blue-400" : "text-zinc-500 group-hover:text-zinc-300"
                 }`}
               />
               {!collapsed && <span>{item.label}</span>}
               
               {isActive && (
-                <div className="absolute left-0 w-1 h-5 bg-indigo-500 rounded-r-full" />
+                <div className="absolute left-0 w-1 h-5 bg-blue-500 rounded-r-full" />
               )}
             </Link>
           );
