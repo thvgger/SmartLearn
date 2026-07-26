@@ -63,11 +63,13 @@ export default function DownloadAppPage() {
 
           <div className="space-y-4">
             <Button
+              asChild
               className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-sm h-12 transition-all shadow-lg shadow-blue-600/20 border-none cursor-pointer"
-              onClick={() => alert("Downloading Windows CBT Client (.exe)...")}
             >
-              <Icon icon="ri:download-line" className="w-4 h-4 mr-2 group-hover:-translate-y-0.5 transition-transform" />
-              Download Windows Installer (.exe)
+              <a href="/download/windows">
+                <Icon icon="ri:download-line" className="w-4 h-4 mr-2 group-hover:-translate-y-0.5 transition-transform" />
+                Download Windows Installer (.exe)
+              </a>
             </Button>
             <p className="text-center text-[10px] text-zinc-500">
               SHA256: 9e58b8f2a688b50f7574b29dc1d8920401bcf9d26857ea2e4a68ef3bd7a810f2
