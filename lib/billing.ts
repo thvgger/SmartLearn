@@ -2,11 +2,11 @@ export const PRICES: Record<string, number> = {
     free: 0,
     free_yearly: 0,
     starter: 1500,
-    starter_yearly: 15000,
+    starter_yearly: 13500,
     school: 3000,
-    school_yearly: 30000,
+    school_yearly: 27000,
     enterprise: 5000,
-    enterprise_yearly: 50000
+    enterprise_yearly: 45000
 };
 
 export function calculatePlanSwitch(
@@ -54,10 +54,20 @@ export function calculatePlanSwitch(
         }
     }
 
+    const processingFee = calculateRemitaFee(totalDue);
+    const finalTotal = totalDue + processingFee;
+
     return {
         subtotal: targetPrice,
         creditApplied: credit,
-        totalDue: totalDue,
+        processingFee: processingFee,
+        totalDue: finalTotal,
         extraDays: extraDays
     };
+}
+
+export function calculateRemitaFee(amount: number): number {
+    if (amount <= 0) return 0;
+    const fee = amount * 0.015;
+    return Math.min(Math.round(fee), 2000);
 }

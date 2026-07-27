@@ -15,9 +15,9 @@ declare global {
 }
 
 const PLANS: Record<string, { name: string; monthlyPrice: number; yearlyPrice: number; description: string }> = {
-  starter: { name: "Starter", monthlyPrice: 1500, yearlyPrice: 15000, description: "Perfect for growing schools with up to 100 students." },
-  school: { name: "School", monthlyPrice: 3000, yearlyPrice: 30000, description: "Our most popular plan for established schools with up to 500 students." },
-  enterprise: { name: "Enterprise", monthlyPrice: 5000, yearlyPrice: 50000, description: "Custom data retention and unlimited students for large organizations." },
+  starter: { name: "Starter", monthlyPrice: 1500, yearlyPrice: 13500, description: "Perfect for growing schools with up to 100 students." },
+  school: { name: "School", monthlyPrice: 3000, yearlyPrice: 27000, description: "Our most popular plan for established schools with up to 500 students." },
+  enterprise: { name: "Enterprise", monthlyPrice: 5000, yearlyPrice: 45000, description: "Custom solution for very large institutions." }
 };
 
 function CheckoutContent() {
@@ -47,6 +47,7 @@ function CheckoutContent() {
   const [calcData, setCalcData] = useState<{
     subtotal: number;
     creditApplied: number;
+    processingFee: number;
     totalDue: number;
     extraDays: number;
   } | null>(null);
@@ -327,14 +328,16 @@ function CheckoutContent() {
                   )}
                   <div className="p-4 border-b border-white/5 flex justify-between items-center text-sm">
                     <span className="text-zinc-400 font-medium flex items-center gap-2">
-                      Taxes & Fees 
+                      Processing Fee (1.5%)
                       <Icon icon="ri:information-line" className="w-3.5 h-3.5 text-zinc-600" />
                     </span>
-                    <span className="text-white font-bold text-emerald-400">Included</span>
+                    <span className="text-white font-bold">
+                      {calcLoading ? "..." : (calcData?.processingFee ? `₦${calcData.processingFee.toLocaleString()}` : "₦0")}
+                    </span>
                   </div>
                   <div className="p-4 bg-white/[0.02] flex justify-between items-center">
                     <span className="text-white font-bold">Total Due Today</span>
-                    <span className="text-white font-extrabold text-lg">₦{calcLoading ? "..." : (calcData?.totalDue !== undefined ? calcData.totalDue : amount).toLocaleString()}</span>
+                    <span className="text-white font-extrabold text-lg">₦{calcLoading ? "..." : (calcData?.totalDue !== undefined ? calcData.totalDue : (amount + Math.min(Math.round(amount * 0.015), 2000))).toLocaleString()}</span>
                   </div>
                 </div>
 
@@ -374,9 +377,9 @@ function CheckoutContent() {
                       ) : (
                         <span className="flex items-center gap-2 flex-wrap justify-center text-center">
                           <span>Generate Invoice</span>
-                          {calcData?.totalDue !== 0 && (
+                          {((calcData?.totalDue !== undefined ? calcData.totalDue : (amount + Math.min(Math.round(amount * 0.015), 2000))) !== 0) && (
                             <span className="opacity-90">
-                              & Pay ₦{(calcData?.totalDue !== undefined ? calcData.totalDue : amount).toLocaleString()}
+                              & Pay ₦{(calcData?.totalDue !== undefined ? calcData.totalDue : (amount + Math.min(Math.round(amount * 0.015), 2000))).toLocaleString()}
                             </span>
                           )}
                           <Icon icon="ri:arrow-right-line" className="w-4 h-4 shrink-0" />
