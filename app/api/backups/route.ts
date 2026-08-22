@@ -92,7 +92,28 @@ export async function GET(req: NextRequest) {
 // Called by the CBT app with the full payload
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    let bodyBuffer: Buffer;
+    if (req.body) {
+      const reader = req.body.getReader();
+      const chunks: Uint8Array[] = [];
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (value) chunks.push(value);
+      }
+      bodyBuffer = Buffer.concat(chunks);
+    } else {
+      const arrayBuf = await req.arrayBuffer();
+      bodyBuffer = Buffer.from(arrayBuf);
+    }
+    
+    if (req.headers.get("content-encoding") === "gzip") {
+      const zlib = require("zlib");
+      bodyBuffer = zlib.gunzipSync(bodyBuffer);
+    }
+    
+    const jsonStrInput = bodyBuffer.toString("utf-8");
+    const body = JSON.parse(jsonStrInput);
     const { license_key, label, entities, data } = body;
 
     if (!license_key || !data || !entities) {
