@@ -65,6 +65,7 @@ export async function GET(req: NextRequest) {
     const backups = await prisma.backup.findMany({
       where: { user_id: userId },
       orderBy: { created_at: "desc" },
+      take: 50, // Limit to 50 to prevent 413 Payload Too Large on Vercel response limits
       select: {
         id: true,
         license_key: true,
