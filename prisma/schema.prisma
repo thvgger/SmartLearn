@@ -104,6 +104,7 @@ model Backup {
 model SyncedUser {
     id          String   @id @default(cuid())
     user_id     String
+    local_id    Int      @default(0) // References SQLite 'users' ID
     name        String
     email       String?
     password    String?
@@ -117,11 +118,13 @@ model SyncedUser {
     user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
     @@index([user_id])
+    @@unique([user_id, local_id])
 }
 
 model Exam {
     id             String    @id @default(cuid())
     user_id        String
+    local_id       Int       @default(0) // References SQLite 'tests' ID
     title          String
     subject        String
     question_count Int       @default(0)
@@ -136,11 +139,13 @@ model Exam {
     user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
     @@index([user_id])
+    @@unique([user_id, local_id])
 }
 
 model Question {
     id         String   @id @default(cuid())
     user_id    String
+    local_id   Int      @default(0) // References SQLite 'questions' ID
     subject    String
     topic      String
     text       String
@@ -152,6 +157,22 @@ model Question {
 
     @@index([user_id])
     @@index([subject])
+    @@unique([user_id, local_id])
+}
+
+model TestAttempt {
+    id         String   @id @default(cuid())
+    user_id    String
+    local_id   Int      @default(0)
+    student_id Int
+    exam_id    Int
+    score      Float
+    created_at DateTime @default(now())
+    
+    user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+    @@index([user_id])
+    @@unique([user_id, local_id])
 }
 
 model VerificationToken {
