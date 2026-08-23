@@ -29,10 +29,16 @@ export async function rebuildDashboardData(sessionUserId: string, parsedData: an
   const questionLimit = QUESTION_LIMITS[plan] || 0;
 
   return await prisma.$transaction(async (tx: any) => {
-    // 1. Clear existing cloud data
-    await tx.syncedUser.deleteMany({ where: { user_id: sessionUserId } });
-    await tx.exam.deleteMany({ where: { user_id: sessionUserId } });
-    await tx.question.deleteMany({ where: { user_id: sessionUserId } });
+    // 1. Clear existing cloud data only if the payload includes them and it's the first chunk
+    if (parsedData.users) {
+      await tx.syncedUser.deleteMany({ where: { user_id: sessionUserId } });
+    }
+    if (parsedData.tests) {
+      await tx.exam.deleteMany({ where: { user_id: sessionUserId } });
+    }
+    if (parsedData.questions && (parsedData.chunk_index === undefined || parsedData.chunk_index === 0)) {
+      await tx.question.deleteMany({ where: { user_id: sessionUserId } });
+    }
 
     // Build lookup maps
     const classMap = new Map();
