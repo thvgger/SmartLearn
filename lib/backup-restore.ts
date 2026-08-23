@@ -1,6 +1,146 @@
 import { prisma } from "@/lib/db";
 
+async function processDeltaSync(sessionUserId: string, changes: any[]) {
+  return await prisma.$transaction(async (tx: any) => {
+    for (const change of changes) {
+      const { table, id, action, data } = change;
+      
+      if (table === 'users' && data?.role !== 'admin') {
+        if (action === 'DELETE') {
+          await tx.syncedUser.deleteMany({ where: { user_id: sessionUserId, local_id: id } });
+        } else {
+          await tx.syncedUser.upsert({
+            where: { user_id_local_id: { user_id: sessionUserId, local_id: id } },
+            update: {
+              name: data.name || "Unknown User",
+              email: data.email || null,
+              password: data.plain_password || data.password || null,
+              role: data.role || "student",
+              class_name: "Unassigned", // Can map class later if needed
+            },
+            create: {
+              user_id: sessionUserId,
+              local_id: id,
+              name: data.name || "Unknown User",
+              email: data.email || null,
+              password: data.plain_password || data.password || null,
+              role: data.role || "student",
+              class_name: "Unassigned",
+            }
+          });
+        }
+      }
+      
+      if (table === 'tests') {
+        if (action === 'DELETE') {
+          await tx.exam.deleteMany({ where: { user_id: sessionUserId, local_id: id } });
+        } else {
+          await tx.exam.upsert({
+            where: { user_id_local_id: { user_id: sessionUserId, local_id: id } },
+            update: {
+              title: data.title || "Untitled Exam",
+              subject: data.description || "General",
+              duration: data.duration_minutes ? `${data.duration_minutes}m` : "1h",
+              status: data.is_active ? "scheduled" : "completed",
+            },
+            create: {
+              user_id: sessionUserId,
+              local_id: id,
+              title: data.title || "Untitled Exam",
+              subject: data.description || "General",
+              duration: data.duration_minutes ? `${data.duration_minutes}m` : "1h",
+              status: data.is_active ? "scheduled" : "completed",
+            }
+          });
+        }
+      }
+      
+      if (table === 'questions') {
+        if (action === 'DELETE') {
+          await tx.question.deleteMany({ where: { user_id: sessionUserId, local_id: id } });
+        } else {
+          const optionsArray = [data.option_a, data.option_b, data.option_c, data.option_d].filter(Boolean);
+          await tx.question.upsert({
+            where: { user_id_local_id: { user_id: sessionUserId, local_id: id } },
+            update: {
+              text: data.question_text || "Unknown Question",
+              options: JSON.stringify(optionsArray.length > 0 ? optionsArray : []),
+              answer: data.correct_answer || "",
+            },
+            create: {
+              user_id: sessionUserId,
+              local_id: id,
+              subject: "General",
+              topic: "General",
+              text: data.question_text || "Unknown Question",
+              options: JSON.stringify(optionsArray.length > 0 ? optionsArray : []),
+              answer: data.correct_answer || "",
+            }
+          });
+        }
+      }
+      
+      if (table === 'test_attempts') {
+        if (action === 'DELETE') {
+          await tx.testAttempt.deleteMany({ where: { user_id: sessionUserId, local_id: id } });
+        } else {
+          await tx.testAttempt.upsert({
+            where: { user_id_local_id: { user_id: sessionUserId, local_id: id } },
+            update: {
+              student_id: data.user_id,
+              exam_id: data.test_id,
+              score: data.score,
+            },
+            create: {
+              user_id: sessionUserId,
+              local_id: id,
+              student_id: data.user_id,
+              exam_id: data.test_id,
+              score: data.score,
+            }
+          });
+        }
+      }
+    }
+    
+    // Recalculate aggregates if test_attempts or tests were modified
+    const hasAttemptsOrTests = changes.some(c => c.table === 'test_attempts' || c.table === 'tests' || c.table === 'questions');
+    if (hasAttemptsOrTests) {
+      const exams = await tx.exam.findMany({ where: { user_id: sessionUserId } });
+      for (const exam of exams) {
+        const agg = await tx.testAttempt.aggregate({
+          where: { user_id: sessionUserId, exam_id: exam.local_id },
+          _avg: { score: true },
+        });
+        // Group by student to get unique count
+        const uniqueStudents = await tx.testAttempt.groupBy({
+          by: ['student_id'],
+          where: { user_id: sessionUserId, exam_id: exam.local_id },
+        });
+        const qCount = await tx.question.count({
+           where: { user_id: sessionUserId } // Note: real app would map test_id
+        });
+        
+        await tx.exam.update({
+          where: { id: exam.id },
+          data: {
+            student_count: uniqueStudents.length,
+            avg_score: agg._avg.score || 0,
+            question_count: qCount,
+          }
+        });
+      }
+    }
+  });
+}
+
 export async function rebuildDashboardData(sessionUserId: string, parsedData: any) {
+  if (parsedData.is_delta || Array.isArray(parsedData)) {
+    const changes = Array.isArray(parsedData) ? parsedData : parsedData.data;
+    const parsedChanges = typeof changes === 'string' ? JSON.parse(changes) : changes;
+    return await processDeltaSync(sessionUserId, parsedChanges);
+  }
+
   // Get user's plan to enforce limits
   const user = await prisma.user.findUnique({
     where: { id: sessionUserId },
