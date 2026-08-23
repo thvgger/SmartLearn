@@ -3,107 +3,97 @@ import { prisma } from "@/lib/db";
 async function processDeltaSync(sessionUserId: string, changes: any[]) {
   try {
     return await prisma.$transaction(async (tx: any) => {
+      // Group changes
+      const groups: Record<string, Record<string, any[]>> = {
+        users: { INSERT: [], UPDATE: [], DELETE: [] },
+        tests: { INSERT: [], UPDATE: [], DELETE: [] },
+        questions: { INSERT: [], UPDATE: [], DELETE: [] },
+        test_attempts: { INSERT: [], UPDATE: [], DELETE: [] }
+      };
+      
       for (const change of changes) {
-        const { table, id, action, data } = change;
-        
-        if (table === 'users' && data?.role !== 'admin') {
-          if (action === 'DELETE') {
-            await tx.syncedUser.deleteMany({ where: { user_id: sessionUserId, local_id: id } });
-          } else {
-            await tx.syncedUser.upsert({
-              where: { user_id_local_id: { user_id: sessionUserId, local_id: id } },
-              update: {
-                name: data.name || "Unknown User",
-                email: data.email || null,
-                password: data.plain_password || data.password || null,
-                role: data.role || "student",
-                class_name: "Unassigned", // Can map class later if needed
-              },
-              create: {
-                user_id: sessionUserId,
-                local_id: id,
-                name: data.name || "Unknown User",
-                email: data.email || null,
-                password: data.plain_password || data.password || null,
-                role: data.role || "student",
-                class_name: "Unassigned",
-              }
-            });
-          }
+        if (groups[change.table] && groups[change.table][change.action]) {
+          groups[change.table][change.action].push(change);
         }
-        
-        if (table === 'tests') {
-          if (action === 'DELETE') {
-            await tx.exam.deleteMany({ where: { user_id: sessionUserId, local_id: id } });
-          } else {
-            await tx.exam.upsert({
-              where: { user_id_local_id: { user_id: sessionUserId, local_id: id } },
-              update: {
-                title: data.title || "Untitled Exam",
-                subject: data.description || "General",
-                duration: data.duration_minutes ? `${data.duration_minutes}m` : "1h",
-                status: data.is_active ? "scheduled" : "completed",
-              },
-              create: {
-                user_id: sessionUserId,
-                local_id: id,
-                title: data.title || "Untitled Exam",
-                subject: data.description || "General",
-                duration: data.duration_minutes ? `${data.duration_minutes}m` : "1h",
-                status: data.is_active ? "scheduled" : "completed",
-              }
-            });
-          }
-        }
-        
-        if (table === 'questions') {
-          if (action === 'DELETE') {
-            await tx.question.deleteMany({ where: { user_id: sessionUserId, local_id: id } });
-          } else {
-            const optionsArray = data ? [data.option_a, data.option_b, data.option_c, data.option_d].filter(Boolean) : [];
-            await tx.question.upsert({
-              where: { user_id_local_id: { user_id: sessionUserId, local_id: id } },
-              update: {
-                exam_id: data.test_id || 0,
-                text: data.question_text || "Unknown Question",
-                options: JSON.stringify(optionsArray.length > 0 ? optionsArray : []),
-                answer: data.correct_answer || "",
-              },
-              create: {
-                user_id: sessionUserId,
-                local_id: id,
-                exam_id: data.test_id || 0,
-                subject: "General",
-                topic: "General",
-                text: data.question_text || "Unknown Question",
-                options: JSON.stringify(optionsArray.length > 0 ? optionsArray : []),
-                answer: data.correct_answer || "",
-              }
-            });
-          }
-        }
-        
-        if (table === 'test_attempts') {
-          if (action === 'DELETE') {
-            await tx.testAttempt.deleteMany({ where: { user_id: sessionUserId, local_id: id } });
-          } else {
-            await tx.testAttempt.upsert({
-              where: { user_id_local_id: { user_id: sessionUserId, local_id: id } },
-              update: {
-                student_id: data.user_id,
-                exam_id: data.test_id,
-                score: data.score,
-              },
-              create: {
-                user_id: sessionUserId,
-                local_id: id,
-                student_id: data.user_id,
-                exam_id: data.test_id,
-                score: data.score,
-              }
-            });
-          }
-        }
+      }
+
+      // Process DELETES (Bulk)
+      if (groups.users.DELETE.length) await tx.syncedUser.deleteMany({ where: { user_id: sessionUserId, local_id: { in: groups.users.DELETE.map(c => c.id) } } });
+      if (groups.tests.DELETE.length) await tx.exam.deleteMany({ where: { user_id: sessionUserId, local_id: { in: groups.tests.DELETE.map(c => c.id) } } });
+      if (groups.questions.DELETE.length) await tx.question.deleteMany({ where: { user_id: sessionUserId, local_id: { in: groups.questions.DELETE.map(c => c.id) } } });
+      if (groups.test_attempts.DELETE.length) await tx.testAttempt.deleteMany({ where: { user_id: sessionUserId, local_id: { in: groups.test_attempts.DELETE.map(c => c.id) } } });
+
+      // Process INSERTS (Bulk createMany)
+      if (groups.users.INSERT.length) {
+        await tx.syncedUser.createMany({
+          skipDuplicates: true,
+          data: groups.users.INSERT.filter(c => c.data?.role !== 'admin').map(c => ({
+            user_id: sessionUserId, local_id: c.id,
+            name: c.data.name || "Unknown", email: c.data.email || null,
+            password: c.data.plain_password || c.data.password || null,
+            role: c.data.role || "student", class_name: "Unassigned"
+          }))
+        });
+      }
+      if (groups.tests.INSERT.length) {
+        await tx.exam.createMany({
+          skipDuplicates: true,
+          data: groups.tests.INSERT.map(c => ({
+            user_id: sessionUserId, local_id: c.id,
+            title: c.data.title || "Untitled", subject: c.data.description || "General",
+            duration: c.data.duration_minutes ? `${c.data.duration_minutes}m` : "1h",
+            status: c.data.is_active ? "scheduled" : "completed"
+          }))
+        });
+      }
+      if (groups.questions.INSERT.length) {
+        await tx.question.createMany({
+          skipDuplicates: true,
+          data: groups.questions.INSERT.map(c => {
+            const opts = c.data ? [c.data.option_a, c.data.option_b, c.data.option_c, c.data.option_d].filter(Boolean) : [];
+            return {
+              user_id: sessionUserId, local_id: c.id, exam_id: c.data.test_id || 0,
+              subject: "General", topic: "General", text: c.data.question_text || "Unknown",
+              options: JSON.stringify(opts.length > 0 ? opts : []), answer: c.data.correct_answer || ""
+            };
+          })
+        });
+      }
+      if (groups.test_attempts.INSERT.length) {
+        await tx.testAttempt.createMany({
+          skipDuplicates: true,
+          data: groups.test_attempts.INSERT.map(c => ({
+            user_id: sessionUserId, local_id: c.id,
+            student_id: c.data.user_id, exam_id: c.data.test_id, score: c.data.score
+          }))
+        });
+      }
+
+      // Process UPDATES (Individual)
+      for (const c of groups.users.UPDATE.filter(c => c.data?.role !== 'admin')) {
+        await tx.syncedUser.updateMany({
+          where: { user_id: sessionUserId, local_id: c.id },
+          data: { name: c.data.name, email: c.data.email, password: c.data.plain_password || c.data.password, role: c.data.role }
+        });
+      }
+      for (const c of groups.tests.UPDATE) {
+        await tx.exam.updateMany({
+          where: { user_id: sessionUserId, local_id: c.id },
+          data: { title: c.data.title, subject: c.data.description, duration: c.data.duration_minutes ? `${c.data.duration_minutes}m` : "1h", status: c.data.is_active ? "scheduled" : "completed" }
+        });
+      }
+      for (const c of groups.questions.UPDATE) {
+        const opts = c.data ? [c.data.option_a, c.data.option_b, c.data.option_c, c.data.option_d].filter(Boolean) : [];
+        await tx.question.updateMany({
+          where: { user_id: sessionUserId, local_id: c.id },
+          data: { exam_id: c.data.test_id || 0, text: c.data.question_text, options: JSON.stringify(opts.length > 0 ? opts : []), answer: c.data.correct_answer || "" }
+        });
+      }
+      for (const c of groups.test_attempts.UPDATE) {
+        await tx.testAttempt.updateMany({
+          where: { user_id: sessionUserId, local_id: c.id },
+          data: { student_id: c.data.user_id, exam_id: c.data.test_id, score: c.data.score }
+        });
       }
       
       // Recalculate aggregates if test_attempts or tests were modified
