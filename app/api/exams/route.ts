@@ -55,6 +55,7 @@ export async function POST(req: Request) {
     const exam = await prisma.exam.create({
       data: {
         user_id: session.userId,
+        local_id: -Math.floor(Math.random() * 1000000000) - 1, // Random negative ID for cloud-created items
         title,
         subject,
         question_count: question_count || 0,
