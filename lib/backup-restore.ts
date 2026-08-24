@@ -124,6 +124,9 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
           });
         }
       }
+    }, {
+      maxWait: 15000,
+      timeout: 60000, // Increase transaction timeout to 60 seconds
     });
   } catch (error) {
     console.error("[Delta Sync] Critical error processing payload:", error);
@@ -291,5 +294,9 @@ export async function rebuildDashboardData(sessionUserId: string, parsedData: an
         await tx.question.createMany({ data: questionData });
       }
     }
+  }, {
+    maxWait: 15000,
+    timeout: 60000, // Increase transaction timeout to 60 seconds
   });
 }
+
