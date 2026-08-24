@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+export const maxDuration = 300; // Allow 5 minutes for bulk sync processing
+
 /**
  * SmartLearn Cloud Backup API
  *

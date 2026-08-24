@@ -97,22 +97,23 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
       }
       
       // Recalculate aggregates if test_attempts or tests were modified
-      const hasAttemptsOrTests = changes.some(c => c.table === 'test_attempts' || c.table === 'tests' || c.table === 'questions');
+      const hasAttemptsOrTests = changes.some((c: any) => c.table === 'test_attempts' || c.table === 'tests' || c.table === 'questions');
       if (hasAttemptsOrTests) {
         const exams = await tx.exam.findMany({ where: { user_id: sessionUserId } });
-        for (const exam of exams) {
-          const agg = await tx.testAttempt.aggregate({
-            where: { user_id: sessionUserId, exam_id: exam.local_id },
-            _avg: { score: true },
-          });
-          // Group by student to get unique count
-          const uniqueStudents = await tx.testAttempt.groupBy({
-            by: ['student_id'],
-            where: { user_id: sessionUserId, exam_id: exam.local_id },
-          });
-          const qCount = await tx.question.count({
-             where: { user_id: sessionUserId, exam_id: exam.local_id }
-          });
+        await Promise.all(exams.map(async (exam: any) => {
+          const [agg, uniqueStudents, qCount] = await Promise.all([
+            tx.testAttempt.aggregate({
+              where: { user_id: sessionUserId, exam_id: exam.local_id },
+              _avg: { score: true },
+            }),
+            tx.testAttempt.groupBy({
+              by: ['student_id'],
+              where: { user_id: sessionUserId, exam_id: exam.local_id },
+            }),
+            tx.question.count({
+              where: { user_id: sessionUserId, exam_id: exam.local_id }
+            })
+          ]);
           
           await tx.exam.update({
             where: { id: exam.id },
@@ -122,11 +123,11 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
               question_count: qCount,
             }
           });
-        }
+        }));
       }
     }, {
       maxWait: 15000,
-      timeout: 60000, // Increase transaction timeout to 60 seconds
+      timeout: 120000, // Increase transaction timeout to 120 seconds to be extremely safe
     });
   } catch (error) {
     console.error("[Delta Sync] Critical error processing payload:", error);
