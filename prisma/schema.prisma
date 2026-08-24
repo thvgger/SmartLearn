@@ -134,6 +134,11 @@ model Exam {
     scheduled_date DateTime?
     student_count  Int       @default(0)
     avg_score      Float?
+    teacher_id     String?
+    passing_score  Int       @default(70)
+    calculator_type String   @default("none")
+    randomize_questions Boolean @default(false)
+    randomize_options Boolean   @default(false)
     created_at     DateTime  @default(now())
     updated_at     DateTime  @updatedAt
 
@@ -153,6 +158,8 @@ model Question {
     text       String
     options    String   @default("[]") // JSON array of option strings
     answer     String   // the correct answer
+    attachment_url  String?
+    attachment_type String?
     created_at DateTime @default(now())
 
     user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
