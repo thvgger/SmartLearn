@@ -64,15 +64,19 @@ export async function GET(req: NextRequest) {
           is_active: ex.status !== "completed",
           created_at: ex.created_at,
         })),
-        questions: questions.map((q) => ({
-          id: q.id,
-          test_id: q.subject, // Map relation appropriately downwards
-          question_text: q.text,
-          options: JSON.parse(q.options || "[]"),
-          correct_answer: q.answer,
-          topic: q.topic,
-          created_at: q.created_at,
-        })),
+        questions: questions.map((q) => {
+          const parentExam = exams.find((e) => e.local_id === q.exam_id || e.id === q.topic);
+          return {
+            id: q.id,
+            test_id: parentExam ? parentExam.id : q.topic,
+            test_title: parentExam ? parentExam.title : q.topic,
+            question_text: q.text,
+            options: JSON.parse(q.options || "[]"),
+            correct_answer: q.answer,
+            topic: q.topic,
+            created_at: q.created_at,
+          };
+        }),
       },
     });
   } catch (error) {

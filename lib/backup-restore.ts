@@ -22,6 +22,9 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
       if (groups.tests.DELETE.length) await tx.exam.deleteMany({ where: { user_id: sessionUserId, local_id: { in: groups.tests.DELETE.map(c => c.id) } } });
       if (groups.questions.DELETE.length) await tx.question.deleteMany({ where: { user_id: sessionUserId, local_id: { in: groups.questions.DELETE.map(c => c.id) } } });
       if (groups.test_attempts.DELETE.length) await tx.testAttempt.deleteMany({ where: { user_id: sessionUserId, local_id: { in: groups.test_attempts.DELETE.map(c => c.id) } } });
+      
+      const syncedUsers = await tx.syncedUser.findMany({ where: { user_id: sessionUserId } });
+      const localToCuid = new Map(syncedUsers.map((u: any) => [u.local_id, u.id]));
 
       // Process INSERTS (Bulk createMany)
       if (groups.users.INSERT.length) {
@@ -42,7 +45,12 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
             user_id: sessionUserId, local_id: c.id,
             title: c.data.title || "Untitled", subject: c.data.description || "General",
             duration: c.data.duration_minutes ? `${c.data.duration_minutes}m` : "1h",
-            status: c.data.is_active ? "scheduled" : "completed"
+            status: c.data.is_active ? "scheduled" : "completed",
+            passing_score: c.data.passing_score ?? 70,
+            calculator_type: c.data.calculator_type ?? "none",
+            randomize_questions: Boolean(c.data.randomize_questions),
+            randomize_options: Boolean(c.data.randomize_options),
+            teacher_id: c.data.created_by ? (localToCuid.get(c.data.created_by) || null) : null
           }))
         });
       }
@@ -79,7 +87,17 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
       for (const c of groups.tests.UPDATE) {
         await tx.exam.updateMany({
           where: { user_id: sessionUserId, local_id: c.id },
-          data: { title: c.data.title, subject: c.data.description, duration: c.data.duration_minutes ? `${c.data.duration_minutes}m` : "1h", status: c.data.is_active ? "scheduled" : "completed" }
+          data: { 
+            title: c.data.title, 
+            subject: c.data.description, 
+            duration: c.data.duration_minutes ? `${c.data.duration_minutes}m` : "1h", 
+            status: c.data.is_active ? "scheduled" : "completed",
+            passing_score: c.data.passing_score ?? 70,
+            calculator_type: c.data.calculator_type ?? "none",
+            randomize_questions: Boolean(c.data.randomize_questions),
+            randomize_options: Boolean(c.data.randomize_options),
+            teacher_id: c.data.created_by ? (localToCuid.get(c.data.created_by) || null) : null
+          }
         });
       }
       for (const c of groups.questions.UPDATE) {
@@ -274,10 +292,12 @@ export async function rebuildDashboardData(sessionUserId: string, parsedData: an
         const questionData = questionsToInsert.map((q: any) => {
           // Try to get subject from test
           let testSubject = "General";
+          let testTitle = "General";
           if (Array.isArray(parsedData.tests)) {
             const parentTest = parsedData.tests.find((t: any) => t.id === q.test_id);
             if (parentTest && parentTest.title) {
               testSubject = parentTest.title.split(" ")[0]; // rough guess
+              testTitle = parentTest.title;
             }
           }
 
@@ -286,7 +306,7 @@ export async function rebuildDashboardData(sessionUserId: string, parsedData: an
           return {
             user_id: sessionUserId,
             subject: testSubject,
-            topic: "General",
+            topic: testTitle,
             text: q.question_text || "Unknown Question",
             options: JSON.stringify(optionsArray.length > 0 ? optionsArray : []),
             answer: q.correct_answer || "",

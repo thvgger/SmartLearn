@@ -134,13 +134,48 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const jsonStr = typeof data === "string" ? data : JSON.stringify(data);
-    const sizeBytes = Buffer.byteLength(jsonStr, "utf-8");
+    let finalDataString = typeof data === "string" ? data : JSON.stringify(data);
+    let finalEntities = Array.isArray(entities) ? entities.join(",") : (entities || "users,classes,tests,results");
+
+    if (body.is_delta) {
+      const prevBackup = await prisma.backup.findFirst({
+        where: { user_id: user.id },
+        orderBy: { created_at: "desc" },
+      });
+
+      let state: any = { users: [], classes: [], tests: [], questions: [], test_attempts: [] };
+      if (prevBackup && prevBackup.data) {
+        try {
+          const parsed = JSON.parse(prevBackup.data);
+          if (!Array.isArray(parsed)) {
+             state = { ...state, ...parsed };
+          }
+        } catch (e) { }
+      }
+
+      const deltas = typeof data === "string" ? JSON.parse(data) : data;
+      for (const d of deltas) {
+        if (!state[d.table]) state[d.table] = [];
+        const tableArr = state[d.table];
+        if (d.action === "DELETE") {
+           state[d.table] = tableArr.filter((row: any) => row.id !== d.id);
+        } else {
+           const existingIndex = tableArr.findIndex((row: any) => row.id === d.id);
+           if (existingIndex >= 0) tableArr[existingIndex] = d.data;
+           else tableArr.push(d.data);
+        }
+      }
+
+      finalDataString = JSON.stringify(state);
+      finalEntities = "full_state_from_delta";
+    }
+
+    const sizeBytes = Buffer.byteLength(finalDataString, "utf-8");
 
     // Count records
     let recordCount = 0;
     try {
-      const parsed = typeof data === "string" ? JSON.parse(data) : data;
+      const parsed = JSON.parse(finalDataString);
       for (const key of Object.keys(parsed)) {
         if (Array.isArray(parsed[key])) {
           recordCount += parsed[key].length;
@@ -155,8 +190,8 @@ export async function POST(req: NextRequest) {
         user_id: user.id,
         license_key,
         label: label || null,
-        entities: Array.isArray(entities) ? entities.join(",") : entities,
-        data: jsonStr,
+        entities: finalEntities,
+        data: finalDataString,
         size_bytes: sizeBytes,
         record_count: recordCount,
         is_synced: true, // Mark this new upload as the newly synced one
