@@ -50,8 +50,7 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
             passing_score: c.data.passing_score ?? 70,
             calculator_type: c.data.calculator_type ?? "none",
             randomize_questions: Boolean(c.data.randomize_questions),
-            randomize_options: Boolean(c.data.randomize_options),
-            teacher_id: c.data.created_by ? (localToCuid.get(c.data.created_by) || null) : null
+            randomize_options: Boolean(c.data.randomize_options)
           }))
         });
       }
