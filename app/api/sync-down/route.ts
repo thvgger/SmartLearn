@@ -81,6 +81,8 @@ export async function GET(req: NextRequest) {
             question_text: q.text,
             options: JSON.parse(q.options || "[]"),
             correct_answer: q.answer,
+            attachment_url: q.attachment_url,
+            attachment_type: q.attachment_type,
             topic: q.topic,
             created_at: q.created_at,
           };

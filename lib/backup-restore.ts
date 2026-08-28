@@ -63,7 +63,9 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
             return {
               user_id: sessionUserId, local_id: c.id, exam_id: c.data.test_id || 0,
               subject: "General", topic: "General", text: c.data.question_text || "Unknown",
-              options: JSON.stringify(opts.length > 0 ? opts : []), answer: c.data.correct_answer || ""
+              options: JSON.stringify(opts.length > 0 ? opts : []), answer: c.data.correct_answer || "",
+              attachment_url: c.data.attachment_url || null,
+              attachment_type: c.data.attachment_type || null
             };
           })
         });
@@ -105,7 +107,14 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
         const opts = c.data ? [c.data.option_a, c.data.option_b, c.data.option_c, c.data.option_d].filter(Boolean) : [];
         await tx.question.updateMany({
           where: { user_id: sessionUserId, local_id: c.id },
-          data: { exam_id: c.data.test_id || 0, text: c.data.question_text, options: JSON.stringify(opts.length > 0 ? opts : []), answer: c.data.correct_answer || "" }
+          data: { 
+            exam_id: c.data.test_id || 0, 
+            text: c.data.question_text, 
+            options: JSON.stringify(opts.length > 0 ? opts : []), 
+            answer: c.data.correct_answer || "",
+            attachment_url: c.data.attachment_url || null,
+            attachment_type: c.data.attachment_type || null
+          }
         });
       }
       for (const c of groups.test_attempts.UPDATE) {
@@ -312,6 +321,8 @@ export async function rebuildDashboardData(sessionUserId: string, parsedData: an
             text: q.question_text || "Unknown Question",
             options: JSON.stringify(optionsArray.length > 0 ? optionsArray : []),
             answer: q.correct_answer || "",
+            attachment_url: q.attachment_url || null,
+            attachment_type: q.attachment_type || null
           };
         });
         await tx.question.createMany({ data: questionData });
