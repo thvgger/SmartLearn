@@ -43,6 +43,7 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
           skipDuplicates: true,
           data: groups.tests.INSERT.map(c => ({
             user_id: sessionUserId, local_id: c.id,
+            teacher_id: localToCuid.get(c.data.created_by) || sessionUserId,
             title: c.data.title || "Untitled", subject: c.data.description || "General",
             duration: c.data.duration_minutes ? `${c.data.duration_minutes}m` : "1h",
             status: c.data.is_active ? "scheduled" : "completed",
@@ -266,6 +267,7 @@ export async function rebuildDashboardData(sessionUserId: string, parsedData: an
 
         return {
           user_id: sessionUserId,
+          teacher_id: sessionUserId, // Fallback, full syncs are mostly for dashboard which queries by school anyway
           title: t.title || "Untitled Exam",
           subject: t.description || "General",
           question_count: qCount,

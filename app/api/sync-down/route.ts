@@ -48,6 +48,13 @@ export async function GET(req: NextRequest) {
       where: { user_id: user.id },
     });
 
+    // Fetch teachers (SyncedUsers with role teacher) to manually map emails
+    const teachers = await prisma.syncedUser.findMany({
+      where: { user_id: user.id, role: "teacher" },
+      select: { id: true, email: true }
+    });
+    const teacherMap = new Map(teachers.map(t => [t.id, t.email]));
+
     const questions = await prisma.question.findMany({
       where: { user_id: user.id },
     });
@@ -57,6 +64,7 @@ export async function GET(req: NextRequest) {
       data: {
         tests: exams.map((ex) => ({
           id: ex.id,
+          teacher_email: ex.teacher_id ? teacherMap.get(ex.teacher_id) || "" : "",
           title: ex.title,
           description: ex.subject,
           duration_minutes: parseInt(ex.duration.replace(/\D/g, "")) || 60,

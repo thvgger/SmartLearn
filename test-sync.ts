@@ -1,0 +1,1 @@
+import { prisma } from './lib/db'; async function test() { const exams = await prisma.exam.findMany(); console.log(exams.map(e => ({ id: e.id, title: e.title, teacher_id: e.teacher_id }))); } test().catch(console.error).finally(() => process.exit(0));
