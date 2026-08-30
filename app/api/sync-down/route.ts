@@ -58,28 +58,36 @@ export async function GET(req: NextRequest) {
     const questions = await prisma.question.findMany({
       where: { user_id: user.id },
     });
-
     return NextResponse.json({
       success: true,
       data: {
         tests: exams.map((ex) => ({
-          id: ex.id,
+          cloud_id: ex.id,
+          id: (ex as any).local_id || ex.id,
           teacher_email: ex.teacher_id ? teacherMap.get(ex.teacher_id) || "" : "",
           title: ex.title,
           description: ex.subject,
-          duration_minutes: parseInt(ex.duration.replace(/\D/g, "")) || 60,
+          duration_minutes: parseInt((ex.duration || "60").replace(/\D/g, "")) || 60,
           passing_score: 50, // default placeholder
           is_active: ex.status !== "completed",
           created_at: ex.created_at,
         })),
         questions: questions.map((q) => {
-          const parentExam = exams.find((e) => e.local_id === q.exam_id || e.id === q.topic);
+          const parentExam = exams.find((e) => (e as any).local_id === q.exam_id || e.id === q.topic);
+          let parsedOpts = [];
+          try {
+            parsedOpts = JSON.parse(q.options || "[]");
+          } catch (err) {
+            parsedOpts = [];
+          }
+          
           return {
-            id: q.id,
-            test_id: parentExam ? parentExam.id : q.topic,
+            cloud_id: q.id,
+            id: (q as any).local_id || q.id,
+            test_id: parentExam ? ((parentExam as any).local_id || parentExam.id) : q.topic,
             test_title: parentExam ? parentExam.title : q.topic,
             question_text: q.text,
-            options: JSON.parse(q.options || "[]"),
+            options: parsedOpts,
             correct_answer: q.answer,
             attachment_url: q.attachment_url,
             attachment_type: q.attachment_type,
