@@ -185,27 +185,50 @@ export async function POST(req: NextRequest) {
       // If parsing fails, just leave count at 0
     }
 
-    const backup = await prisma.backup.create({
-      data: {
-        user_id: user.id,
-        license_key,
-        label: label || null,
-        entities: finalEntities,
-        data: finalDataString,
-        size_bytes: sizeBytes,
-        record_count: recordCount,
-        is_synced: true, // Mark this new upload as the newly synced one
-      },
+    // Find existing active backup
+    const existingBackup = await prisma.backup.findFirst({
+      where: { user_id: user.id, is_synced: true },
+      orderBy: { created_at: 'desc' }
     });
 
-    // Mark previous backups as unsynced
-    await prisma.backup.updateMany({
-      where: { 
-        user_id: user.id, 
-        id: { not: backup.id } 
-      },
-      data: { is_synced: false },
-    });
+    let backup;
+    if (existingBackup && Array.isArray(data)) {
+      // Delta sync chunk: UPDATE the existing active backup so we don't blow up the 512MB DB limit
+      backup = await prisma.backup.update({
+        where: { id: existingBackup.id },
+        data: {
+          label: label || existingBackup.label,
+          entities: finalEntities,
+          data: finalDataString,
+          size_bytes: sizeBytes,
+          record_count: recordCount,
+          updated_at: new Date()
+        }
+      });
+    } else {
+      // Full sync or first backup: CREATE new record
+      backup = await prisma.backup.create({
+        data: {
+          user_id: user.id,
+          license_key,
+          label: label || null,
+          entities: finalEntities,
+          data: finalDataString,
+          size_bytes: sizeBytes,
+          record_count: recordCount,
+          is_synced: true,
+        },
+      });
+
+      // Mark previous backups as unsynced
+      await prisma.backup.updateMany({
+        where: { 
+          user_id: user.id, 
+          id: { not: backup.id } 
+        },
+        data: { is_synced: false },
+      });
+    }
 
     // Auto-restore this backup so the dashboard is immediately populated
     const parsedData = typeof data === "string" ? JSON.parse(data) : data;
