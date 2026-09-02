@@ -238,6 +238,7 @@ export async function rebuildDashboardData(sessionUserId: string, parsedData: an
           }
             return {
               user_id: sessionUserId,
+              local_id: s.id || 0,
               name: s.name || "Unknown User",
               email: s.email || null,
               password: s.plain_password || s.password || null,
@@ -275,6 +276,7 @@ export async function rebuildDashboardData(sessionUserId: string, parsedData: an
 
         return {
           user_id: sessionUserId,
+          local_id: t.id || 0,
           teacher_id: sessionUserId, // Fallback, full syncs are mostly for dashboard which queries by school anyway
           title: t.title || "Untitled Exam",
           subject: t.description || "General",
@@ -315,6 +317,8 @@ export async function rebuildDashboardData(sessionUserId: string, parsedData: an
           
           return {
             user_id: sessionUserId,
+            local_id: q.id || 0,
+            exam_id: q.test_id || 0,
             subject: testSubject,
             topic: testTitle,
             text: q.question_text || "Unknown Question",
