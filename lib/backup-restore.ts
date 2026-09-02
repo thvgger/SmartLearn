@@ -139,20 +139,18 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
       const hasAttemptsOrTests = changes.some((c: any) => c.table === 'test_attempts' || c.table === 'tests' || c.table === 'questions');
       if (hasAttemptsOrTests) {
         const exams = await tx.exam.findMany({ where: { user_id: sessionUserId } });
-        await Promise.all(exams.map(async (exam: any) => {
-          const [agg, uniqueStudents, qCount] = await Promise.all([
-            tx.testAttempt.aggregate({
-              where: { user_id: sessionUserId, exam_id: exam.local_id },
-              _avg: { score: true },
-            }),
-            tx.testAttempt.groupBy({
-              by: ['student_id'],
-              where: { user_id: sessionUserId, exam_id: exam.local_id },
-            }),
-            tx.question.count({
-              where: { user_id: sessionUserId, exam_id: exam.local_id }
-            })
-          ]);
+        for (const exam of exams) {
+          const agg = await tx.testAttempt.aggregate({
+            where: { user_id: sessionUserId, exam_id: exam.local_id },
+            _avg: { score: true },
+          });
+          const uniqueStudents = await tx.testAttempt.groupBy({
+            by: ['student_id'],
+            where: { user_id: sessionUserId, exam_id: exam.local_id },
+          });
+          const qCount = await tx.question.count({
+            where: { user_id: sessionUserId, exam_id: exam.local_id }
+          });
           
           await tx.exam.update({
             where: { id: exam.id },
@@ -162,7 +160,7 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
               question_count: qCount,
             }
           });
-        }));
+        }
       }
     }, {
       maxWait: 15000,
