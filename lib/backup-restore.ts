@@ -90,15 +90,20 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
       for (const c of groups.users.UPDATE.filter(c => c.data?.role !== 'admin')) {
         await tx.syncedUser.updateMany({
           where: { user_id: sessionUserId, local_id: c.id },
-          data: { name: c.data.name, email: c.data.email, password: c.data.plain_password || c.data.password, role: c.data.role }
+          data: { 
+            name: c.data.name || "Unknown", 
+            email: c.data.email, 
+            password: c.data.plain_password || c.data.password, 
+            role: c.data.role || "student"
+          }
         });
       }
       for (const c of groups.tests.UPDATE) {
         await tx.exam.updateMany({
           where: { user_id: sessionUserId, local_id: c.id },
           data: { 
-            title: c.data.title, 
-            subject: c.data.description, 
+            title: c.data.title || "Untitled", 
+            subject: c.data.description || "General", 
             duration: c.data.duration_minutes ? `${c.data.duration_minutes}m` : "1h", 
             status: c.data.is_active ? "scheduled" : "completed",
             passing_score: c.data.passing_score ?? 70,
@@ -115,7 +120,7 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
           where: { user_id: sessionUserId, local_id: c.id },
           data: { 
             exam_id: c.data.test_id || 0, 
-            text: c.data.question_text, 
+            text: c.data.question_text || "Unknown", 
             options: JSON.stringify(opts.length > 0 ? opts : []), 
             answer: c.data.correct_answer || "",
             attachment_url: c.data.attachment_url || null,
