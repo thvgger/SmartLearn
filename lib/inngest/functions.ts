@@ -2,8 +2,11 @@ import { inngest } from './client';
 import { rebuildDashboardData } from '../backup-restore';
 
 export const processBackupSync = inngest.createFunction(
-  { id: 'process-backup-sync', concurrency: 1 },
-  { event: 'backup/sync.requested' },
+  { 
+    id: 'process-backup-sync', 
+    concurrency: 1,
+    triggers: [{ event: 'backup/sync.requested' }]
+  },
   async ({ event, step }) => {
     const { userId, parsedData } = event.data;
     
