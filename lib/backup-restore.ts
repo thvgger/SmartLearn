@@ -55,28 +55,35 @@ async function processDeltaSync(sessionUserId: string, changes: any[]) {
         });
       }
       if (groups.questions.INSERT.length) {
-        await tx.question.createMany({
-          skipDuplicates: true,
-          data: groups.questions.INSERT.map(c => {
-            const opts = c.data ? [c.data.option_a, c.data.option_b, c.data.option_c, c.data.option_d].filter(Boolean) : [];
-            return {
-              user_id: sessionUserId, local_id: c.id, exam_id: c.data.test_id || 0,
-              subject: "General", topic: "General", text: c.data.question_text || "Unknown",
-              options: JSON.stringify(opts.length > 0 ? opts : []), answer: c.data.correct_answer || "",
-              attachment_url: c.data.attachment_url || null,
-              attachment_type: c.data.attachment_type || null
-            };
-          })
+        const questionsToInsert = groups.questions.INSERT.map(c => {
+          const opts = c.data ? [c.data.option_a, c.data.option_b, c.data.option_c, c.data.option_d].filter(Boolean) : [];
+          return {
+            user_id: sessionUserId, local_id: c.id, exam_id: c.data.test_id || 0,
+            subject: "General", topic: "General", text: c.data.question_text || "Unknown",
+            options: JSON.stringify(opts.length > 0 ? opts : []), answer: c.data.correct_answer || "",
+            attachment_url: c.data.attachment_url || null,
+            attachment_type: c.data.attachment_type || null
+          };
         });
+        for (let i = 0; i < questionsToInsert.length; i += 3000) {
+          await tx.question.createMany({
+            skipDuplicates: true,
+            data: questionsToInsert.slice(i, i + 3000)
+          });
+        }
       }
       if (groups.test_attempts.INSERT.length) {
-        await tx.testAttempt.createMany({
-          skipDuplicates: true,
-          data: groups.test_attempts.INSERT.map(c => ({
-            user_id: sessionUserId, local_id: c.id,
-            student_id: c.data.user_id, exam_id: c.data.test_id, score: c.data.score
-          }))
-        });
+        const attemptsToInsert = groups.test_attempts.INSERT.map(c => ({
+          user_id: sessionUserId, local_id: c.id,
+          student_id: c.data.user_id, exam_id: c.data.test_id, score: c.data.score
+        }));
+        // Chunk into sizes of 5000 to avoid pg parameter limits (5 fields * 5000 = 25000 params)
+        for (let i = 0; i < attemptsToInsert.length; i += 5000) {
+          await tx.testAttempt.createMany({
+            skipDuplicates: true,
+            data: attemptsToInsert.slice(i, i + 5000)
+          });
+        }
       }
 
       // Process UPDATES (Individual)
