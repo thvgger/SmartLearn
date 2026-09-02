@@ -209,8 +209,14 @@ export async function POST(req: NextRequest) {
 
     // Auto-restore this backup so the dashboard is immediately populated
     const parsedData = typeof data === "string" ? JSON.parse(data) : data;
-    const { rebuildDashboardData } = await import("@/lib/backup-restore");
-    await rebuildDashboardData(user.id, parsedData);
+    const { inngest } = await import("@/lib/inngest/client");
+    await inngest.send({
+      name: "backup/sync.requested",
+      data: {
+        userId: user.id,
+        parsedData,
+      },
+    });
 
     return NextResponse.json({
       success: true,
