@@ -1,0 +1,1 @@
+const { PrismaClient } = require('@prisma/client'); const p = new PrismaClient(); p.backup.deleteMany({}).then(() => console.log('Cleared backups')).catch(console.error).finally(() => p.$disconnect());

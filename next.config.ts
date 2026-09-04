@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/download/windows',
-        destination: 'https://github.com/thvgger/swiftlearn.exe/releases/latest/download/CBT-Setup.exe',
+        destination: 'https://github.com/thvgger/swiftlearn.exe/releases/download/latest/CBT-Setup-Offline.exe',
         permanent: false,
       },
     ];
